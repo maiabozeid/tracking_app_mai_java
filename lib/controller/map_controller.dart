@@ -24,8 +24,8 @@ class MapController extends BaseController {
   final util = PolyUtilHelper();
   final soundHelper = SoundHelper();
   late Position position;
-  StreamSubscription<Position>? _positionStreamSubscription;
-  StreamSubscription<Position>? _positionStream;
+  StreamSubscription<Position>? positionStreamSubscription;
+  StreamSubscription<Position>? positionStream;
   final currentLocationMarker = const Marker(
     markerId: MarkerId('currentLocation'),
     position: LatLng(0, 0),
@@ -163,7 +163,7 @@ class MapController extends BaseController {
             width: 120,
             child: TextButton(
                 onPressed: () {
-                  _positionStream = Geolocator.getPositionStream(
+                  positionStream = Geolocator.getPositionStream(
                           locationSettings: const LocationSettings(
                               accuracy: LocationAccuracy.best))
                       .listen((event) {
@@ -284,7 +284,7 @@ class MapController extends BaseController {
     }
     position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    print(position);
+    // print(position);
     return position;
   }
 
@@ -316,7 +316,7 @@ class MapController extends BaseController {
   }
 
   Future<void> startLocationTracking() async {
-    _positionStreamSubscription = Geolocator.getPositionStream(
+    positionStreamSubscription = Geolocator.getPositionStream(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best))
         .listen((position) {
@@ -641,7 +641,7 @@ class MapController extends BaseController {
   functionButton() async {
     switch (missionValue.value) {
       case 1:
-        _positionStream?.cancel();
+        positionStream?.cancel();
         services.startMission();
         startMission();
         break;
@@ -660,8 +660,8 @@ class MapController extends BaseController {
               child: TextButton(
                   onPressed: () async {
                     timer.cancel();
-                    _positionStream?.cancel();
-                    _positionStreamSubscription?.cancel();
+                    positionStream?.cancel();
+                    positionStreamSubscription?.cancel();
                     await stopMission();
                     CacheHelper.saveData(
                         key: AppConstants.missionVaValue, value: 3);
@@ -683,11 +683,11 @@ class MapController extends BaseController {
       case 3:
         pauseMission();
         startMission();
-        _positionStream?.cancel();
+        positionStream?.cancel();
         break;
       case 4:
-        _positionStream?.cancel();
-        _positionStreamSubscription?.cancel();
+        positionStream?.cancel();
+        positionStreamSubscription?.cancel();
         timer.cancel();
         completer = Completer();
         soundHelper.player.dispose();
@@ -770,4 +770,6 @@ class MapController extends BaseController {
       );
     }
   }
+
+
 }

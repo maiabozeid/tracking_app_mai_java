@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui' as ui;
-
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tracking_app/helper/sound_helper.dart';
@@ -25,7 +24,6 @@ class PolyUtilHelper {
         break;
       }
     }
-
     return distance <= tolerance;
   }
 
@@ -43,7 +41,7 @@ class PolyUtilHelper {
   }
 
   Future<LatLng?> getClosestPoint(LatLng latLng, List<LatLng> points) async {
-    double minDistance = 30;
+    double minDistance = 8;
     LatLng? closestPoint;
     for (LatLng point in points) {
       double distance = distanceBetweenPoints(latLng.latitude, latLng.longitude,
