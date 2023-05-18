@@ -19,7 +19,7 @@ import 'package:tracking_app/util/app_constants.dart';
 import 'package:tracking_app/util/images.dart';
 
 class MapController extends BaseController {
-  static MapController to=Get.find();
+  static MapController to = Get.find();
   final services = MapServices();
   final util = PolyUtilHelper();
   final soundHelper = SoundHelper();
@@ -41,12 +41,14 @@ class MapController extends BaseController {
   final missionValue = 0.obs;
   final userDistance = 0.0.obs;
   final infoList = <InfoModel>[].obs;
-   Timer? timer;
+  Timer? timer;
   final latitude = 0.0.obs;
   final longitude = 0.0.obs;
   final locationMarker = true.obs;
   final bookValue = false.obs;
   late PolylinePoints polylinePoints;
+  final latitudeContinue = 0.0.obs;
+  final longitudeContinue = 0.0.obs;
 
   @override
   Future<void> onInit() async {
@@ -64,6 +66,7 @@ class MapController extends BaseController {
       await createPolyline();
       await distanceBetweenLocations();
       await drawPolyLineMission();
+      await getObjectZero();
       if (directionsModel?.status == 3) {
         CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
       }
@@ -236,12 +239,15 @@ class MapController extends BaseController {
 
   drawPolyLineMission() async {
     directionsModel?.districtLocations?.forEach((element) {
-      pathPoint.add(LatLng(element.lat ?? 0.0, element.long ?? 0.0));
-      polyline.add(Polyline(
-          polylineId: const PolylineId("2"),
-          color: Colors.red,
-          width: 6,
-          points: pathPoint));
+      if(element.objectId==0){}else{
+        pathPoint.add(LatLng(element.lat ?? 0.0, element.long ?? 0.0));
+        polyline.add(Polyline(
+            polylineId: const PolylineId("2"),
+            color: Colors.red,
+            width: 6,
+            points: pathPoint));
+      }
+
     });
     final Uint8List markerStartEnd =
         await util.getBytesFromAsset(Images.startIcon, 80);
@@ -284,7 +290,7 @@ class MapController extends BaseController {
     }
     position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-     print(position);
+    print(position);
     return position;
   }
 
@@ -355,6 +361,20 @@ class MapController extends BaseController {
       statusId.value = 4;
       print("false");
     }
+  }
+
+  getObjectZero() {
+    directionsModel?.districtLocations?.forEach((element) {
+      if (element.objectId == 0) {
+        latitudeContinue.value = element.lat!;
+        longitudeContinue.value = element.long!;
+        print(element.lat);
+        print(element.long);
+        print(element.objectId);
+        print(element.description);
+        print("true");
+      }
+    });
   }
 
   getIndexPoint(LatLng latLng) async {
@@ -777,14 +797,13 @@ class MapController extends BaseController {
     ));
   }
 
-  openMap() async {
+  openMap({LatLng? latLng}) async {
     final availableMaps = await MapLauncher.installedMaps;
     for (var map in availableMaps) {
       map.showDirections(
         origin: Coords(position.latitude, position.longitude),
         directionsMode: DirectionsMode.driving,
-        destination: Coords(directionsModel!.districtLocations!.first.lat!,
-            directionsModel!.districtLocations!.first.long!),
+        destination: Coords(latLng?.latitude ?? 0.0, latLng?.longitude ?? 0.0),
         // waypoints: waypoints
       );
     }

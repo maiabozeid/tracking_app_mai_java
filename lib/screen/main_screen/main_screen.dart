@@ -145,64 +145,95 @@ class _MainScreenState extends State<MainScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          controller.directionsModel?.status == 0
-                              ? {
-                                  Get.defaultDialog(
-                                      radius: 6,
-                                      title: "يجب حجز المسار اولا",
-                                      titleStyle: const TextStyle(
-                                          color: Colors.red, fontSize: 20),
-                                      content: Lottie.asset(Images.error,
-                                          height: 90),
-                                      confirm: SizedBox(
-                                        width: 120,
-                                        child: TextButton(
-                                            onPressed: () async {
-                                              controller.bookMission();
-                                            },
-                                            style: TextButton.styleFrom(
-                                                backgroundColor:
-                                                    const Color(0xff008d36)),
-                                            child: const Text(
-                                              "حجز",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16),
-                                            )),
-                                      ))
-                                }
-                              : {
-                                  if (controller.userDistance.value > 500)
-                                    {
-                                      Get.defaultDialog(
-                                          radius: 6,
-                                          title:
-                                              "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
-                                          titleStyle: const TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 18),
-                                          content: const Text(""),
-                                          confirm: SizedBox(
-                                            width: 150,
-                                            child: TextButton(
-                                                onPressed: () async {
-                                                  controller.openMap();
-                                                },
-                                                style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        const Color(
-                                                            0xff008d36)),
-                                                child: const Text(
-                                                  "اذهب لنقطه البدايه",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16),
-                                                )),
-                                          ))
-                                    }
-                                  else
-                                    {Get.to(() => const MapScreen())}
-                                };
+                          if (controller.directionsModel?.status == 0) {
+                            Get.defaultDialog(
+                                radius: 6,
+                                title: "يجب حجز المسار اولا",
+                                titleStyle: const TextStyle(
+                                    color: Colors.red, fontSize: 20),
+                                content: Lottie.asset(Images.error, height: 90),
+                                confirm: SizedBox(
+                                  width: 120,
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        controller.bookMission();
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xff008d36)),
+                                      child: const Text(
+                                        "حجز",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      )),
+                                ));
+                          } else if (controller.longitudeContinue.value !=
+                                  0.0 &&
+                              controller.longitudeContinue.value != 0.0) {
+                            Get.defaultDialog(
+                                radius: 6,
+                                title:
+                                    "انت بعيد عن نقطه التوقف بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                titleStyle: const TextStyle(
+                                    color: Colors.green, fontSize: 18),
+                                content: const Text(""),
+                                confirm: SizedBox(
+                                  width: 150,
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        controller.openMap(
+                                            latLng: LatLng(
+                                                controller
+                                                    .latitudeContinue.value,
+                                                controller
+                                                    .longitudeContinue.value));
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xff008d36)),
+                                      child: const Text(
+                                        "اذهب لنقطه الاستكمال",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      )),
+                                ));
+                          } else if (controller.userDistance.value > 500) {
+                            Get.defaultDialog(
+                                radius: 6,
+                                title:
+                                    "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                titleStyle: const TextStyle(
+                                    color: Colors.green, fontSize: 18),
+                                content: const Text(""),
+                                confirm: SizedBox(
+                                  width: 150,
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        controller.openMap(
+                                            latLng: LatLng(
+                                                controller
+                                                    .directionsModel!
+                                                    .districtLocations!
+                                                    .first
+                                                    .lat!,
+                                                controller
+                                                    .directionsModel!
+                                                    .districtLocations!
+                                                    .first
+                                                    .long!));
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xff008d36)),
+                                      child: const Text(
+                                        "اذهب لنقطه البدايه",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      )),
+                                ));
+                          } else {
+                            Get.to(() => const MapScreen());
+                          }
                         },
                         child: Card(
                           elevation: 2,
@@ -256,7 +287,100 @@ class _MainScreenState extends State<MainScreen> {
                                                   0
                                               ? controller.bookMission()
                                               : {
+                                                  //   if (controller
+                                                  //           .userDistance.value >
+                                                  //       500)
+                                                  //     {
+                                                  //       Get.defaultDialog(
+                                                  //           radius: 6,
+                                                  //           title:
+                                                  //               "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                                  //           titleStyle:
+                                                  //               const TextStyle(
+                                                  //                   color: Colors
+                                                  //                       .green,
+                                                  //                   fontSize: 18),
+                                                  //           content:
+                                                  //               const Text(""),
+                                                  //           confirm: SizedBox(
+                                                  //             width: 120,
+                                                  //             child: TextButton(
+                                                  //                 onPressed:
+                                                  //                     () async {
+                                                  //                   controller
+                                                  //                       .openMap();
+                                                  //                 },
+                                                  //                 style: TextButton.styleFrom(
+                                                  //                     backgroundColor:
+                                                  //                         const Color(
+                                                  //                             0xff008d36)),
+                                                  //                 child:
+                                                  //                     const Text(
+                                                  //                   "اذهب للبدايه",
+                                                  //                   style: TextStyle(
+                                                  //                       color: Colors
+                                                  //                           .white,
+                                                  //                       fontSize:
+                                                  //                           16),
+                                                  //                 )),
+                                                  //           ))
+                                                  //     }
+                                                  //   else
+                                                  //     {
+                                                  //       Get.to(() =>
+                                                  //           const MapScreen()),
+                                                  //     }
+                                                  // };
                                                   if (controller
+                                                              .longitudeContinue
+                                                              .value !=
+                                                          0.0 &&
+                                                      controller
+                                                              .longitudeContinue
+                                                              .value !=
+                                                          0.0)
+                                                    {
+                                                      Get.defaultDialog(
+                                                          radius: 6,
+                                                          title:
+                                                              "انت بعيد عن نقطه التوقف بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                                          titleStyle:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .green,
+                                                                  fontSize: 18),
+                                                          content:
+                                                              const Text(""),
+                                                          confirm: SizedBox(
+                                                            width: 150,
+                                                            child: TextButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  controller.openMap(
+                                                                      latLng: LatLng(
+                                                                          controller
+                                                                              .latitudeContinue
+                                                                              .value,
+                                                                          controller
+                                                                              .longitudeContinue
+                                                                              .value));
+                                                                },
+                                                                style: TextButton.styleFrom(
+                                                                    backgroundColor:
+                                                                        const Color(
+                                                                            0xff008d36)),
+                                                                child:
+                                                                    const Text(
+                                                                  "اذهب لنقطه الاستكمال",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          16),
+                                                                )),
+                                                          )),
+                                                    }
+                                                  else if (controller
                                                           .userDistance.value >
                                                       500)
                                                     {
@@ -272,12 +396,22 @@ class _MainScreenState extends State<MainScreen> {
                                                           content:
                                                               const Text(""),
                                                           confirm: SizedBox(
-                                                            width: 120,
+                                                            width: 150,
                                                             child: TextButton(
                                                                 onPressed:
                                                                     () async {
-                                                                  controller
-                                                                      .openMap();
+                                                                  controller.openMap(
+                                                                      latLng: LatLng(
+                                                                          controller
+                                                                              .directionsModel!
+                                                                              .districtLocations!
+                                                                              .first
+                                                                              .lat!,
+                                                                          controller
+                                                                              .directionsModel!
+                                                                              .districtLocations!
+                                                                              .first
+                                                                              .long!));
                                                                 },
                                                                 style: TextButton.styleFrom(
                                                                     backgroundColor:
@@ -285,14 +419,14 @@ class _MainScreenState extends State<MainScreen> {
                                                                             0xff008d36)),
                                                                 child:
                                                                     const Text(
-                                                                  "اذهب للبدايه",
+                                                                  "اذهب لنقطه البدايه",
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,
                                                                       fontSize:
                                                                           16),
                                                                 )),
-                                                          ))
+                                                          )),
                                                     }
                                                   else
                                                     {
@@ -310,25 +444,49 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GoogleMap(
-                          markers: {...controller.markers},
-                          polylines: Set<Polyline>.of(controller.polyline),
-                          gestureRecognizers: {}
-                            ..add(Factory<PanGestureRecognizer>(
-                                () => PanGestureRecognizer()))
-                            ..add(Factory<ScaleGestureRecognizer>(
-                                () => ScaleGestureRecognizer()))
-                            ..add(Factory<TapGestureRecognizer>(
-                                () => TapGestureRecognizer()))
-                            ..add(Factory<VerticalDragGestureRecognizer>(
-                                () => VerticalDragGestureRecognizer())),
-                          myLocationEnabled: true,
-                          initialCameraPosition: CameraPosition(
-                              target: LatLng(controller.position.latitude,
-                                  controller.position.longitude),
-                              zoom: 18)),
-                    )
+                    Obx(() => (controller.latitudeContinue.value == 0.0 &&
+                            controller.longitudeContinue.value == 0.0)
+                        ? Expanded(
+                            child: GoogleMap(
+                                markers: {...controller.markers},
+                                polylines:
+                                    Set<Polyline>.of(controller.polyline),
+                                gestureRecognizers: {}
+                                  ..add(Factory<PanGestureRecognizer>(
+                                      () => PanGestureRecognizer()))
+                                  ..add(Factory<ScaleGestureRecognizer>(
+                                      () => ScaleGestureRecognizer()))
+                                  ..add(Factory<TapGestureRecognizer>(
+                                      () => TapGestureRecognizer()))
+                                  ..add(Factory<VerticalDragGestureRecognizer>(
+                                      () => VerticalDragGestureRecognizer())),
+                                myLocationEnabled: true,
+                                initialCameraPosition: CameraPosition(
+                                    target: LatLng(controller.position.latitude,
+                                        controller.position.longitude),
+                                    zoom: 18)),
+                          )
+                        : Expanded(
+                            child: GoogleMap(
+                                // markers: {...controller.markers},
+                                // polylines:
+                                //     Set<Polyline>.of(controller.polyline),
+                                gestureRecognizers: {}
+                                  ..add(Factory<PanGestureRecognizer>(
+                                      () => PanGestureRecognizer()))
+                                  ..add(Factory<ScaleGestureRecognizer>(
+                                      () => ScaleGestureRecognizer()))
+                                  ..add(Factory<TapGestureRecognizer>(
+                                      () => TapGestureRecognizer()))
+                                  ..add(Factory<VerticalDragGestureRecognizer>(
+                                      () => VerticalDragGestureRecognizer())),
+                                myLocationEnabled: true,
+                                initialCameraPosition: CameraPosition(
+                                    target: LatLng(
+                                        controller.latitudeContinue.value,
+                                        controller.longitudeContinue.value),
+                                    zoom: 18)),
+                          ))
                   ],
                 )),
     ));
