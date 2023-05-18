@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui' as ui;
+
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tracking_app/helper/sound_helper.dart';
@@ -19,11 +20,13 @@ class PolyUtilHelper {
     for (int i = 0; i < polyline.length - 1; i++) {
       double segmentDistance =
           distanceToLine(point, polyline[i], polyline[i + 1]) * 1000;
+      print(distance);
       if (segmentDistance < distance) {
+
         distance = segmentDistance;
-        break;
       }
     }
+
     return distance <= tolerance;
   }
 
@@ -41,7 +44,7 @@ class PolyUtilHelper {
   }
 
   Future<LatLng?> getClosestPoint(LatLng latLng, List<LatLng> points) async {
-    double minDistance = 8;
+    double minDistance = 15;
     LatLng? closestPoint;
     for (LatLng point in points) {
       double distance = distanceBetweenPoints(latLng.latitude, latLng.longitude,
@@ -64,7 +67,6 @@ class PolyUtilHelper {
         cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
   }
-
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);

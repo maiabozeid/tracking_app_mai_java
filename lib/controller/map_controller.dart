@@ -60,7 +60,7 @@ class MapController extends BaseController {
 
   getPaths() async {
     directionsModel = await services.getPaths(position: position);
-    if (directionsModel != null) {
+    if (directionsModel?.districtLocations != null) {
       await createPolyline();
       await distanceBetweenLocations();
       await drawPolyLineMission();
@@ -376,7 +376,7 @@ class MapController extends BaseController {
       case "s":
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            5) {
+            15) {
           soundHelper.playerAudioStart();
           break;
         }
@@ -388,7 +388,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -407,7 +407,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -427,7 +427,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -446,7 +446,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -466,7 +466,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -485,7 +485,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -504,7 +504,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -523,7 +523,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -542,7 +542,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            5) {
+            15) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -558,7 +558,9 @@ class MapController extends BaseController {
       case "e":
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            5) {
+            15) {
+          print(Geolocator.distanceBetween(
+              event.latitude, event.longitude, lat, long));
           soundHelper.playerAudioFinish();
           CacheHelper.saveData(key: AppConstants.missionVaValue, value: 4);
           missionValue.value =
@@ -770,6 +772,4 @@ class MapController extends BaseController {
       );
     }
   }
-
-
 }

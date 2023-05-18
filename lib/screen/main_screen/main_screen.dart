@@ -140,6 +140,7 @@ class MainScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
+
                           if (controller.userDistance.value > 500) {
                             Get.defaultDialog(
                                 radius: 6,
