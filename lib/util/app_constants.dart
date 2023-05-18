@@ -2,7 +2,7 @@ class AppConstants {
   static const String appName = 'Paths App';
   static const String baseUrl = 'https://qualityapinew.afaqci.com/api';
   static const String login = '/Account/Login';
-  static const String getPaths = '/DriverPaths/GetAvailablePaths?';
+  static const String getPaths = '/DriverPaths/GetAvailablePaths2?';
   static const String bookPath = '/DriverPaths/AddDriverPath';
   static const String startMission = '/DriverPaths/StartPath';
   static const String endMission = '/DriverPaths/EndTemporaryPath';

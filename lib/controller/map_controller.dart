@@ -14,12 +14,12 @@ import 'package:tracking_app/helper/sound_helper.dart';
 import 'package:tracking_app/model/info_model.dart';
 import 'package:tracking_app/model/path_model.dart';
 import 'package:tracking_app/screen/home_screen/home_screen.dart';
-import 'package:tracking_app/screen/main_screen/main_screen.dart';
 import 'package:tracking_app/services/map_services.dart';
 import 'package:tracking_app/util/app_constants.dart';
 import 'package:tracking_app/util/images.dart';
 
 class MapController extends BaseController {
+  static MapController to=Get.find();
   final services = MapServices();
   final util = PolyUtilHelper();
   final soundHelper = SoundHelper();
@@ -165,7 +165,7 @@ class MapController extends BaseController {
                 onPressed: () {
                   positionStream = Geolocator.getPositionStream(
                           locationSettings: const LocationSettings(
-                              accuracy: LocationAccuracy.best))
+                              accuracy: LocationAccuracy.high))
                       .listen((event) {
                     if (util.distanceBetweenPoints(
                             event.latitude,
@@ -284,7 +284,7 @@ class MapController extends BaseController {
     }
     position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    // print(position);
+     print(position);
     return position;
   }
 
@@ -296,7 +296,6 @@ class MapController extends BaseController {
         } else {
           getIndexPoint(LatLng(latitude.value, longitude.value));
           infoList.add(InfoModel(
-              // time: DateTime.now().toIso8601String(),
               districtId: directionsModel?.districtId,
               status: statusId.value,
               routeNumber: directionsModel?.routeNumber,
@@ -318,7 +317,7 @@ class MapController extends BaseController {
   Future<void> startLocationTracking() async {
     positionStreamSubscription = Geolocator.getPositionStream(
             locationSettings:
-                const LocationSettings(accuracy: LocationAccuracy.best))
+                const LocationSettings(accuracy: LocationAccuracy.high))
         .listen((position) {
       latitude.value = position.latitude;
       longitude.value = position.longitude;
@@ -376,7 +375,7 @@ class MapController extends BaseController {
       case "s":
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            15) {
+            20) {
           soundHelper.playerAudioStart();
           break;
         }
@@ -388,7 +387,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -407,7 +406,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -427,7 +426,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -446,7 +445,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -466,7 +465,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -479,13 +478,32 @@ class MapController extends BaseController {
           markers.removeWhere((element) => element.markerId.value == "$lat");
         }
         break;
+      case "ss":
+        // final Uint8List markerIconEnd =
+        //     await util.getBytesFromAsset(Images.goStraight, 80);
+        // BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
+        if (Geolocator.distanceBetween(
+                event.latitude, event.longitude, lat, long) <=
+            20) {
+          // markers.add(
+          //   Marker(
+          //       markerId: MarkerId("$lat"),
+          //       position: LatLng(lat, long),
+          //       icon: navigate),
+          // );
+          soundHelper.playerNewStart();
+          break;
+        } else {
+          // markers.removeWhere((element) => element.markerId.value == "$lat");
+        }
+        break;
       case "rr":
         final Uint8List markerIconEnd =
             await util.getBytesFromAsset(Images.turnRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -504,7 +522,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -523,7 +541,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -542,7 +560,7 @@ class MapController extends BaseController {
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            15) {
+            20) {
           markers.add(
             Marker(
                 markerId: MarkerId("$lat"),
@@ -558,7 +576,7 @@ class MapController extends BaseController {
       case "e":
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            15) {
+            20) {
           print(Geolocator.distanceBetween(
               event.latitude, event.longitude, lat, long));
           soundHelper.playerAudioFinish();
@@ -669,7 +687,6 @@ class MapController extends BaseController {
                         key: AppConstants.missionVaValue, value: 3);
                     soundHelper.player.dispose();
                     completer = Completer();
-                    Get.delete<MapController>();
                     latitude.value = 0.0;
                     longitude.value = 0.0;
                     Get.offAll(() => const HomeScreen());

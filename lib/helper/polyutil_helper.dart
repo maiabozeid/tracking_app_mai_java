@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui' as ui;
-
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tracking_app/helper/sound_helper.dart';
@@ -20,9 +19,8 @@ class PolyUtilHelper {
     for (int i = 0; i < polyline.length - 1; i++) {
       double segmentDistance =
           distanceToLine(point, polyline[i], polyline[i + 1]) * 1000;
-      print(distance);
+      // print(distance);
       if (segmentDistance < distance) {
-
         distance = segmentDistance;
       }
     }
@@ -53,7 +51,6 @@ class PolyUtilHelper {
       if (distance < minDistance) {
         minDistance = distance;
         closestPoint = point;
-        break;
       }
     }
     return closestPoint;

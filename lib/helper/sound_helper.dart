@@ -59,6 +59,14 @@ class SoundHelper {
       log("can not play Audio go straight ahead   cause : $e ");
     }
   }
+  Future<void> playerNewStart() async {
+    try {
+      await player.setAsset('assets/audio/newStart.mp3');
+      player.play();
+    } catch (e) {
+      log("can not play Audio go straight ahead   cause : $e ");
+    }
+  }
 
   Future<void> playerAudioUTurn() async {
     try {

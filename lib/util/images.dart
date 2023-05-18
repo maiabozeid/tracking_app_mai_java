@@ -13,4 +13,6 @@ class Images {
   static const String endIcon = 'assets/images/end.png';
   static const String logIcon = 'assets/images/switch.png';
   static const String roadMap = 'assets/images/road-map.png';
+  static const String error = 'assets/images/error.json';
+  static const String stopSign = 'assets/images/stop-sign.json';
 }

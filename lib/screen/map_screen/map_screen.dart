@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -10,8 +12,47 @@ import 'package:tracking_app/screen/home_screen/home_screen.dart';
 import 'package:tracking_app/util/app_constants.dart';
 import 'package:tracking_app/util/styles.dart';
 
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      // Call your function here
+      _myFunction();
+    }
+  }
+
+  Future<void> _myFunction() async {
+    print("_myFunction");
+    MapController.to.timer.cancel();
+    MapController.to.positionStream?.cancel();
+    MapController.to.positionStreamSubscription?.cancel();
+    await MapController.to.stopMission();
+    CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
+    MapController.to.soundHelper.player.dispose();
+    MapController.to.completer = Completer();
+    MapController.to.latitude.value = 0.0;
+    MapController.to.longitude.value = 0.0;
+    // Do something here
+  }
 
   @override
   Widget build(BuildContext context) {

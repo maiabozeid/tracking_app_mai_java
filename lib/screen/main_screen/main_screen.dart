@@ -16,9 +16,14 @@ import 'package:tracking_app/util/dimensions.dart';
 import 'package:tracking_app/util/images.dart';
 import 'package:tracking_app/util/styles.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(MapController());
@@ -140,33 +145,64 @@ class MainScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-
-                          if (controller.userDistance.value > 500) {
-                            Get.defaultDialog(
-                                radius: 6,
-                                title:
-                                    "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
-                                titleStyle: const TextStyle(
-                                    color: Colors.green, fontSize: 18),
-                                content: const Text(""),
-                                confirm: SizedBox(
-                                  width: 120,
-                                  child: TextButton(
-                                      onPressed: () async {
-                                        controller.openMap();
-                                      },
-                                      style: TextButton.styleFrom(
-                                          backgroundColor:
-                                              const Color(0xff008d36)),
-                                      child: const Text(
-                                        "اذهب للبدايه",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 16),
-                                      )),
-                                ));
-                          } else {
-                            Get.to(() => const MapScreen());
-                          }
+                          controller.directionsModel?.status == 0
+                              ? {
+                                  Get.defaultDialog(
+                                      radius: 6,
+                                      title: "يجب حجز المسار اولا",
+                                      titleStyle: const TextStyle(
+                                          color: Colors.red, fontSize: 20),
+                                      content: Lottie.asset(Images.error,
+                                          height: 90),
+                                      confirm: SizedBox(
+                                        width: 120,
+                                        child: TextButton(
+                                            onPressed: () async {
+                                              controller.bookMission();
+                                            },
+                                            style: TextButton.styleFrom(
+                                                backgroundColor:
+                                                    const Color(0xff008d36)),
+                                            child: const Text(
+                                              "حجز",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16),
+                                            )),
+                                      ))
+                                }
+                              : {
+                                  if (controller.userDistance.value > 500)
+                                    {
+                                      Get.defaultDialog(
+                                          radius: 6,
+                                          title:
+                                              "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                          titleStyle: const TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 18),
+                                          content: const Text(""),
+                                          confirm: SizedBox(
+                                            width: 150,
+                                            child: TextButton(
+                                                onPressed: () async {
+                                                  controller.openMap();
+                                                },
+                                                style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        const Color(
+                                                            0xff008d36)),
+                                                child: const Text(
+                                                  "اذهب لنقطه البدايه",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16),
+                                                )),
+                                          ))
+                                    }
+                                  else
+                                    {Get.to(() => const MapScreen())}
+                                };
                         },
                         child: Card(
                           elevation: 2,
@@ -287,6 +323,7 @@ class MainScreen extends StatelessWidget {
                                 () => TapGestureRecognizer()))
                             ..add(Factory<VerticalDragGestureRecognizer>(
                                 () => VerticalDragGestureRecognizer())),
+                          myLocationEnabled: true,
                           initialCameraPosition: CameraPosition(
                               target: LatLng(controller.position.latitude,
                                   controller.position.longitude),
