@@ -42,7 +42,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   Future<void> _myFunction() async {
     print("_myFunction");
-    MapController.to.timer.cancel();
+    MapController.to.timer != null ? MapController.to.timer?.cancel() : {};
     MapController.to.positionStream?.cancel();
     MapController.to.positionStreamSubscription?.cancel();
     await MapController.to.stopMission();
@@ -81,6 +81,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                           width: 120,
                           child: TextButton(
                               onPressed: () async {
+                                controller.timer?.cancel();
                                 controller.positionStreamSubscription?.cancel();
                                 controller.positionStream?.cancel();
                                 controller.endMission();

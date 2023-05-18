@@ -41,7 +41,7 @@ class MapController extends BaseController {
   final missionValue = 0.obs;
   final userDistance = 0.0.obs;
   final infoList = <InfoModel>[].obs;
-  late Timer timer;
+   Timer? timer;
   final latitude = 0.0.obs;
   final longitude = 0.0.obs;
   final locationMarker = true.obs;
@@ -679,7 +679,7 @@ class MapController extends BaseController {
               width: 120,
               child: TextButton(
                   onPressed: () async {
-                    timer.cancel();
+                    timer?.cancel();
                     positionStream?.cancel();
                     positionStreamSubscription?.cancel();
                     await stopMission();
@@ -707,7 +707,7 @@ class MapController extends BaseController {
       case 4:
         positionStream?.cancel();
         positionStreamSubscription?.cancel();
-        timer.cancel();
+        timer?.cancel();
         completer = Completer();
         soundHelper.player.dispose();
         Get.defaultDialog(
