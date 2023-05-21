@@ -169,13 +169,14 @@ class _MainScreenState extends State<MainScreen> {
                                 ));
                           } else if (controller.longitudeContinue.value !=
                                   0.0 &&
-                              controller.longitudeContinue.value != 0.0) {
+                              controller.longitudeContinue.value != 0.0 &&
+                              controller.distanceContinue.value > 20) {
                             Get.defaultDialog(
                                 radius: 6,
                                 title:
-                                    "انت بعيد عن نقطه التوقف بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                    "انت بعيد عن نقطه التوقف بمسافه\n ${controller.distanceContinue.value.toStringAsFixed(2)} م ",
                                 titleStyle: const TextStyle(
-                                    color: Colors.green, fontSize: 18),
+                                    color: Colors.amber, fontSize: 18),
                                 content: const Text(""),
                                 confirm: SizedBox(
                                   width: 150,
@@ -331,23 +332,24 @@ class _MainScreenState extends State<MainScreen> {
                                                   //           const MapScreen()),
                                                   //     }
                                                   // };
-                                                  if (controller
+                                                  if (controller.longitudeContinue.value != 0.0 &&
+                                                      controller
                                                               .longitudeContinue
                                                               .value !=
                                                           0.0 &&
                                                       controller
-                                                              .longitudeContinue
-                                                              .value !=
-                                                          0.0)
+                                                              .distanceContinue
+                                                              .value >
+                                                          15)
                                                     {
                                                       Get.defaultDialog(
                                                           radius: 6,
                                                           title:
-                                                              "انت بعيد عن نقطه التوقف بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                                              "انت بعيد عن نقطه التوقف بمسافه\n ${controller.distanceContinue.value.toStringAsFixed(2)} م ",
                                                           titleStyle:
                                                               const TextStyle(
                                                                   color: Colors
-                                                                      .green,
+                                                                      .amber,
                                                                   fontSize: 18),
                                                           content:
                                                               const Text(""),
@@ -468,7 +470,7 @@ class _MainScreenState extends State<MainScreen> {
                           )
                         : Expanded(
                             child: GoogleMap(
-                                // markers: {...controller.markers},
+                                markers: {...controller.markersContinue},
                                 // polylines:
                                 //     Set<Polyline>.of(controller.polyline),
                                 gestureRecognizers: {}
@@ -481,6 +483,10 @@ class _MainScreenState extends State<MainScreen> {
                                   ..add(Factory<VerticalDragGestureRecognizer>(
                                       () => VerticalDragGestureRecognizer())),
                                 myLocationEnabled: true,
+                                onMapCreated: (map) {
+                                  map.showMarkerInfoWindow(controller
+                                      .markersContinue.first.markerId);
+                                },
                                 initialCameraPosition: CameraPosition(
                                     target: LatLng(
                                         controller.latitudeContinue.value,

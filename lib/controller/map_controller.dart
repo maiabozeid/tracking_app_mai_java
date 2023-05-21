@@ -31,6 +31,7 @@ class MapController extends BaseController {
     position: LatLng(0, 0),
   ).obs;
   final markers = <Marker>{}.obs;
+  final markersContinue = <Marker>{}.obs;
   final polyline = <Polyline>{}.obs;
   final streamPoint = <LatLng>[].obs;
   final pathPoint = <LatLng>[].obs;
@@ -49,6 +50,7 @@ class MapController extends BaseController {
   late PolylinePoints polylinePoints;
   final latitudeContinue = 0.0.obs;
   final longitudeContinue = 0.0.obs;
+  final distanceContinue = 0.0.obs;
 
   @override
   Future<void> onInit() async {
@@ -61,7 +63,8 @@ class MapController extends BaseController {
   }
 
   getPaths() async {
-    directionsModel = await services.getPaths(position: position);
+    //directionsModel = await testData();
+     directionsModel = await services.getPaths(position: position);
     if (directionsModel?.districtLocations != null) {
       await createPolyline();
       await distanceBetweenLocations();
@@ -76,73 +79,86 @@ class MapController extends BaseController {
   }
 
   testData() {
-    directionsModel =
-        DirectionsModel(routeNumber: 1, districtId: 1, districtLocations: [
-      DistrictLocations(
-        districtId: 1,
+    directionsModel = DirectionsModel(
+        status: 3,
         routeNumber: 1,
-        description: "s",
-        objectId: 1,
-        lat: 30.629651,
-        long: 31.079462,
-      ),
-      DistrictLocations(
         districtId: 1,
-        routeNumber: 1,
-        description: "c",
-        objectId: 1,
-        lat: 30.629709,
-        long: 31.079129,
-      ),
-      DistrictLocations(
-        districtId: 1,
-        routeNumber: 1,
-        description: "l",
-        objectId: 1,
-        lat: 30.629787,
-        long: 31.078822,
-      ),
-      DistrictLocations(
-        districtId: 1,
-        routeNumber: 1,
-        description: "c",
-        objectId: 1,
-        lat: 30.629967,
-        long: 31.078968,
-      ),
-      DistrictLocations(
-        districtId: 1,
-        routeNumber: 1,
-        description: "l",
-        objectId: 1,
-        lat: 30.630093,
-        long: 31.079094,
-      ),
-      DistrictLocations(
-        districtId: 1,
-        routeNumber: 1,
-        description: "c",
-        objectId: 1,
-        lat: 30.630061,
-        long: 31.079404,
-      ),
-      DistrictLocations(
-        districtId: 1,
-        routeNumber: 1,
-        description: "l",
-        objectId: 1,
-        lat: 30.630029,
-        long: 31.079700,
-      ),
-      DistrictLocations(
-        districtId: 1,
-        routeNumber: 1,
-        description: "e",
-        objectId: 1,
-        lat: 30.629874,
-        long: 31.079663,
-      ),
-    ]);
+        districtName: "birket",
+        districtLocations: [
+          DistrictLocations(
+            districtId: 1,
+            routeNumber: 1,
+            description: "s",
+            objectId: 1,
+            lat: 30.629651,
+            long: 31.079462,
+          ),
+          DistrictLocations(
+            districtId: 1,
+            routeNumber: 1,
+            description: "c",
+            objectId: 1,
+            lat: 30.629709,
+            long: 31.079129,
+          ),
+          DistrictLocations(
+            districtId: 1,
+            routeNumber: 1,
+            description: "l",
+            objectId: 1,
+            lat: 30.629787,
+            long: 31.078822,
+          ),
+          DistrictLocations(
+            districtId: 1,
+            routeNumber: 1,
+            description: "c",
+            objectId: 1,
+            lat: 30.629967,
+            long: 31.078968,
+          ),
+          DistrictLocations(
+            districtId: 1,
+            routeNumber: 1,
+            description: "l",
+            objectId: 1,
+            lat: 30.630093,
+            long: 31.079094,
+          ),
+          // DistrictLocations(
+          //   districtId: 1,
+          //   routeNumber: 1,
+          //   description: "l",
+          //   objectId: 0,
+          //   lat: 30.630093,
+          //   long: 31.079094,
+          // ),
+          DistrictLocations(
+            districtId: 1,
+            routeNumber: 1,
+            description: "c",
+            objectId: 1,
+            lat: 30.630061,
+            long: 31.079404,
+          ),
+          DistrictLocations(
+            districtId: 1,
+            routeNumber: 1,
+            description: "l",
+            objectId: 1,
+            lat: 30.630029,
+            long: 31.079700,
+          ),
+          DistrictLocations(
+            districtId: 1,
+            routeNumber: 1,
+            description: "e",
+            objectId: 1,
+            lat: 30.629874,
+            long: 31.079663,
+          ),
+        ]);
+    return directionsModel;
   }
 
   distanceBetweenLocations() {
@@ -182,8 +198,6 @@ class MapController extends BaseController {
                           key: AppConstants.missionVaValue, value: 0);
                       missionValue.value =
                           CacheHelper.getData(key: AppConstants.missionVaValue);
-                      // SharedPref.setSelectedMissionValue(0);
-                      // missionValue.value = SharedPref.getMissionValue();
                     } else {
                       CacheHelper.getData(key: AppConstants.missionVaValue) == 3
                           ? {
@@ -192,9 +206,6 @@ class MapController extends BaseController {
                                     key: AppConstants.missionVaValue, value: 3),
                                 missionValue.value = CacheHelper.getData(
                                     key: AppConstants.missionVaValue)
-                                // SharedPref.setSelectedMissionValue(3),
-                                // missionValue.value =
-                                //     SharedPref.getMissionValue()
                               }
                             }
                           : {
@@ -202,8 +213,6 @@ class MapController extends BaseController {
                                   key: AppConstants.missionVaValue, value: 1),
                               missionValue.value = CacheHelper.getData(
                                   key: AppConstants.missionVaValue)
-                              // SharedPref.setSelectedMissionValue(1),
-                              // missionValue.value = SharedPref.getMissionValue()
                             };
                     }
                     animateTo(event.latitude ?? 0.0, event.longitude,
@@ -222,8 +231,6 @@ class MapController extends BaseController {
       CacheHelper.getData(key: AppConstants.missionVaValue) == 3
           ? {
               CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
-              // SharedPref.setSelectedMissionValue(3),
-              // missionValue.value = SharedPref.getMissionValue()
               missionValue.value =
                   CacheHelper.getData(key: AppConstants.missionVaValue)
             }
@@ -231,15 +238,14 @@ class MapController extends BaseController {
               CacheHelper.saveData(key: AppConstants.missionVaValue, value: 1),
               missionValue.value =
                   CacheHelper.getData(key: AppConstants.missionVaValue)
-              // SharedPref.setSelectedMissionValue(1),
-              // missionValue.value = SharedPref.getMissionValue()
             };
     }
   }
 
   drawPolyLineMission() async {
     directionsModel?.districtLocations?.forEach((element) {
-      if(element.objectId==0){}else{
+      if (element.objectId == 0) {
+      } else {
         pathPoint.add(LatLng(element.lat ?? 0.0, element.long ?? 0.0));
         polyline.add(Polyline(
             polylineId: const PolylineId("2"),
@@ -247,7 +253,6 @@ class MapController extends BaseController {
             width: 6,
             points: pathPoint));
       }
-
     });
     final Uint8List markerStartEnd =
         await util.getBytesFromAsset(Images.startIcon, 80);
@@ -372,6 +377,25 @@ class MapController extends BaseController {
         print(element.long);
         print(element.objectId);
         print(element.description);
+        distanceContinue.value = Geolocator.distanceBetween(
+            position.latitude,
+            position.longitude,
+            latitudeContinue.value,
+            longitudeContinue.value);
+        print(distanceContinue.value);
+        markersContinue.add(Marker(
+            markerId: MarkerId(
+              "${element.objectId}",
+            ),
+            onTap: () async {
+              await openMap(
+                  latLng:
+                      LatLng(latitudeContinue.value, longitudeContinue.value));
+            },
+            infoWindow: const InfoWindow(
+              title: ' نقطه الاستكمال',
+            ),
+            position: LatLng(latitudeContinue.value, longitudeContinue.value)));
         print("true");
       }
     });

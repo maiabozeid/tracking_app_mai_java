@@ -36,6 +36,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
       // Call your function here
+
       _myFunction();
     }
   }
@@ -113,11 +114,18 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                         polylines: Set<Polyline>.of(controller.polyline),
                         markers: <Marker>{
                           ...controller.markers,
-                          controller.currentLocationMarker.value
+                          controller.currentLocationMarker.value,
+                          controller.markersContinue.isEmpty
+                              ? const Marker(markerId: MarkerId("0"))
+                              : controller.markersContinue.first,
                         },
                         onMapCreated: (map) async {
                           controller.completer.complete(map);
                           await controller.checkUserInLocation();
+                          controller.markersContinue.isEmpty
+                              ? null
+                              : map.showMarkerInfoWindow(
+                                  controller.markersContinue.first.markerId);
                         },
                       ),
                       Positioned(
