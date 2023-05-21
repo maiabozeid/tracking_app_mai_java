@@ -107,6 +107,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                       GoogleMap(
                         myLocationEnabled: controller.locationMarker.value,
                         mapType: MapType.normal,
+                        zoomControlsEnabled: true,
                         initialCameraPosition: CameraPosition(
                             zoom: 16,
                             target: LatLng(controller.position.latitude,

@@ -450,6 +450,7 @@ class _MainScreenState extends State<MainScreen> {
                             controller.longitudeContinue.value == 0.0)
                         ? Expanded(
                             child: GoogleMap(
+                                zoomControlsEnabled: true,
                                 markers: {...controller.markers},
                                 polylines:
                                     Set<Polyline>.of(controller.polyline),
@@ -470,6 +471,7 @@ class _MainScreenState extends State<MainScreen> {
                           )
                         : Expanded(
                             child: GoogleMap(
+                                zoomControlsEnabled: true,
                                 markers: {...controller.markersContinue},
                                 // polylines:
                                 //     Set<Polyline>.of(controller.polyline),
