@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:tracking_app/component/custom_button.dart';
 import 'package:tracking_app/component/fixed_text_field.dart';
 import 'package:tracking_app/screen/auth/controller/signin_controller.dart';
-import 'package:tracking_app/screen/map_screen/map_screen.dart';
 import 'package:tracking_app/util/dimensions.dart';
 import 'package:tracking_app/util/images.dart';
 

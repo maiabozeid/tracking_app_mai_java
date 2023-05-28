@@ -64,7 +64,7 @@ class MapController extends BaseController {
 
   getPaths() async {
     //directionsModel = await testData();
-     directionsModel = await services.getPaths(position: position);
+    directionsModel = await services.getPaths(position: position);
     if (directionsModel?.districtLocations != null) {
       await createPolyline();
       await distanceBetweenLocations();
@@ -215,7 +215,7 @@ class MapController extends BaseController {
                                   key: AppConstants.missionVaValue)
                             };
                     }
-                    animateTo(event.latitude ?? 0.0, event.longitude,
+                    animateTo(event.latitude , event.longitude,
                         bearing: event.heading);
                   });
                   Get.back();
@@ -327,8 +327,8 @@ class MapController extends BaseController {
 
   Future<void> startLocationTracking() async {
     positionStreamSubscription = Geolocator.getPositionStream(
-            locationSettings:
-                const LocationSettings(accuracy: LocationAccuracy.high))
+            locationSettings: const LocationSettings(
+                accuracy: LocationAccuracy.high, distanceFilter: 1))
         .listen((position) {
       latitude.value = position.latitude;
       longitude.value = position.longitude;
@@ -423,7 +423,6 @@ class MapController extends BaseController {
           soundHelper.playerAudioStart();
           break;
         }
-
         break;
       case "r":
         final Uint8List markerIconEnd =
@@ -462,7 +461,6 @@ class MapController extends BaseController {
         } else {
           markers.removeWhere((element) => element.markerId.value == "$lat");
         }
-
         break;
       case "u":
         final Uint8List markerIconEnd =
@@ -501,7 +499,6 @@ class MapController extends BaseController {
         } else {
           markers.removeWhere((element) => element.markerId.value == "$lat");
         }
-
         break;
       case "c":
         final Uint8List markerIconEnd =
@@ -546,7 +543,7 @@ class MapController extends BaseController {
             await util.getBytesFromAsset(Images.turnRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
+                event.latitude , event.longitude , lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -565,7 +562,7 @@ class MapController extends BaseController {
             await util.getBytesFromAsset(Images.left, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
+                event.latitude , event.longitude , lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -584,7 +581,7 @@ class MapController extends BaseController {
             await util.getBytesFromAsset(Images.leftAndRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude ?? 0.0, event.longitude ?? 0.0, lat, long) <=
+                event.latitude , event.longitude , lat, long) <=
             20) {
           markers.add(
             Marker(

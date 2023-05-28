@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                           Text(
                               "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
                               style: robotoRegular.copyWith(
-                                  color: Colors.white, fontSize: 20)),
+                                  color: Colors.white, fontSize: 14)),
                           IconButton(
                               onPressed: () {
                                 CacheHelper.clearData();

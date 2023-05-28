@@ -175,7 +175,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Column(
       children: const [
         Text(
-          " وزارة الشؤون البلدية والقروية   ",
+          " وزارة الشؤون البلدية والقروية",
           style: TextStyle(
             color: Color(0xFFffffff),
             fontSize: 25,

@@ -16,14 +16,9 @@ import 'package:tracking_app/util/dimensions.dart';
 import 'package:tracking_app/util/images.dart';
 import 'package:tracking_app/util/styles.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(MapController());
@@ -62,7 +57,7 @@ class _MainScreenState extends State<MainScreen> {
                                   Text(
                                       "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
                                       style: robotoRegular.copyWith(
-                                          color: Colors.white, fontSize: 20)),
+                                          color: Colors.white, fontSize: 14)),
                                   IconButton(
                                       onPressed: () {
                                         CacheHelper.clearData();
@@ -115,7 +110,7 @@ class _MainScreenState extends State<MainScreen> {
                                   Text(
                                       "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
                                       style: robotoRegular.copyWith(
-                                          color: Colors.white, fontSize: 20)),
+                                          color: Colors.white, fontSize: 14)),
                                   IconButton(
                                       onPressed: () {
                                         CacheHelper.clearData();
@@ -288,50 +283,6 @@ class _MainScreenState extends State<MainScreen> {
                                                   0
                                               ? controller.bookMission()
                                               : {
-                                                  //   if (controller
-                                                  //           .userDistance.value >
-                                                  //       500)
-                                                  //     {
-                                                  //       Get.defaultDialog(
-                                                  //           radius: 6,
-                                                  //           title:
-                                                  //               "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
-                                                  //           titleStyle:
-                                                  //               const TextStyle(
-                                                  //                   color: Colors
-                                                  //                       .green,
-                                                  //                   fontSize: 18),
-                                                  //           content:
-                                                  //               const Text(""),
-                                                  //           confirm: SizedBox(
-                                                  //             width: 120,
-                                                  //             child: TextButton(
-                                                  //                 onPressed:
-                                                  //                     () async {
-                                                  //                   controller
-                                                  //                       .openMap();
-                                                  //                 },
-                                                  //                 style: TextButton.styleFrom(
-                                                  //                     backgroundColor:
-                                                  //                         const Color(
-                                                  //                             0xff008d36)),
-                                                  //                 child:
-                                                  //                     const Text(
-                                                  //                   "اذهب للبدايه",
-                                                  //                   style: TextStyle(
-                                                  //                       color: Colors
-                                                  //                           .white,
-                                                  //                       fontSize:
-                                                  //                           16),
-                                                  //                 )),
-                                                  //           ))
-                                                  //     }
-                                                  //   else
-                                                  //     {
-                                                  //       Get.to(() =>
-                                                  //           const MapScreen()),
-                                                  //     }
-                                                  // };
                                                   if (controller.longitudeContinue.value != 0.0 &&
                                                       controller
                                                               .longitudeContinue
@@ -473,8 +424,6 @@ class _MainScreenState extends State<MainScreen> {
                             child: GoogleMap(
                                 zoomControlsEnabled: true,
                                 markers: {...controller.markersContinue},
-                                // polylines:
-                                //     Set<Polyline>.of(controller.polyline),
                                 gestureRecognizers: {}
                                   ..add(Factory<PanGestureRecognizer>(
                                       () => PanGestureRecognizer()))
