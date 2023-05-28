@@ -170,7 +170,7 @@ class _MainScreenState extends State<MainScreen> {
                           } else if (controller.longitudeContinue.value !=
                                   0.0 &&
                               controller.longitudeContinue.value != 0.0 &&
-                              controller.distanceContinue.value > 20) {
+                              controller.distanceContinue.value > 70) {
                             Get.defaultDialog(
                                 radius: 6,
                                 title:
@@ -340,7 +340,7 @@ class _MainScreenState extends State<MainScreen> {
                                                       controller
                                                               .distanceContinue
                                                               .value >
-                                                          15)
+                                                          70)
                                                     {
                                                       Get.defaultDialog(
                                                           radius: 6,
