@@ -1,6 +1,8 @@
 class AppConstants {
   static const String appName = 'Paths App';
-  static const String baseUrl = 'https://qualityapinew.afaqci.com/api';
+  //static const String baseUrl = 'https://QualityApp.co4qu.com/api';
+   static const String baseUrl = 'https://liveapp2.co4qu.com/api';
+   // static const String baseUrl = 'https://qualityapinew.afaqci.com/api';
   static const String login = '/Account/Login';
   static const String getPaths = '/DriverPaths/GetAvailablePaths2?';
   static const String bookPath = '/DriverPaths/AddDriverPath';

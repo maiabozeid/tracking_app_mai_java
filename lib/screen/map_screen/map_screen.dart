@@ -42,17 +42,23 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _myFunction() async {
-    print("_myFunction");
-    MapController.to.timer != null ? MapController.to.timer?.cancel() : {};
-    MapController.to.positionStream?.cancel();
-    MapController.to.positionStreamSubscription?.cancel();
-    await MapController.to.stopMission();
-    CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
-    MapController.to.soundHelper.player.dispose();
-    MapController.to.completer = Completer();
-    MapController.to.latitude.value = 0.0;
-    MapController.to.longitude.value = 0.0;
-    // Do something here
+    CacheHelper.getData(key: AppConstants.missionVaValue) == 0
+        ? {}
+        : {
+            print("_myFunction"),
+            MapController.to.timer != null
+                ? MapController.to.timer?.cancel()
+                : {},
+            MapController.to.positionStream?.cancel(),
+            MapController.to.positionStreamSubscription?.cancel(),
+            await MapController.to.stopMission(),
+            CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
+            MapController.to.soundHelper.player.dispose(),
+            MapController.to.completer = Completer(),
+            MapController.to.latitude.value = 0.0,
+            MapController.to.longitude.value = 0.0,
+            // Do something here
+          };
   }
 
   @override
@@ -82,16 +88,26 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                           width: 120,
                           child: TextButton(
                               onPressed: () async {
-                                controller.timer?.cancel();
-                                controller.positionStreamSubscription?.cancel();
-                                controller.positionStream?.cancel();
-                                controller.endMission();
-                                controller.soundHelper.player.dispose();
-                                CacheHelper.saveData(
-                                    key: AppConstants.missionVaValue, value: 3);
-                                controller.latitude.value = 0.0;
-                                controller.longitude.value = 0.0;
-                                Get.to(() => const HomeScreen());
+                                CacheHelper.getData(
+                                            key: AppConstants.missionVaValue) ==
+                                        0
+                                    ? {
+                                        Get.to(() => const HomeScreen()),
+                                      }
+                                    : {
+                                        controller.timer?.cancel(),
+                                        controller.positionStreamSubscription
+                                            ?.cancel(),
+                                        controller.positionStream?.cancel(),
+                                        controller.endMission(),
+                                        controller.soundHelper.player.dispose(),
+                                        CacheHelper.saveData(
+                                            key: AppConstants.missionVaValue,
+                                            value: 3),
+                                        controller.latitude.value = 0.0,
+                                        controller.longitude.value = 0.0,
+                                        Get.to(() => const HomeScreen()),
+                                      };
                               },
                               style: TextButton.styleFrom(
                                   backgroundColor: const Color(0xff008d36)),

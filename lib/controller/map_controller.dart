@@ -70,11 +70,14 @@ class MapController extends BaseController {
       await distanceBetweenLocations();
       await drawPolyLineMission();
       await getObjectZero();
+
       if (directionsModel?.status == 3) {
         CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
       }
       missionValue.value =
           CacheHelper.getData(key: AppConstants.missionVaValue) ?? 0;
+    } else {
+      CacheHelper.saveData(key: AppConstants.missionVaValue, value: 0);
     }
   }
 
@@ -173,7 +176,7 @@ class MapController extends BaseController {
   }
 
   checkUserInLocation() {
-    if (userDistance.value > 50) {
+    if (userDistance.value > 70) {
       Get.defaultDialog(
           barrierDismissible: false,
           radius: 6,
@@ -192,8 +195,8 @@ class MapController extends BaseController {
                             directionsModel?.districtLocations?.first.lat ??
                                 0.0,
                             directionsModel?.districtLocations?.first.long ??
-                                0.0) >=
-                        50) {
+                                0.0)*1000 >=
+                        70) {
                       CacheHelper.saveData(
                           key: AppConstants.missionVaValue, value: 0);
                       missionValue.value =
@@ -302,11 +305,12 @@ class MapController extends BaseController {
   startMission() async {
     locationMarker.value = false;
     await startLocationTracking().then((value) {
-      timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      timer = Timer.periodic(const Duration(seconds: 2), (timer) {
         if (latitude.value == 0.0 && longitude.value == 0.0) {
         } else {
           getIndexPoint(LatLng(latitude.value, longitude.value));
           infoList.add(InfoModel(
+            time:DateTime.now().toString() ,
               districtId: directionsModel?.districtId,
               status: statusId.value,
               routeNumber: directionsModel?.routeNumber,
@@ -314,11 +318,11 @@ class MapController extends BaseController {
               longitude: longitude.value));
         }
       });
-      timer = Timer.periodic(const Duration(seconds: 45), (timer) async {
-        print("length:${infoList.length} ");
-        for (var element in infoList) {
-          print(element.toJson());
-        }
+      timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
+        // print("length:${infoList.length} ");
+        // for (var element in infoList) {
+        //   print(element.toJson());
+        // }
         await services.addVehicleInfo(data: infoList);
         infoList.clear();
       });
@@ -345,7 +349,7 @@ class MapController extends BaseController {
     bool isNearPolyline = util.isLocationOnPath(
       latLng,
       pathPoint,
-      tolerance: 65,
+      tolerance: 70,
     );
     if (isNearPolyline) {
       CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
@@ -373,16 +377,16 @@ class MapController extends BaseController {
       if (element.objectId == 0) {
         latitudeContinue.value = element.lat!;
         longitudeContinue.value = element.long!;
-        print(element.lat);
-        print(element.long);
-        print(element.objectId);
-        print(element.description);
+        // print(element.lat);
+        // print(element.long);
+        // print(element.objectId);
+        // print(element.description);
         distanceContinue.value = Geolocator.distanceBetween(
             position.latitude,
             position.longitude,
             latitudeContinue.value,
             longitudeContinue.value);
-        print(distanceContinue.value);
+        // print(distanceContinue.value);
         markersContinue.add(Marker(
             markerId: MarkerId(
               "${element.objectId}",
@@ -396,7 +400,7 @@ class MapController extends BaseController {
               title: ' نقطه الاستكمال',
             ),
             position: LatLng(latitudeContinue.value, longitudeContinue.value)));
-        print("true");
+        // print("true");
       }
     });
   }

@@ -8,11 +8,11 @@ class InfoModel {
 
   InfoModel(
       {this.time,
-        this.latitude,
-        this.longitude,
-        this.routeNumber,
-        this.districtId,
-        this.status});
+      this.latitude,
+      this.longitude,
+      this.routeNumber,
+      this.districtId,
+      this.status});
 
   toJson() {
     Map<String, dynamic> map = {};
@@ -21,7 +21,7 @@ class InfoModel {
     map["RouteNumber"] = routeNumber;
     map["DistrictId"] = districtId;
     map["status"] = status;
-    // map["time"] = time;
+    map["Date"] = time;
     return map;
   }
 }
