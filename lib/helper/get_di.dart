@@ -4,10 +4,10 @@ import 'package:tracking_app/helper/cache_helper.dart';
 import 'package:tracking_app/helper/dio_integration.dart';
 
 Future<Map<String, Map<String, String>>> init() async {
-  // Core
-  await CacheHelper.init();
-  DioUtilNew.getInstance();
-  Get.lazyPut(() => MapController(), fenix: true);
+  // Core await CacheHelper.init();
+  //   DioUtilNew.getInstance();
+  //   Get.lazyPut(() => MapController(), fenix: true);
+
   // Get.lazyPut(() => LocalizationController(), fenix: true);
   // Controller
   // Get.lazyPut(() => ThemeController(sharedPreferences: Get.find()));

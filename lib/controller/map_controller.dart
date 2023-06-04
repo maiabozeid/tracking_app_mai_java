@@ -70,7 +70,6 @@ class MapController extends BaseController {
       await distanceBetweenLocations();
       await drawPolyLineMission();
       await getObjectZero();
-
       if (directionsModel?.status == 3) {
         CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
       }
@@ -166,11 +165,11 @@ class MapController extends BaseController {
 
   distanceBetweenLocations() {
     userDistance.value = util.distanceBetweenPoints(
-      position.latitude,
-      position.longitude,
-      directionsModel?.districtLocations?.first.lat ?? 0.0,
-      directionsModel?.districtLocations?.first.long ?? 0.0,
-    ) *
+          position.latitude,
+          position.longitude,
+          directionsModel?.districtLocations?.first.lat ?? 0.0,
+          directionsModel?.districtLocations?.first.long ?? 0.0,
+        ) *
         1000;
     print("userDistance${userDistance.value}");
   }
@@ -186,16 +185,18 @@ class MapController extends BaseController {
             child: TextButton(
                 onPressed: () {
                   positionStream = Geolocator.getPositionStream(
-                      locationSettings: const LocationSettings(
-                          accuracy: LocationAccuracy.high))
+                          locationSettings: const LocationSettings(
+                              accuracy: LocationAccuracy.high))
                       .listen((event) {
                     if (util.distanceBetweenPoints(
-                        event.latitude,
-                        event.longitude,
-                        directionsModel?.districtLocations?.first.lat ??
-                            0.0,
-                        directionsModel?.districtLocations?.first.long ??
-                            0.0) * 1000 >=
+                                event.latitude,
+                                event.longitude,
+                                directionsModel?.districtLocations?.first.lat ??
+                                    0.0,
+                                directionsModel
+                                        ?.districtLocations?.first.long ??
+                                    0.0) *
+                            1000 >=
                         70) {
                       CacheHelper.saveData(
                           key: AppConstants.missionVaValue, value: 0);
@@ -204,19 +205,17 @@ class MapController extends BaseController {
                     } else {
                       CacheHelper.getData(key: AppConstants.missionVaValue) == 3
                           ? {
-                        {
-                          CacheHelper.saveData(
-                              key: AppConstants.missionVaValue, value: 3),
-                          missionValue.value = CacheHelper.getData(
-                              key: AppConstants.missionVaValue)
-                        }
-                      }
+                              CacheHelper.saveData(
+                                  key: AppConstants.missionVaValue, value: 3),
+                              missionValue.value = CacheHelper.getData(
+                                  key: AppConstants.missionVaValue)
+                            }
                           : {
-                        CacheHelper.saveData(
-                            key: AppConstants.missionVaValue, value: 1),
-                        missionValue.value = CacheHelper.getData(
-                            key: AppConstants.missionVaValue)
-                      };
+                              CacheHelper.saveData(
+                                  key: AppConstants.missionVaValue, value: 1),
+                              missionValue.value = CacheHelper.getData(
+                                  key: AppConstants.missionVaValue)
+                            };
                     }
                     animateTo(event.latitude, event.longitude,
                         bearing: event.heading);
@@ -233,21 +232,22 @@ class MapController extends BaseController {
     } else {
       CacheHelper.getData(key: AppConstants.missionVaValue) == 3
           ? {
-        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
-        missionValue.value =
-            CacheHelper.getData(key: AppConstants.missionVaValue)
-      }
+              CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
+              missionValue.value =
+                  CacheHelper.getData(key: AppConstants.missionVaValue)
+            }
           : {
-        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 1),
-        missionValue.value =
-            CacheHelper.getData(key: AppConstants.missionVaValue)
-      };
+              CacheHelper.saveData(key: AppConstants.missionVaValue, value: 1),
+              missionValue.value =
+                  CacheHelper.getData(key: AppConstants.missionVaValue)
+            };
     }
   }
 
   drawPolyLineMission() async {
     directionsModel?.districtLocations?.forEach((element) {
-      if (element.objectId == 0) {} else {
+      if (element.objectId == 0) {
+      } else {
         pathPoint.add(LatLng(element.lat ?? 0.0, element.long ?? 0.0));
         polyline.add(Polyline(
             polylineId: const PolylineId("2"),
@@ -257,10 +257,10 @@ class MapController extends BaseController {
       }
     });
     final Uint8List markerStartEnd =
-    await util.getBytesFromAsset(Images.startIcon, 80);
+        await util.getBytesFromAsset(Images.startIcon, 80);
     BitmapDescriptor start = BitmapDescriptor.fromBytes(markerStartEnd);
     final Uint8List markerIconEnd =
-    await util.getBytesFromAsset(Images.endIcon, 80);
+        await util.getBytesFromAsset(Images.endIcon, 80);
     BitmapDescriptor end = BitmapDescriptor.fromBytes(markerIconEnd);
     markers.add(Marker(
         markerId: const MarkerId("1"),
@@ -305,7 +305,8 @@ class MapController extends BaseController {
     locationMarker.value = false;
     await startLocationTracking().then((value) {
       timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-        if (latitude.value == 0.0 && longitude.value == 0.0) {} else {
+        if (latitude.value == 0.0 && longitude.value == 0.0) {
+        } else {
           getIndexPoint(LatLng(latitude.value, longitude.value));
           infoList.add(InfoModel(
               time: DateTime.now().toString(),
@@ -329,8 +330,9 @@ class MapController extends BaseController {
 
   Future<void> startLocationTracking() async {
     positionStreamSubscription = Geolocator.getPositionStream(
-        locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.high, distanceFilter: 1))
+            locationSettings: const LocationSettings(
+                accuracy: LocationAccuracy.bestForNavigation,
+                distanceFilter: 1))
         .listen((position) {
       latitude.value = position.latitude;
       longitude.value = position.longitude;
@@ -392,7 +394,7 @@ class MapController extends BaseController {
             onTap: () async {
               await openMap(
                   latLng:
-                  LatLng(latitudeContinue.value, longitudeContinue.value));
+                      LatLng(latitudeContinue.value, longitudeContinue.value));
             },
             infoWindow: const InfoWindow(
               title: ' نقطه الاستكمال',
@@ -420,7 +422,7 @@ class MapController extends BaseController {
     switch (char) {
       case "s":
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           soundHelper.playerAudioStart();
           break;
@@ -428,10 +430,10 @@ class MapController extends BaseController {
         break;
       case "r":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.turnRight, 80);
+            await util.getBytesFromAsset(Images.turnRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -447,10 +449,10 @@ class MapController extends BaseController {
         break;
       case "l":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.left, 80);
+            await util.getBytesFromAsset(Images.left, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -466,10 +468,10 @@ class MapController extends BaseController {
         break;
       case "u":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.returnImage, 80);
+            await util.getBytesFromAsset(Images.returnImage, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -485,10 +487,10 @@ class MapController extends BaseController {
         break;
       case "ub":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.turnBack, 80);
+            await util.getBytesFromAsset(Images.turnBack, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -504,10 +506,10 @@ class MapController extends BaseController {
         break;
       case "c":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.goStraight, 80);
+            await util.getBytesFromAsset(Images.goStraight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -522,11 +524,11 @@ class MapController extends BaseController {
         }
         break;
       case "ss":
-      // final Uint8List markerIconEnd =
-      //     await util.getBytesFromAsset(Images.goStraight, 80);
-      // BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
+        // final Uint8List markerIconEnd =
+        //     await util.getBytesFromAsset(Images.goStraight, 80);
+        // BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           // markers.add(
           //   Marker(
@@ -542,10 +544,10 @@ class MapController extends BaseController {
         break;
       case "rr":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.turnRight, 80);
+            await util.getBytesFromAsset(Images.turnRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -561,10 +563,10 @@ class MapController extends BaseController {
         break;
       case "ll":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.left, 80);
+            await util.getBytesFromAsset(Images.left, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -580,10 +582,10 @@ class MapController extends BaseController {
         break;
       case "rl":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.leftAndRight, 80);
+            await util.getBytesFromAsset(Images.leftAndRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -599,10 +601,10 @@ class MapController extends BaseController {
         break;
       case "lr":
         final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.leftAndRight, 80);
+            await util.getBytesFromAsset(Images.leftAndRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -618,7 +620,7 @@ class MapController extends BaseController {
         break;
       case "e":
         if (Geolocator.distanceBetween(
-            event.latitude, event.longitude, lat, long) <=
+                event.latitude, event.longitude, lat, long) <=
             20) {
           print(Geolocator.distanceBetween(
               event.latitude, event.longitude, lat, long));
@@ -666,13 +668,13 @@ class MapController extends BaseController {
     final googleMapController = await completer.future;
     googleMapController
         .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(
-          latitude,
-          longitude,
-        ),
-        bearing: bearing ?? 90,
-        zoom: 18,
-        tilt: 30)));
+            target: LatLng(
+              latitude,
+              longitude,
+            ),
+            bearing: bearing ?? 90,
+            zoom: 18,
+            tilt: 30)));
   }
 
   drawPolyLine({List<LatLng>? points}) {
@@ -685,7 +687,7 @@ class MapController extends BaseController {
 
   myMarker(Position event, double rotate) async {
     final Uint8List markerIconEnd =
-    await util.getBytesFromAsset(Images.track, 50);
+        await util.getBytesFromAsset(Images.track, 50);
     BitmapDescriptor end = BitmapDescriptor.fromBytes(markerIconEnd);
     currentLocationMarker.value = Marker(
       markerId: MarkerId("$event"),
@@ -714,10 +716,6 @@ class MapController extends BaseController {
             title: "ايقاف مؤقت",
             titleStyle: const TextStyle(color: Colors.red, fontSize: 18),
             content: const Text(""),
-            // content: Text(
-            //   " لقد قطعت مسافه ${userDistance.round() / 1000} كم من طول المسار ",
-            //   style: const TextStyle(color: Color(0xff008d36), fontSize: 18),
-            // ),
             confirm: SizedBox(
               width: 120,
               child: TextButton(
@@ -762,13 +760,17 @@ class MapController extends BaseController {
               width: 120,
               child: TextButton(
                   onPressed: () async {
+                    soundHelper.player.dispose();
+                    completer = Completer();
+                    timer?.cancel();
+                    positionStream?.cancel();
+                    positionStreamSubscription?.cancel();
                     endMission();
                     CacheHelper.saveData(
                         key: AppConstants.missionVaValue, value: 0);
                     await services.completeTask(
                         districtId: directionsModel!.districtId!,
                         routeId: directionsModel!.routeNumber!);
-                    Get.delete<MapController>();
                     latitude.value = 0.0;
                     longitude.value = 0.0;
                     Get.to(() => const HomeScreen());
@@ -780,20 +782,6 @@ class MapController extends BaseController {
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   )),
             ));
-    // Get.defaultDialog(
-    //     title: 'انهاء المهمه'.tr,
-    //     content: const Text(""),
-    //     confirm: InkWell(onTap: () async {
-    //       endMission();
-    //       CacheHelper.saveData(key: AppConstants.missionVaValue, value: 0);
-    //       await services.completeTask(
-    //           districtId: directionsModel!.districtId!,
-    //           routeId: directionsModel!.routeNumber!);
-    //       Get.delete<MapController>();
-    //       latitude.value = 0.0;
-    //       longitude.value = 0.0;
-    //       Get.to(() => const HomeScreen());
-    //     }));
     }
   }
 
