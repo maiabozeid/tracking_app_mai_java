@@ -5,7 +5,9 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:map_launcher/map_launcher.dart';
+import 'package:tracking_app/component/permission_dialog.dart';
 import 'package:tracking_app/controller/base_controller.dart';
 import 'package:tracking_app/enum/view_state.dart';
 import 'package:tracking_app/helper/cache_helper.dart';
@@ -40,6 +42,7 @@ class MapController extends BaseController {
   DirectionsModel? directionsModel;
   final statusId = 0.obs;
   final missionValue = 0.obs;
+  final bookingId = 0.obs;
   final userDistance = 0.0.obs;
   final infoList = <InfoModel>[].obs;
   Timer? timer;
@@ -51,6 +54,10 @@ class MapController extends BaseController {
   final latitudeContinue = 0.0.obs;
   final longitudeContinue = 0.0.obs;
   final distanceContinue = 0.0.obs;
+  Stream<DateTime>? _timeStream;
+  StreamSubscription<DateTime>? timeSubscription;
+  final time = "".obs;
+  final serversEnabledBool = false.obs;
 
   @override
   Future<void> onInit() async {
@@ -59,6 +66,11 @@ class MapController extends BaseController {
     setState(ViewState.busy);
     await determinePosition();
     await getPaths();
+    _timeStream = Stream<DateTime>.periodic(
+        const Duration(seconds: 1), (i) => DateTime.now());
+    timeSubscription = _timeStream?.listen((value) {
+      time.value = DateFormat.jm().format(DateTime.parse(value.toString()));
+    });
     setState(ViewState.idle);
   }
 
@@ -72,12 +84,15 @@ class MapController extends BaseController {
       await getObjectZero();
       if (directionsModel?.status == 3) {
         CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
+      } else {
+        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 0);
       }
-      missionValue.value =
-          CacheHelper.getData(key: AppConstants.missionVaValue) ?? 0;
-    } else {
-      CacheHelper.saveData(key: AppConstants.missionVaValue, value: 0);
     }
+    missionValue.value =
+        CacheHelper.getData(key: AppConstants.missionVaValue) ?? 0;
+    bookingId.value = CacheHelper.getData(key: AppConstants.bookingId) ?? 0;
+
+    print(missionValue.value);
   }
 
   testData() {
@@ -279,7 +294,13 @@ class MapController extends BaseController {
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    serversEnabledBool.value = serviceEnabled;
     if (!serviceEnabled) {
+      showDialog(
+          context: Get.context!,
+          barrierDismissible: false,
+          builder: (context) => const PermissionDialog());
+
       return Future.error('Location services are disabled.');
     }
 
@@ -287,17 +308,27 @@ class MapController extends BaseController {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        showDialog(
+            context: Get.context!,
+            barrierDismissible: false,
+            builder: (context) => const PermissionDialog());
+
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
+      showDialog(
+          context: Get.context!,
+          barrierDismissible: false,
+          builder: (context) => const PermissionDialog());
+
+      // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print(position);
+
+    position = await Geolocator.getCurrentPosition();
     return position;
   }
 
@@ -322,6 +353,7 @@ class MapController extends BaseController {
         // for (var element in infoList) {
         //   print(element.toJson());
         // }
+        // infoList.sort((a, b) => a.time!.compareTo(b.time!));
         await services.addVehicleInfo(data: infoList);
         infoList.clear();
       });
@@ -658,6 +690,8 @@ class MapController extends BaseController {
           routeNumber: directionsModel?.routeNumber,
           districtId: directionsModel?.districtId);
       bookValue.value = false;
+      CacheHelper.saveData(key: AppConstants.bookingId, value: 1);
+      bookingId.value = CacheHelper.getData(key: AppConstants.bookingId);
     } catch (e) {
       bookValue.value = false;
     }
@@ -706,6 +740,7 @@ class MapController extends BaseController {
   functionButton() async {
     switch (missionValue.value) {
       case 1:
+        CacheHelper.saveData(key: AppConstants.tapped, value: true);
         positionStream?.cancel();
         services.startMission();
         startMission();
@@ -720,6 +755,7 @@ class MapController extends BaseController {
               width: 120,
               child: TextButton(
                   onPressed: () async {
+                    timeSubscription?.cancel();
                     timer?.cancel();
                     positionStream?.cancel();
                     positionStreamSubscription?.cancel();
@@ -746,11 +782,13 @@ class MapController extends BaseController {
         positionStream?.cancel();
         break;
       case 4:
-        positionStream?.cancel();
-        positionStreamSubscription?.cancel();
-        timer?.cancel();
-        completer = Completer();
-        soundHelper.player.dispose();
+        // positionStream?.cancel();
+        // positionStreamSubscription?.cancel();
+        // timer?.cancel();
+        // completer = Completer();
+        // soundHelper.player.dispose();
+        // CacheHelper.saveData(key: AppConstants.bookingId, value: 0);
+        // bookingId.value = CacheHelper.getData(key: AppConstants.bookingId);
         Get.defaultDialog(
             radius: 6,
             title: 'انهاء المهمه'.tr,
@@ -760,6 +798,9 @@ class MapController extends BaseController {
               width: 120,
               child: TextButton(
                   onPressed: () async {
+                    timeSubscription?.cancel();
+                    CacheHelper.saveData(
+                        key: AppConstants.tapped, value: false);
                     soundHelper.player.dispose();
                     completer = Completer();
                     timer?.cancel();
@@ -773,7 +814,7 @@ class MapController extends BaseController {
                         routeId: directionsModel!.routeNumber!);
                     latitude.value = 0.0;
                     longitude.value = 0.0;
-                    Get.to(() => const HomeScreen());
+                    Get.offAll(() => const HomeScreen());
                   },
                   style: TextButton.styleFrom(
                       backgroundColor: const Color(0xff008d36)),

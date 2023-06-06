@@ -42,10 +42,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _myFunction() async {
-    CacheHelper.getData(key: AppConstants.missionVaValue) == 0
+    CacheHelper.getData(key: AppConstants.tapped) ?? false == false
         ? {}
         : {
-            print("_myFunction"),
+            MapController.to.timeSubscription?.cancel(),
             MapController.to.timer != null
                 ? MapController.to.timer?.cancel()
                 : {},
@@ -88,13 +88,13 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                           width: 120,
                           child: TextButton(
                               onPressed: () async {
-                                CacheHelper.getData(
-                                            key: AppConstants.missionVaValue) ==
-                                        0
+                                CacheHelper.getData(key: AppConstants.tapped) ??
+                                        false == false
                                     ? {
                                         Get.to(() => const HomeScreen()),
                                       }
                                     : {
+                                        controller.timeSubscription?.cancel(),
                                         controller.timer?.cancel(),
                                         controller.positionStreamSubscription
                                             ?.cancel(),

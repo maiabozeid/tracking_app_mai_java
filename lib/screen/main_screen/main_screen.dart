@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tracking_app/component/custom_button.dart';
+import 'package:tracking_app/controller/connectivity_controller.dart';
 import 'package:tracking_app/controller/map_controller.dart';
 import 'package:tracking_app/enum/view_state.dart';
 import 'package:tracking_app/helper/cache_helper.dart';
@@ -21,6 +23,9 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var now = DateTime.now();
+    var formatter = DateFormat('dd-MM-yyyy');
+    String formattedDate = formatter.format(now);
     final controller = Get.put(MapController());
     return SafeArea(
         child: Scaffold(
@@ -54,16 +59,113 @@ class MainScreen extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                      "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
-                                      style: robotoRegular.copyWith(
-                                          color: Colors.white, fontSize: 14)),
-                                  IconButton(
-                                      onPressed: () {
-                                        CacheHelper.clearData();
-                                        Get.offAll(() => const SignInScreen());
-                                      },
-                                      icon: Image.asset(Images.logIcon))
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.access_time,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            controller.time.value,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.date_range,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(formattedDate,
+                                              style: const TextStyle(
+                                                  color: Colors.white))
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            CacheHelper.clearData();
+                                            Get.offAll(
+                                                () => const SignInScreen());
+                                          },
+                                          icon: Image.asset(Images.logIcon)),
+                                      Obx(() => ConnectivityController
+                                                  .to.connectionStatus.value !=
+                                              0
+                                          ? Row(
+                                              children: [
+                                                Image.asset(
+                                                  Images.online,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "online",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                Image.asset(
+                                                  Images.offline,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "offline",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )),
+                                      Obx(() =>
+                                          controller.serversEnabledBool.value
+                                              ? Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_on,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "GpsEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                )
+                                              : Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_off,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "GpsDisEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                ))
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -107,16 +209,113 @@ class MainScreen extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                      "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
-                                      style: robotoRegular.copyWith(
-                                          color: Colors.white, fontSize: 14)),
-                                  IconButton(
-                                      onPressed: () {
-                                        CacheHelper.clearData();
-                                        Get.offAll(() => const SignInScreen());
-                                      },
-                                      icon: Image.asset(Images.logIcon))
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.access_time,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            controller.time.value,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.date_range,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(formattedDate,
+                                              style: const TextStyle(
+                                                  color: Colors.white))
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            CacheHelper.clearData();
+                                            Get.offAll(
+                                                () => const SignInScreen());
+                                          },
+                                          icon: Image.asset(Images.logIcon)),
+                                      Obx(() => ConnectivityController
+                                                  .to.connectionStatus.value !=
+                                              0
+                                          ? Row(
+                                              children: [
+                                                Image.asset(
+                                                  Images.online,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "online",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                Image.asset(
+                                                  Images.offline,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "offline",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )),
+                                      Obx(() =>
+                                          controller.serversEnabledBool.value
+                                              ? Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_on,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "GpsEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                )
+                                              : Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_off,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "GpsDisEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                ))
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -140,7 +339,7 @@ class MainScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          if (controller.directionsModel?.status == 0) {
+                          if (controller.bookingId.value == 0) {
                             Get.defaultDialog(
                                 radius: 6,
                                 title: "يجب حجز المسار اولا",
@@ -273,14 +472,12 @@ class MainScreen extends StatelessWidget {
                                     : CustomButton(
                                         color: const Color(0xff008d36)
                                             .withOpacity(0.9),
-                                        buttonText: controller
-                                                    .directionsModel?.status ==
-                                                0
-                                            ? "حجز المسار"
-                                            : "استكمال المسار",
+                                        buttonText:
+                                            controller.bookingId.value == 1
+                                                ? "استكمال المسار"
+                                                : "حجز المسار",
                                         onPressed: () {
-                                          controller.directionsModel?.status ==
-                                                  0
+                                          controller.bookingId.value == 0
                                               ? controller.bookMission()
                                               : {
                                                   if (controller.longitudeContinue.value != 0.0 &&

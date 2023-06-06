@@ -1,12 +1,17 @@
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:tracking_app/controller/connectivity_controller.dart';
 import 'package:tracking_app/controller/map_controller.dart';
 import 'package:tracking_app/helper/cache_helper.dart';
 import 'package:tracking_app/helper/dio_integration.dart';
 
+final instance = GetIt.instance;
+
 Future<Map<String, Map<String, String>>> init() async {
-  // Core await CacheHelper.init();
-  //   DioUtilNew.getInstance();
-  //   Get.lazyPut(() => MapController(), fenix: true);
+  await CacheHelper.init();
+  DioUtilNew.getInstance();
+  Get.lazyPut(() => MapController(), fenix: true);
+  Get.lazyPut(() => ConnectivityController(), fenix: true);
 
   // Get.lazyPut(() => LocalizationController(), fenix: true);
   // Controller

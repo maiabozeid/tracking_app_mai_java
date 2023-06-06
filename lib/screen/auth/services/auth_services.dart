@@ -19,6 +19,7 @@ class AuthServices {
         "Password": password,
       });
       if (response.statusCode == 200) {
+        print(response.data);
         UserModel userModel = UserModel.fromJson(response.data);
         CacheHelper.saveData(
             key: AppConstants.expireOn, value: userModel.data!.expiresOn);

@@ -123,3 +123,41 @@
 //     );
 //   }
 // }
+// double threshold = 10; // Meters
+// bool isOnPath = false;
+//
+// for (int i = 0; i < polylinePoints.length - 1; i++) {
+// PolylinePoint start = polylinePoints[i];
+// PolylinePoint end = polylinePoints[i + 1];
+//
+// double distanceToStart = await Geolocator.distanceBetween(
+// position.latitude,
+// position.longitude,
+// start.latitude,
+// start.longitude,
+// );
+//
+// double distanceToEnd = await Geolocator.distanceBetween(
+// position.latitude,
+// position.longitude,
+// end.latitude,
+// end.longitude,
+// );
+//
+// double distance = await Geolocator.distanceBetween(
+// start.latitude,
+// start.longitude,
+// end.latitude,
+// end.longitude,
+// );
+//
+// if (distanceToStart <= threshold || distanceToEnd <= threshold) {
+// isOnPath = true;
+// break;
+// }
+//
+// if (distanceToStart + distanceToEnd - distance <= threshold) {
+// isOnPath = true;
+// break;
+// }
+// }

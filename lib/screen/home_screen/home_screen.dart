@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:tracking_app/helper/cache_helper.dart';
 import 'package:tracking_app/screen/auth/sign_in_screen.dart';
 import 'package:tracking_app/screen/main_screen/main_screen.dart';
@@ -13,6 +14,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var now = DateTime.now();
+    var formatter = DateFormat('dd-MM-yyyy');
+    String formattedTime = DateFormat.jm().format(
+        DateTime.parse(DateTime.now().toString()));
+        String formattedDate = formatter.format(now);
+
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -36,10 +44,29 @@ class HomeScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                              "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
-                              style: robotoRegular.copyWith(
-                                  color: Colors.white, fontSize: 14)),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  "اهلا : ${CacheHelper.getData(
+                                      key: AppConstants.name)}",
+                                  style: robotoRegular.copyWith(
+                                      color: Colors.white, fontSize: 14)),
+                              Row(
+                                children: [
+                                  const Icon(Icons.access_time,color: Colors.white),
+                                  const SizedBox(width: 5,),
+                                  Text(formattedTime,style: const TextStyle(color:Colors.white),)
+                                ],
+                              ), Row(
+                                children: [
+                                  const Icon(Icons.date_range,color: Colors.white),
+                                  const SizedBox(width: 5,),
+                                  Text(formattedDate,style: const TextStyle(color:Colors.white))
+                                ],
+                              ),
+                            ],
+                          ),
                           IconButton(
                               onPressed: () {
                                 CacheHelper.clearData();

@@ -15,4 +15,6 @@ class Images {
   static const String roadMap = 'assets/images/road-map.png';
   static const String error = 'assets/images/error.json';
   static const String stopSign = 'assets/images/stop-sign.json';
+  static const String offline = 'assets/images/offline.png';
+  static const String online = 'assets/images/online.png';
 }
