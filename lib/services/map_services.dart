@@ -38,9 +38,9 @@ class MapServices {
         print(response.statusCode);
 
         Utility.displaySuccessAlert("تم حجز المسار بنجاح", Get.context!);
-      } else {
-        print(response.statusCode);
-        print(response.data);
+      } else  if(response.statusCode ==400){
+        showCustomSnackBar(isError: true, message: "هذا المسار محجوز من قبل");
+      }else{
         showCustomSnackBar(isError: true, message: "توجد مشكله فى السيرفر");
       }
     } catch (e) {}

@@ -503,7 +503,29 @@ class MainScreen extends StatelessWidget {
                                                 : "حجز المسار",
                                         onPressed: () {
                                           controller.bookingId.value == 0
-                                              ? controller.bookMission()
+                                              ? {
+                                                  Get.defaultDialog(
+                                                      content: const SizedBox(),
+                                                      titleStyle: const TextStyle(
+                                                          color: Colors.green),
+                                                      buttonColor: Colors.green,
+                                                      title:
+                                                          "هل تريد تأكيد الحجز ؟",
+                                                      onConfirm: () {
+                                                        controller
+                                                            .bookMission();
+                                                      },
+                                                      onCancel: () {
+                                                        Get.back();
+                                                      },
+
+                                                      cancelTextColor:
+                                                          Colors.red,
+                                                      confirmTextColor:
+                                                          Colors.white,
+                                                      textConfirm: "تأكيد",
+                                                      textCancel: "لا")
+                                                }
                                               : {
                                                   if (controller.longitudeContinue.value != 0.0 &&
                                                       controller
