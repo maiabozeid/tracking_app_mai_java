@@ -1,22 +1,27 @@
 class DirectionsModel {
-  DirectionsModel({
-    this.routeNumber,
-    this.districtId,
-    this.districtName,
-    this.status,
-    this.objectId,
-    this.periorty,
-    this.distance,
-    this.districtLocations,
-    this.closestLocation,
-    this.actualDistance,
-  });
+  DirectionsModel(
+      {this.routeNumber,
+      this.districtId,
+      this.districtName,
+      this.status,
+      this.objectId,
+      this.periorty,
+      this.distance,
+      this.districtLocations,
+      this.closestLocation,
+      this.actualDistance,
+      this.CityName,
+      this.VehicleNumber,
+      this.VehicleType});
 
   DirectionsModel.fromJson(dynamic json) {
     actualDistance = json['actualDistance'];
     routeNumber = json['routeNumber'];
     districtId = json['districtId'];
     districtName = json['districtName'];
+    VehicleNumber = json['vehicleNumber'];
+    CityName = json['cityName'];
+    VehicleType = json['vehicleType'];
     status = json['status'];
     objectId = json['objectId'];
     periorty = json['periorty'];
@@ -38,6 +43,9 @@ class DirectionsModel {
   int? routeNumber;
   int? districtId;
   String? districtName;
+  String? CityName;
+  String? VehicleNumber;
+  String? VehicleType;
   int? status;
   int? objectId;
   int? periorty;

@@ -68,153 +68,13 @@ class MainScreen extends StatelessWidget {
                                           style: robotoRegular.copyWith(
                                               color: Colors.white,
                                               fontSize: 14)),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.access_time,
-                                              color: Colors.white),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            controller.time.value,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.date_range,
-                                              color: Colors.white),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(formattedDate,
-                                              style: const TextStyle(
-                                                  color: Colors.white))
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            CacheHelper.clearData();
-                                            Get.offAll(
-                                                () => const SignInScreen());
-                                          },
-                                          icon: Image.asset(Images.logIcon)),
-                                      Obx(() => ConnectivityController
-                                                  .to.connectionStatus.value !=
-                                              0
-                                          ? Row(
-                                              children: [
-                                                Image.asset(
-                                                  Images.online,
-                                                  color: Colors.white,
-                                                  width: 25,
-                                                ),
-                                                const Text(
-                                                  "online",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                )
-                                              ],
-                                            )
-                                          : Column(
-                                              children: [
-                                                Image.asset(
-                                                  Images.offline,
-                                                  color: Colors.white,
-                                                  width: 25,
-                                                ),
-                                                const Text(
-                                                  "offline",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                )
-                                              ],
-                                            )),
-                                      Obx(() =>
-                                          controller.serversEnabledBool.value
-                                              ? Row(
-                                                  children: const [
-                                                    Icon(
-                                                      Icons.location_on,
-                                                      color: Colors.white,
-                                                    ),
-                                                    Text(
-                                                      "GpsEnabled",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    )
-                                                  ],
-                                                )
-                                              : Row(
-                                                  children: const [
-                                                    Icon(
-                                                      Icons.location_off,
-                                                      color: Colors.white,
-                                                    ),
-                                                    Text(
-                                                      "GpsDisEnabled",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    )
-                                                  ],
-                                                ))
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            left: 0,
-                            child: Image.asset(
-                              Images.logo,
-                              height: 100,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Lottie.asset(Images.noData),
-                    Text("لاتوجد مسارات متاحه",
-                        style: robotoRegular.copyWith(
-                            color: const Color(0xff008d36), fontSize: 18)),
-                  ],
-                )
-              : Column(
-                  children: [
-                    SizedBox(
-                      height: Dimensions.height * 0.25,
-                      child: Stack(
-                        children: [
-                          Container(
-                            height: Dimensions.height * 0.2,
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                                color: Color(0xff008d36),
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(70),
-                                    bottomRight: Radius.circular(70))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
                                       Text(
-                                          "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
+                                          "رقم السياره : ${controller.directionsModel?.VehicleNumber}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Text(
+                                          "نوعها : ${controller.directionsModel?.VehicleType}",
                                           style: robotoRegular.copyWith(
                                               color: Colors.white,
                                               fontSize: 14)),
@@ -308,7 +168,167 @@ class MainScreen extends StatelessWidget {
                                                       color: Colors.white,
                                                     ),
                                                     Text(
-                                                      "GpsDisEnabled",
+                                                      "DisEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                ))
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            left: 0,
+                            child: Image.asset(
+                              Images.logo,
+                              height: 100,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Lottie.asset(Images.noData),
+                    Text("لاتوجد مسارات متاحه",
+                        style: robotoRegular.copyWith(
+                            color: const Color(0xff008d36), fontSize: 18)),
+                  ],
+                )
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: Dimensions.height * 0.25,
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: Dimensions.height * 0.2,
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                                color: Color(0xff008d36),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(70),
+                                    bottomRight: Radius.circular(70))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Text(
+                                          "رقم السياره : ${controller.directionsModel?.VehicleNumber}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Text(
+                                          "نوعها : ${controller.directionsModel?.VehicleType}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.access_time,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            controller.time.value,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.date_range,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(formattedDate,
+                                              style: const TextStyle(
+                                                  color: Colors.white))
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            CacheHelper.clearData();
+                                            Get.offAll(
+                                                () => const SignInScreen());
+                                          },
+                                          icon: Image.asset(Images.logIcon)),
+                                      Obx(() => ConnectivityController
+                                                  .to.connectionStatus.value !=
+                                              0
+                                          ? Row(
+                                              children: [
+                                                Image.asset(
+                                                  Images.online,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "online",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                Image.asset(
+                                                  Images.offline,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "offline",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )),
+                                      Obx(() =>
+                                          controller.serversEnabledBool.value
+                                              ? Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_on,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "GpsEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                )
+                                              : Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_off,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "DisEnabled",
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     )
@@ -446,6 +466,11 @@ class MainScreen extends StatelessWidget {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Text(
+                                        "البلديه : ${controller.directionsModel?.CityName}",
+                                        style: robotoRegular.copyWith(
+                                            color: const Color(0xff008d36),
+                                            fontSize: 16)),
                                     Text(
                                         "الحى : ${controller.directionsModel?.districtName}",
                                         style: robotoRegular.copyWith(
