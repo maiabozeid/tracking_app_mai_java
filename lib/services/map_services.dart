@@ -39,7 +39,9 @@ class MapServices {
 
         Utility.displaySuccessAlert("تم حجز المسار بنجاح", Get.context!);
       } else {
-        showCustomSnackBar(isError: true, message: "توجد مشكله فى السرفر");
+        print(response.statusCode);
+        print(response.data);
+        showCustomSnackBar(isError: true, message: "توجد مشكله فى السيرفر");
       }
     } catch (e) {}
   }
@@ -70,7 +72,6 @@ class MapServices {
       final response = await dio!.put(AppConstants.continueMission);
       if (response.statusCode == 200) {
         print(response.statusCode);
-
       }
     } catch (e) {}
   }
@@ -90,7 +91,6 @@ class MapServices {
       final response = await dio!.put(AppConstants.end);
       if (response.statusCode == 200) {
         print(response.statusCode);
-
       }
     } catch (e) {}
   }

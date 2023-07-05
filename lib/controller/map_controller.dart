@@ -809,6 +809,7 @@ class MapController extends BaseController {
                     endMission();
                     CacheHelper.saveData(
                         key: AppConstants.missionVaValue, value: 0);
+                    CacheHelper.saveData(key: AppConstants.bookingId, value: 0);
                     await services.completeTask(
                         districtId: directionsModel!.districtId!,
                         routeId: directionsModel!.routeNumber!);
