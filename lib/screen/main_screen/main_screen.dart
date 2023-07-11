@@ -488,153 +488,168 @@ class MainScreen extends StatelessWidget {
                                             fontSize: 16))
                                   ],
                                 ),
-                                Obx(() => controller.bookValue.value
-                                    ? const Center(
-                                        child: CircularProgressIndicator(
-                                          color: Color(0xff008d36),
-                                        ),
-                                      )
-                                    : CustomButton(
-                                        color: const Color(0xff008d36)
-                                            .withOpacity(0.9),
-                                        buttonText:
-                                            controller.bookingId.value == 1
-                                                ? "استكمال المسار"
-                                                : "حجز المسار",
-                                        onPressed: () {
-                                          controller.bookingId.value == 0
-                                              ? {
-                                                  Get.defaultDialog(
-                                                      content: const SizedBox(),
-                                                      titleStyle: const TextStyle(
-                                                          color: Colors.green),
-                                                      buttonColor: Colors.green,
-                                                      title:
-                                                          "هل تريد تأكيد الحجز ؟",
-                                                      onConfirm: () {
-                                                        controller
-                                                            .bookMission();
-                                                      },
-                                                      onCancel: () {
-                                                        Get.back();
-                                                      },
-
-                                                      cancelTextColor:
-                                                          Colors.red,
-                                                      confirmTextColor:
-                                                          Colors.white,
-                                                      textConfirm: "تأكيد",
-                                                      textCancel: "لا")
-                                                }
-                                              : {
-                                                  if (controller.longitudeContinue.value != 0.0 &&
-                                                      controller
-                                                              .longitudeContinue
-                                                              .value !=
-                                                          0.0 &&
-                                                      controller
-                                                              .distanceContinue
+                                Column(
+                                  children: [
+                                    Obx(() => controller.bookValue.value
+                                        ? const Center(
+                                            child: CircularProgressIndicator(
+                                              color: Color(0xff008d36),
+                                            ),
+                                          )
+                                        : CustomButton(
+                                            color: const Color(0xff008d36)
+                                                .withOpacity(0.9),
+                                            buttonText:
+                                                controller.bookingId.value == 1
+                                                    ? "استكمال المسار"
+                                                    : "حجز المسار",
+                                            onPressed: () {
+                                              controller.bookingId.value == 0
+                                                  ? {
+                                                      Get.defaultDialog(
+                                                          content:
+                                                              const SizedBox(),
+                                                          titleStyle:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                          buttonColor:
+                                                              Colors.green,
+                                                          title:
+                                                              "هل تريد تأكيد الحجز ؟",
+                                                          onConfirm: () {
+                                                            controller
+                                                                .bookMission();
+                                                          },
+                                                          onCancel: () {
+                                                            Get.back();
+                                                          },
+                                                          cancelTextColor:
+                                                              Colors.red,
+                                                          confirmTextColor:
+                                                              Colors.white,
+                                                          textConfirm: "تأكيد",
+                                                          textCancel: "لا")
+                                                    }
+                                                  : {
+                                                      if (controller.longitudeContinue.value != 0.0 &&
+                                                          controller
+                                                                  .longitudeContinue
+                                                                  .value !=
+                                                              0.0 &&
+                                                          controller
+                                                                  .distanceContinue
+                                                                  .value >
+                                                              70)
+                                                        {
+                                                          Get.defaultDialog(
+                                                              radius: 6,
+                                                              title:
+                                                                  "انت بعيد عن نقطه التوقف بمسافه\n ${controller.distanceContinue.value.toStringAsFixed(2)} م ",
+                                                              titleStyle:
+                                                                  const TextStyle(
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      fontSize:
+                                                                          18),
+                                                              content:
+                                                                  const Text(
+                                                                      ""),
+                                                              confirm: SizedBox(
+                                                                width: 150,
+                                                                child:
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          controller.openMap(
+                                                                              latLng: LatLng(controller.latitudeContinue.value, controller.longitudeContinue.value));
+                                                                        },
+                                                                        style: TextButton.styleFrom(
+                                                                            backgroundColor: const Color(
+                                                                                0xff008d36)),
+                                                                        child:
+                                                                            const Text(
+                                                                          "اذهب لنقطه الاستكمال",
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 16),
+                                                                        )),
+                                                              )),
+                                                        }
+                                                      else if (controller
+                                                              .userDistance
                                                               .value >
-                                                          70)
-                                                    {
-                                                      Get.defaultDialog(
-                                                          radius: 6,
-                                                          title:
-                                                              "انت بعيد عن نقطه التوقف بمسافه\n ${controller.distanceContinue.value.toStringAsFixed(2)} م ",
-                                                          titleStyle:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .amber,
-                                                                  fontSize: 18),
-                                                          content:
-                                                              const Text(""),
-                                                          confirm: SizedBox(
-                                                            width: 150,
-                                                            child: TextButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  controller.openMap(
-                                                                      latLng: LatLng(
-                                                                          controller
-                                                                              .latitudeContinue
-                                                                              .value,
-                                                                          controller
-                                                                              .longitudeContinue
-                                                                              .value));
-                                                                },
-                                                                style: TextButton.styleFrom(
-                                                                    backgroundColor:
-                                                                        const Color(
-                                                                            0xff008d36)),
-                                                                child:
-                                                                    const Text(
-                                                                  "اذهب لنقطه الاستكمال",
-                                                                  style: TextStyle(
+                                                          500)
+                                                        {
+                                                          Get.defaultDialog(
+                                                              radius: 6,
+                                                              title:
+                                                                  "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                                              titleStyle:
+                                                                  const TextStyle(
                                                                       color: Colors
-                                                                          .white,
+                                                                          .green,
                                                                       fontSize:
-                                                                          16),
-                                                                )),
-                                                          )),
-                                                    }
-                                                  else if (controller
-                                                          .userDistance.value >
-                                                      500)
-                                                    {
-                                                      Get.defaultDialog(
-                                                          radius: 6,
-                                                          title:
-                                                              "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
-                                                          titleStyle:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .green,
-                                                                  fontSize: 18),
-                                                          content:
-                                                              const Text(""),
-                                                          confirm: SizedBox(
-                                                            width: 150,
-                                                            child: TextButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  controller.openMap(
-                                                                      latLng: LatLng(
-                                                                          controller
-                                                                              .directionsModel!
-                                                                              .districtLocations!
-                                                                              .first
-                                                                              .lat!,
-                                                                          controller
-                                                                              .directionsModel!
-                                                                              .districtLocations!
-                                                                              .first
-                                                                              .long!));
-                                                                },
-                                                                style: TextButton.styleFrom(
-                                                                    backgroundColor:
-                                                                        const Color(
-                                                                            0xff008d36)),
+                                                                          18),
+                                                              content:
+                                                                  const Text(
+                                                                      ""),
+                                                              confirm: SizedBox(
+                                                                width: 150,
                                                                 child:
-                                                                    const Text(
-                                                                  "اذهب لنقطه البدايه",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          16),
-                                                                )),
-                                                          )),
-                                                    }
-                                                  else
-                                                    {
-                                                      Get.to(() =>
-                                                          const MapScreen()),
-                                                    }
-                                                };
-                                        },
-                                        width: Dimensions.width * 0.3,
-                                        height: Dimensions.height * 0.05,
-                                      ))
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          controller.openMap(
+                                                                              latLng: LatLng(controller.directionsModel!.districtLocations!.first.lat!, controller.directionsModel!.districtLocations!.first.long!));
+                                                                        },
+                                                                        style: TextButton.styleFrom(
+                                                                            backgroundColor: const Color(
+                                                                                0xff008d36)),
+                                                                        child:
+                                                                            const Text(
+                                                                          "اذهب لنقطه البدايه",
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 16),
+                                                                        )),
+                                                              )),
+                                                        }
+                                                      else
+                                                        {
+                                                          Get.to(() =>
+                                                              const MapScreen()),
+                                                        }
+                                                    };
+                                            },
+                                            width: Dimensions.width * 0.3,
+                                            height: Dimensions.height * 0.05,
+                                          )),
+                                    SizedBox(
+                                        width: 120,
+                                        child: TextButton(
+                                          onPressed: () {
+                                            controller.onInit();
+                                          },
+                                          style: TextButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xff008d36)
+                                                    .withOpacity(0.9),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(Icons.refresh,
+                                                  color: Colors.white),
+                                              Text("تحديث",
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                            ],
+                                          ),
+                                        )),
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -687,7 +702,7 @@ class MainScreen extends StatelessWidget {
                                         controller.latitudeContinue.value,
                                         controller.longitudeContinue.value),
                                     zoom: 18)),
-                          ))
+                          )),
                   ],
                 )),
     ));
