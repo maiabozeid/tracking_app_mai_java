@@ -8,7 +8,7 @@ class AppConstants {
     // static const String baseUrl = 'https://applive.co4qu.com/api';
     // static const String baseUrl = 'https://liveapp2.co4qu.com/api';
    // static const String baseUrl = 'https://qualityapinew.afaqci.com/api';
-  static const String login = '/Account/Login';
+  static const String login = '/Account/Loginapp';
   static const String getPaths = '/DriverPaths/GetAvailablePaths2?';
   static const String bookPath = '/DriverPaths/AddDriverPath';
   static const String startMission = '/DriverPaths/StartPath';
@@ -26,6 +26,8 @@ class AppConstants {
   static const String tapped = "tapped";
   static const String theme = 'theme';
   static const String expireOn = 'expireOn';
+  static const String trackVehicleNumber = 'trackVehicleNumber';
+  static const String trackVehicleDevice = 'trackVehicleDevice';
   static const String role = 'role';
   static const String length = 'length';
   static const String token = 'multivendor_token';

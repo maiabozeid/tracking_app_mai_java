@@ -24,6 +24,12 @@ class AuthServices {
         CacheHelper.saveData(
             key: AppConstants.expireOn, value: userModel.data!.expiresOn);
         CacheHelper.saveData(
+            key: AppConstants.trackVehicleDevice,
+            value: userModel.data!.trackVehicleDevice);
+        CacheHelper.saveData(
+            key: AppConstants.trackVehicleNumber,
+            value: userModel.data!.trackVehicleNumber);
+        CacheHelper.saveData(
             key: AppConstants.role, value: userModel.data!.role);
         CacheHelper.saveData(
             key: AppConstants.token, value: userModel.data!.token);

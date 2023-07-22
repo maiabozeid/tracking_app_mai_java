@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:tracking_app/enum/view_state.dart';
 
-class BaseController extends GetxController implements GetxService {
+class BaseController extends GetxController   {
   final _state = ViewState.idle.obs;
 
   ViewState get state => _state.value;
