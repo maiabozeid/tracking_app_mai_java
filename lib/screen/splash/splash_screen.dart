@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -43,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
         },
       );
 
-  int diffrenceBetweenExpireNow() {
+  int differenceBetweenExpireNow() {
     if (CacheHelper.getData(key: AppConstants.expireOn) != null) {
       DateTime expireDate =
           DateTime.parse(CacheHelper.getData(key: AppConstants.expireOn));
@@ -72,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
               if (CacheHelper.getData(key: AppConstants.token) == null) {
                 // Get.offAll(const MapScreen());
                 Get.offAll(const SignInScreen());
-              } else if (diffrenceBetweenExpireNow() < 1) {
+              } else if (differenceBetweenExpireNow() < 1) {
                 Get.offAll(const SignInScreen());
               } else {
                 Get.offAll(const HomeScreen());
@@ -80,33 +79,6 @@ class _SplashScreenState extends State<SplashScreen>
             }),
           ),
         );
-    // Future.delayed(const Duration(seconds: 5), () async {
-    //   String time = await CacheHelper.getData(key: AppConstants.expireOn) ?? "";
-    //   String token = await CacheHelper.getData(key: AppConstants.token) ?? "";
-    //   print(token);
-    //   print(time);
-    //   print("time");
-    //   if (time.isEmpty) {
-    //     // Get.toNamed(AppRoute.signIn);
-    //   } else {
-    //     var output = DateFormat('MMMM d y , hh:mm a');
-    //     var input =
-    //         DateTime.parse(CacheHelper.getData(key: AppConstants.expireOn));
-    //     print(output.format(input));
-    //     final date2 = DateTime.now();
-    //     final difference = input.difference(date2).inHours;
-    //     print(difference);
-    //     if (difference > 0) {
-    //       // Get.toNamed(AppRoute.homeScreen);
-    //       DioUtilNew.setDioAgain();
-    //     } else if (difference <= 0) {
-    //       CacheHelper.removeData(key: AppConstants.token);
-    //       CacheHelper.removeData(key: AppConstants.expireOn);
-    //       // Get.toNamed(AppRoute.signIn);
-    //       DioUtilNew.setDioAgain();
-    //     }
-    //   }
-    // });
   }
 
   @override

@@ -29,716 +29,684 @@ class MainScreen extends StatelessWidget {
     final controller = Get.put(MapController());
     return SafeArea(
         child: Scaffold(
-          body: Obx(() =>
-          controller.state == ViewState.busy
-              ? const Center(
-            child: SpinKitFadingCube(
-              color: Color(0xff008d36),
-              size: 50.0,
-            ),
-          )
-              : controller.directionsModel?.districtLocations == null
+      body: Obx(() => controller.state == ViewState.busy
+          ? const Center(
+              child: SpinKitFadingCube(
+                color: Color(0xff008d36),
+                size: 50.0,
+              ),
+            )
+          : controller.directionsModel?.districtLocations == null
               ? Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: Dimensions.height * 0.25,
-                child: Stack(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      height: Dimensions.height * 0.2,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                          color: Color(0xff008d36),
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(70),
-                              bottomRight: Radius.circular(70))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    "اهلا : ${CacheHelper.getData(
-                                        key: AppConstants.name)}",
-                                    style: robotoRegular.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 14)),
-                                Text(
-                                    "رقم السياره : ${CacheHelper.getData(
-                                        key: AppConstants.trackVehicleNumber)}",
-                                    style: robotoRegular.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 14)),
-                                Text(
-                                    "نوعها : ${CacheHelper.getData(
-                                        key: AppConstants.trackVehicleDevice)}",
-                                    style: robotoRegular.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 14)),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.access_time,
-                                        color: Colors.white),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      controller.time.value,
-                                      style: const TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.date_range,
-                                        color: Colors.white),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(formattedDate,
-                                        style: const TextStyle(
-                                            color: Colors.white))
-                                  ],
-                                ),
-                              ],
+                    SizedBox(
+                      height: Dimensions.height * 0.25,
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: Dimensions.height * 0.2,
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                                color: Color(0xff008d36),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(70),
+                                    bottomRight: Radius.circular(70))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Text(
+                                          "رقم السياره : ${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Text(
+                                          "نوعها : ${CacheHelper.getData(key: AppConstants.trackVehicleDevice)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.access_time,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            controller.time.value,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.date_range,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(formattedDate,
+                                              style: const TextStyle(
+                                                  color: Colors.white))
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            CacheHelper.clearData();
+                                            Get.offAll(
+                                                () => const SignInScreen());
+                                          },
+                                          icon: Image.asset(Images.logIcon)),
+                                      Obx(() => ConnectivityController
+                                                  .to.connectionStatus.value !=
+                                              0
+                                          ? Row(
+                                              children: [
+                                                Image.asset(
+                                                  Images.online,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "online",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                Image.asset(
+                                                  Images.offline,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "offline",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )),
+                                      Obx(() =>
+                                          controller.serversEnabledBool.value
+                                              ? Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_on,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "GpsEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                )
+                                              : Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_off,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "DisEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                ))
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
-                            Column(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      CacheHelper.clearData();
-                                      Get.offAll(
-                                              () => const SignInScreen());
-                                    },
-                                    icon: Image.asset(Images.logIcon)),
-                                Obx(() =>
-                                ConnectivityController
-                                    .to.connectionStatus.value !=
-                                    0
-                                    ? Row(
-                                  children: [
-                                    Image.asset(
-                                      Images.online,
-                                      color: Colors.white,
-                                      width: 25,
-                                    ),
-                                    const Text(
-                                      "online",
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                )
-                                    : Column(
-                                  children: [
-                                    Image.asset(
-                                      Images.offline,
-                                      color: Colors.white,
-                                      width: 25,
-                                    ),
-                                    const Text(
-                                      "offline",
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                )),
-                                Obx(() =>
-                                controller.serversEnabledBool.value
-                                    ? Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.location_on,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      "GpsEnabled",
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                )
-                                    : Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.location_off,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      "DisEnabled",
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                ))
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      left: 0,
-                      child: Image.asset(
-                        Images.logo,
-                        height: 100,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Lottie.asset(Images.noData),
-              Text("لاتوجد مسارات متاحه",
-                  style: robotoRegular.copyWith(
-                      color: const Color(0xff008d36), fontSize: 18)),
-            ],
-          )
-              : Column(
-            children: [
-              SizedBox(
-                height: Dimensions.height * 0.25,
-                child: Stack(
-                  children: [
-                    Container(
-                      height: Dimensions.height * 0.2,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                          color: Color(0xff008d36),
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(70),
-                              bottomRight: Radius.circular(70))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    "اهلا : ${CacheHelper.getData(
-                                        key: AppConstants.name)}",
-                                    style: robotoRegular.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 14)),
-                                Text(
-                                    "رقم السياره : ${CacheHelper.getData(
-                                        key: AppConstants.trackVehicleNumber)}",
-                                    style: robotoRegular.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 14)),
-                                Text(
-                                    "نوعها : ${CacheHelper.getData(
-                                        key: AppConstants.trackVehicleDevice)}",
-                                    style: robotoRegular.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 14)),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.access_time,
-                                        color: Colors.white),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      controller.time.value,
-                                      style: const TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.date_range,
-                                        color: Colors.white),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(formattedDate,
-                                        style: const TextStyle(
-                                            color: Colors.white))
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      CacheHelper.clearData();
-                                      Get.offAll(
-                                              () => const SignInScreen());
-                                    },
-                                    icon: Image.asset(Images.logIcon)),
-                                Obx(() =>
-                                ConnectivityController
-                                    .to.connectionStatus.value !=
-                                    0
-                                    ? Row(
-                                  children: [
-                                    Image.asset(
-                                      Images.online,
-                                      color: Colors.white,
-                                      width: 25,
-                                    ),
-                                    const Text(
-                                      "online",
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                )
-                                    : Column(
-                                  children: [
-                                    Image.asset(
-                                      Images.offline,
-                                      color: Colors.white,
-                                      width: 25,
-                                    ),
-                                    const Text(
-                                      "offline",
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                )),
-                                Obx(() =>
-                                controller.serversEnabledBool.value
-                                    ? Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.location_on,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      "GpsEnabled",
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                )
-                                    : Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.location_off,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      "DisEnabled",
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                ))
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      left: 0,
-                      child: Image.asset(
-                        Images.logo,
-                        height: 100,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: Dimensions.height * 0.04,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    if (controller.bookingId.value == 0) {
-                      Get.defaultDialog(
-                          radius: 6,
-                          title: "يجب حجز المسار اولا",
-                          titleStyle: const TextStyle(
-                              color: Colors.red, fontSize: 20),
-                          content: Lottie.asset(Images.error, height: 90),
-                          confirm: SizedBox(
-                            width: 120,
-                            child: TextButton(
-                                onPressed: () async {
-                                  controller.bookMission();
-                                },
-                                style: TextButton.styleFrom(
-                                    backgroundColor:
-                                    const Color(0xff008d36)),
-                                child: const Text(
-                                  "حجز",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
-                                )),
-                          ));
-                    } else if (controller.longitudeContinue.value !=
-                        0.0 &&
-                        controller.longitudeContinue.value != 0.0 &&
-                        controller.distanceContinue.value > 70) {
-                      Get.defaultDialog(
-                          radius: 6,
-                          title:
-                          "انت بعيد عن نقطه التوقف بمسافه\n ${controller
-                              .distanceContinue.value.toStringAsFixed(2)} م ",
-                          titleStyle: const TextStyle(
-                              color: Colors.amber, fontSize: 18),
-                          content: const Text(""),
-                          confirm: SizedBox(
-                            width: 150,
-                            child: TextButton(
-                                onPressed: () async {
-                                  controller.openMap(
-                                      latLng: LatLng(
-                                          controller
-                                              .latitudeContinue.value,
-                                          controller
-                                              .longitudeContinue.value));
-                                },
-                                style: TextButton.styleFrom(
-                                    backgroundColor:
-                                    const Color(0xff008d36)),
-                                child: const Text(
-                                  "اذهب لنقطه الاستكمال",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
-                                )),
-                          ));
-                    } else if (controller.userDistance.value > 500) {
-                      Get.defaultDialog(
-                          radius: 6,
-                          title:
-                          "انت بعيد عن بدايه المسار بمسافه ${controller
-                              .userDistance.value.toStringAsFixed(2)}",
-                          titleStyle: const TextStyle(
-                              color: Colors.green, fontSize: 18),
-                          content: const Text(""),
-                          confirm: SizedBox(
-                            width: 150,
-                            child: TextButton(
-                                onPressed: () async {
-                                  controller.openMap(
-                                      latLng: LatLng(
-                                          controller
-                                              .directionsModel!
-                                              .districtLocations!
-                                              .first
-                                              .lat!,
-                                          controller
-                                              .directionsModel!
-                                              .districtLocations!
-                                              .first
-                                              .long!));
-                                },
-                                style: TextButton.styleFrom(
-                                    backgroundColor:
-                                    const Color(0xff008d36)),
-                                child: const Text(
-                                  "اذهب لنقطه البدايه",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
-                                )),
-                          ));
-                    } else {
-                      Get.to(() => const MapScreen());
-                    }
-                  },
-                  child: Card(
-                    elevation: 2,
-                    shadowColor: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(
-                          color: Colors.grey,
-                        )),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                        Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              "البلديه : ${controller.directionsModel
-                                  ?.CityName}",
-                              style: robotoRegular.copyWith(
-                                  color: const Color(0xff008d36),
-                                  fontSize: 16)),
-                          Text(
-                              "الحى : ${controller.directionsModel
-                                  ?.districtName}",
-                              style: robotoRegular.copyWith(
-                                  color: const Color(0xff008d36),
-                                  fontSize: 16)),
-                          Text(
-                              "رقم المسار : ${controller.directionsModel
-                                  ?.routeNumber}",
-                              style: robotoRegular.copyWith(
-                                  color: const Color(0xff008d36),
-                                  fontSize: 16)),
-                          Text(
-                              "المسافه :  ${controller.userDistance.value
-                                  .toStringAsFixed(3)}",
-                              style: robotoRegular.copyWith(
-                                  color: const Color(0xff008d36),
-                                  fontSize: 16))
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Obx(() =>
-                          controller.bookValue.value
-                              ? const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xff008d36),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            left: 0,
+                            child: Image.asset(
+                              Images.logo,
+                              height: 100,
                             ),
                           )
-                              : CustomButton(
-                            color: const Color(0xff008d36)
-                                .withOpacity(0.9),
-                            buttonText:
-                            controller.bookingId.value == 1
-                                ? "استكمال المسار"
-                                : "حجز المسار",
-                            onPressed: () {
-                              controller.bookingId.value == 0
-                                  ? {
-                                Get.defaultDialog(
-                                    content:
-                                    const SizedBox(),
-                                    titleStyle:
-                                    const TextStyle(
-                                        color: Colors
-                                            .green),
-                                    buttonColor:
-                                    Colors.green,
-                                    title:
-                                    "هل تريد تأكيد الحجز ؟",
-                                    onConfirm: () {
-                                      controller
-                                          .bookMission();
-                                    },
-                                    onCancel: () {
-                                      Get.back();
-                                    },
-                                    cancelTextColor:
-                                    Colors.red,
-                                    confirmTextColor:
-                                    Colors.white,
-                                    textConfirm: "تأكيد",
-                                    textCancel: "لا")
-                              }
-                                  : {
-                                if (controller.longitudeContinue.value != 0.0 &&
-                                    controller
-                                        .longitudeContinue
-                                        .value !=
-                                        0.0 &&
-                                    controller
-                                        .distanceContinue
-                                        .value >
-                                        70)
-                                  {
-                                    Get.defaultDialog(
-                                        radius: 6,
-                                        title:
-                                        "انت بعيد عن نقطه التوقف بمسافه\n ${controller
-                                            .distanceContinue.value
-                                            .toStringAsFixed(2)} م ",
-                                        titleStyle:
-                                        const TextStyle(
-                                            color: Colors
-                                                .amber,
-                                            fontSize:
-                                            18),
-                                        content:
-                                        const Text(
-                                            ""),
-                                        confirm: SizedBox(
-                                          width: 150,
-                                          child:
-                                          TextButton(
-                                              onPressed:
-                                                  () async {
-                                                controller.openMap(
-                                                    latLng: LatLng(controller
-                                                        .latitudeContinue.value,
-                                                        controller
-                                                            .longitudeContinue
-                                                            .value));
+                        ],
+                      ),
+                    ),
+                    Lottie.asset(Images.noData),
+                    Text("لاتوجد مسارات متاحه",
+                        style: robotoRegular.copyWith(
+                            color: const Color(0xff008d36), fontSize: 18)),
+                  ],
+                )
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: Dimensions.height * 0.25,
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: Dimensions.height * 0.2,
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                                color: Color(0xff008d36),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(70),
+                                    bottomRight: Radius.circular(70))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "اهلا : ${CacheHelper.getData(key: AppConstants.name)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Text(
+                                          "رقم السياره : ${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Text(
+                                          "نوعها : ${CacheHelper.getData(key: AppConstants.trackVehicleDevice)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 14)),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.access_time,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            controller.time.value,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.date_range,
+                                              color: Colors.white),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(formattedDate,
+                                              style: const TextStyle(
+                                                  color: Colors.white))
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            CacheHelper.clearData();
+                                            Get.offAll(
+                                                () => const SignInScreen());
+                                          },
+                                          icon: Image.asset(Images.logIcon)),
+                                      Obx(() => ConnectivityController
+                                                  .to.connectionStatus.value !=
+                                              0
+                                          ? Row(
+                                              children: [
+                                                Image.asset(
+                                                  Images.online,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "online",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                Image.asset(
+                                                  Images.offline,
+                                                  color: Colors.white,
+                                                  width: 25,
+                                                ),
+                                                const Text(
+                                                  "offline",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            )),
+                                      Obx(() =>
+                                          controller.serversEnabledBool.value
+                                              ? Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_on,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "GpsEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                )
+                                              : Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons.location_off,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "DisEnabled",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                ))
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            left: 0,
+                            child: Image.asset(
+                              Images.logo,
+                              height: 100,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: Dimensions.height * 0.04,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (controller.bookingId.value == 0) {
+                            Get.defaultDialog(
+                                radius: 6,
+                                title: "يجب حجز المسار اولا",
+                                titleStyle: const TextStyle(
+                                    color: Colors.red, fontSize: 20),
+                                content: Lottie.asset(Images.error, height: 90),
+                                confirm: SizedBox(
+                                  width: 120,
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        controller.bookMission();
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xff008d36)),
+                                      child: const Text(
+                                        "حجز",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      )),
+                                ));
+                          } else if (controller.longitudeContinue.value !=
+                                  0.0 &&
+                              controller.longitudeContinue.value != 0.0 &&
+                              controller.distanceContinue.value > 70) {
+                            Get.defaultDialog(
+                                radius: 6,
+                                title:
+                                    "انت بعيد عن نقطه التوقف بمسافه\n ${controller.distanceContinue.value.toStringAsFixed(2)} م ",
+                                titleStyle: const TextStyle(
+                                    color: Colors.amber, fontSize: 18),
+                                content: const Text(""),
+                                confirm: SizedBox(
+                                  width: 150,
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        controller.openMap(
+                                            latLng: LatLng(
+                                                controller
+                                                    .latitudeContinue.value,
+                                                controller
+                                                    .longitudeContinue.value));
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xff008d36)),
+                                      child: const Text(
+                                        "اذهب لنقطه الاستكمال",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      )),
+                                ));
+                          } else if (controller.userDistance.value > 500) {
+                            Get.defaultDialog(
+                                radius: 6,
+                                title:
+                                    "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                titleStyle: const TextStyle(
+                                    color: Colors.green, fontSize: 18),
+                                content: const Text(""),
+                                confirm: SizedBox(
+                                  width: 150,
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        controller.openMap(
+                                            latLng: LatLng(
+                                                controller
+                                                    .directionsModel!
+                                                    .districtLocations!
+                                                    .first
+                                                    .lat!,
+                                                controller
+                                                    .directionsModel!
+                                                    .districtLocations!
+                                                    .first
+                                                    .long!));
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xff008d36)),
+                                      child: const Text(
+                                        "اذهب لنقطه البدايه",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      )),
+                                ));
+                          } else {
+                            Get.to(() => const MapScreen());
+                          }
+                        },
+                        child: Card(
+                          elevation: 2,
+                          shadowColor: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: const BorderSide(
+                                color: Colors.grey,
+                              )),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        "البلديه : ${controller.directionsModel?.CityName}",
+                                        style: robotoRegular.copyWith(
+                                            color: const Color(0xff008d36),
+                                            fontSize: 16)),
+                                    Text(
+                                        "الحى : ${controller.directionsModel?.districtName}",
+                                        style: robotoRegular.copyWith(
+                                            color: const Color(0xff008d36),
+                                            fontSize: 16)),
+                                    Text(
+                                        "رقم المسار : ${controller.directionsModel?.routeNumber}",
+                                        style: robotoRegular.copyWith(
+                                            color: const Color(0xff008d36),
+                                            fontSize: 16)),
+                                    Text(
+                                        "المسافه :  ${controller.userDistance.value.toStringAsFixed(3)}",
+                                        style: robotoRegular.copyWith(
+                                            color: const Color(0xff008d36),
+                                            fontSize: 16))
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Obx(() => controller.bookValue.value
+                                        ? const Center(
+                                            child: CircularProgressIndicator(
+                                              color: Color(0xff008d36),
+                                            ),
+                                          )
+                                        : CustomButton(
+                                            color: const Color(0xff008d36)
+                                                .withOpacity(0.9),
+                                            buttonText:
+                                                controller.bookingId.value == 1
+                                                    ? "استكمال المسار"
+                                                    : "حجز المسار",
+                                            onPressed: () {
+                                              controller.bookingId.value == 0
+                                                  ? {
+                                                      Get.defaultDialog(
+                                                          content:
+                                                              const SizedBox(),
+                                                          titleStyle:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .green),
+                                                          buttonColor:
+                                                              Colors.green,
+                                                          title:
+                                                              "هل تريد تأكيد الحجز ؟",
+                                                          onConfirm: () {
+                                                            controller
+                                                                .bookMission();
+                                                          },
+                                                          onCancel: () {
+                                                            Get.back();
+                                                          },
+                                                          cancelTextColor:
+                                                              Colors.red,
+                                                          confirmTextColor:
+                                                              Colors.white,
+                                                          textConfirm: "تأكيد",
+                                                          textCancel: "لا")
+                                                    }
+                                                  : {
+                                                      if (controller.longitudeContinue.value != 0.0 &&
+                                                          controller
+                                                                  .longitudeContinue
+                                                                  .value !=
+                                                              0.0 &&
+                                                          controller
+                                                                  .distanceContinue
+                                                                  .value >
+                                                              70)
+                                                        {
+                                                          Get.defaultDialog(
+                                                              radius: 6,
+                                                              title:
+                                                                  "انت بعيد عن نقطه التوقف بمسافه\n ${controller.distanceContinue.value.toStringAsFixed(2)} م ",
+                                                              titleStyle:
+                                                                  const TextStyle(
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      fontSize:
+                                                                          18),
+                                                              content:
+                                                                  const Text(
+                                                                      ""),
+                                                              confirm: SizedBox(
+                                                                width: 150,
+                                                                child:
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          controller.openMap(
+                                                                              latLng: LatLng(controller.latitudeContinue.value, controller.longitudeContinue.value));
+                                                                        },
+                                                                        style: TextButton.styleFrom(
+                                                                            backgroundColor: const Color(
+                                                                                0xff008d36)),
+                                                                        child:
+                                                                            const Text(
+                                                                          "اذهب لنقطه الاستكمال",
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 16),
+                                                                        )),
+                                                              )),
+                                                        }
+                                                      else if (controller
+                                                              .userDistance
+                                                              .value >
+                                                          500)
+                                                        {
+                                                          Get.defaultDialog(
+                                                              radius: 6,
+                                                              title:
+                                                                  "انت بعيد عن بدايه المسار بمسافه ${controller.userDistance.value.toStringAsFixed(2)}",
+                                                              titleStyle:
+                                                                  const TextStyle(
+                                                                      color: Colors
+                                                                          .green,
+                                                                      fontSize:
+                                                                          18),
+                                                              content:
+                                                                  const Text(
+                                                                      ""),
+                                                              confirm: SizedBox(
+                                                                width: 150,
+                                                                child:
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          controller.openMap(
+                                                                              latLng: LatLng(controller.directionsModel!.districtLocations!.first.lat!, controller.directionsModel!.districtLocations!.first.long!));
+                                                                        },
+                                                                        style: TextButton.styleFrom(
+                                                                            backgroundColor: const Color(
+                                                                                0xff008d36)),
+                                                                        child:
+                                                                            const Text(
+                                                                          "اذهب لنقطه البدايه",
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 16),
+                                                                        )),
+                                                              )),
+                                                        }
+                                                      else
+                                                        {
+                                                          Get.to(() =>
+                                                              const MapScreen()),
+                                                        }
+                                                    };
+                                            },
+                                            width: Dimensions.width * 0.3,
+                                            height: Dimensions.height * 0.05,
+                                          )),
+                                    Obx(() => controller.bookingId.value == 1
+                                        ? const SizedBox()
+                                        : SizedBox(
+                                            width: 120,
+                                            child: TextButton(
+                                              onPressed: () {
+                                                controller.onInit();
                                               },
                                               style: TextButton.styleFrom(
-                                                  backgroundColor: const Color(
-                                                      0xff008d36)),
-                                              child:
-                                              const Text(
-                                                "اذهب لنقطه الاستكمال",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16),
-                                              )),
-                                        )),
-                                  }
-                                else
-                                  if (controller
-                                      .userDistance
-                                      .value >
-                                      500)
-                                    {
-                                      Get.defaultDialog(
-                                          radius: 6,
-                                          title:
-                                          "انت بعيد عن بدايه المسار بمسافه ${controller
-                                              .userDistance.value
-                                              .toStringAsFixed(2)}",
-                                          titleStyle:
-                                          const TextStyle(
-                                              color: Colors
-                                                  .green,
-                                              fontSize:
-                                              18),
-                                          content:
-                                          const Text(
-                                              ""),
-                                          confirm: SizedBox(
-                                            width: 150,
-                                            child:
-                                            TextButton(
-                                                onPressed:
-                                                    () async {
-                                                  controller.openMap(
-                                                      latLng: LatLng(controller
-                                                          .directionsModel!
-                                                          .districtLocations!
-                                                          .first.lat!,
-                                                          controller
-                                                              .directionsModel!
-                                                              .districtLocations!
-                                                              .first.long!));
-                                                },
-                                                style: TextButton.styleFrom(
-                                                    backgroundColor: const Color(
-                                                        0xff008d36)),
-                                                child:
-                                                const Text(
-                                                  "اذهب لنقطه البدايه",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16),
-                                                )),
-                                          )),
-                                    }
-                                  else
-                                    {
-                                      Get.to(() =>
-                                      const MapScreen()),
-                                    }
-                              };
-                            },
-                            width: Dimensions.width * 0.3,
-                            height: Dimensions.height * 0.05,
-                          )),
-                          Obx(() =>
-                          controller.bookingId.value == 1
-                              ? SizedBox()
-                              : SizedBox(
-                              width: 120,
-                              child: TextButton(
-                                onPressed: () {
-                                  controller.onInit();
-                                },
-                                style: TextButton.styleFrom(
-                                  backgroundColor:
-                                  const Color(0xff008d36)
-                                      .withOpacity(0.9),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.refresh,
-                                        color: Colors.white),
-                                    Text("تحديث",
-                                        style: TextStyle(
-                                            color: Colors.white)),
+                                                backgroundColor:
+                                                    const Color(0xff008d36)
+                                                        .withOpacity(0.9),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  Icon(Icons.refresh,
+                                                      color: Colors.white),
+                                                  Text("تحديث",
+                                                      style: TextStyle(
+                                                          color: Colors.white)),
+                                                ],
+                                              ),
+                                            ))),
                                   ],
-                                ),
-                              ))),
-                            ],
-                          )
-                        ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              Obx(() =>
-              (controller.latitudeContinue.value == 0.0 &&
-                  controller.longitudeContinue.value == 0.0)
-                  ? Expanded(
-                child: GoogleMap(
-                    zoomControlsEnabled: true,
-                    markers: {...controller.markers},
-                    polylines:
-                    Set<Polyline>.of(controller.polyline),
-                    gestureRecognizers: {}..add(Factory<PanGestureRecognizer>(
-                            () => PanGestureRecognizer()))..add(Factory<
-                        ScaleGestureRecognizer>(
-                            () => ScaleGestureRecognizer()))..add(Factory<
-                        TapGestureRecognizer>(
-                            () => TapGestureRecognizer()))..add(Factory<
-                        VerticalDragGestureRecognizer>(
-                            () => VerticalDragGestureRecognizer())),
-                    myLocationEnabled: true,
-                    initialCameraPosition: CameraPosition(
-                        target: LatLng(controller.position.latitude,
-                            controller.position.longitude),
-                        zoom: 18)),
-              )
-                  : Expanded(
-                child: GoogleMap(
-                    zoomControlsEnabled: true,
-                    markers: {...controller.markersContinue},
-                    gestureRecognizers: {}..add(Factory<PanGestureRecognizer>(
-                            () => PanGestureRecognizer()))..add(Factory<
-                        ScaleGestureRecognizer>(
-                            () => ScaleGestureRecognizer()))..add(Factory<
-                        TapGestureRecognizer>(
-                            () => TapGestureRecognizer()))..add(Factory<
-                        VerticalDragGestureRecognizer>(
-                            () => VerticalDragGestureRecognizer())),
-                    myLocationEnabled: true,
-                    onMapCreated: (map) {
-                      map.showMarkerInfoWindow(controller
-                          .markersContinue.first.markerId);
-                    },
-                    initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                            controller.latitudeContinue.value,
-                            controller.longitudeContinue.value),
-                        zoom: 18)),
-              )),
-            ],
-          )),
-        ));
+                    Obx(() => (controller.latitudeContinue.value == 0.0 &&
+                            controller.longitudeContinue.value == 0.0)
+                        ? Expanded(
+                            child: GoogleMap(
+                                zoomControlsEnabled: true,
+                                markers: {...controller.markers},
+                                polylines:
+                                    Set<Polyline>.of(controller.polyline),
+                                gestureRecognizers: {}
+                                  ..add(Factory<PanGestureRecognizer>(
+                                      () => PanGestureRecognizer()))
+                                  ..add(Factory<ScaleGestureRecognizer>(
+                                      () => ScaleGestureRecognizer()))
+                                  ..add(Factory<TapGestureRecognizer>(
+                                      () => TapGestureRecognizer()))
+                                  ..add(Factory<VerticalDragGestureRecognizer>(
+                                      () => VerticalDragGestureRecognizer())),
+                                myLocationEnabled: true,
+                                initialCameraPosition: CameraPosition(
+                                    target: LatLng(controller.position.latitude,
+                                        controller.position.longitude),
+                                    zoom: 18)),
+                          )
+                        : Expanded(
+                            child: GoogleMap(
+                                zoomControlsEnabled: true,
+                                markers: {...controller.markersContinue},
+                                gestureRecognizers: {}
+                                  ..add(Factory<PanGestureRecognizer>(
+                                      () => PanGestureRecognizer()))
+                                  ..add(Factory<ScaleGestureRecognizer>(
+                                      () => ScaleGestureRecognizer()))
+                                  ..add(Factory<TapGestureRecognizer>(
+                                      () => TapGestureRecognizer()))
+                                  ..add(Factory<VerticalDragGestureRecognizer>(
+                                      () => VerticalDragGestureRecognizer())),
+                                myLocationEnabled: true,
+                                onMapCreated: (map) {
+                                  map.showMarkerInfoWindow(controller
+                                      .markersContinue.first.markerId);
+                                },
+                                initialCameraPosition: CameraPosition(
+                                    target: LatLng(
+                                        controller.latitudeContinue.value,
+                                        controller.longitudeContinue.value),
+                                    zoom: 18)),
+                          )),
+                  ],
+                )),
+    ));
   }
 }

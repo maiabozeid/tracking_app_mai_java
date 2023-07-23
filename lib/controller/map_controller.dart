@@ -389,7 +389,7 @@ class MapController extends BaseController {
       CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
       missionValue.value =
           CacheHelper.getData(key: AppConstants.missionVaValue);
-      print("object");
+      // print("object");
       statusId.value = 1;
       for (int i = 0; i < directionsModel!.districtLocations!.length; i++) {
         if (directionsModel!.districtLocations![i].description != null) {
@@ -402,7 +402,6 @@ class MapController extends BaseController {
       }
     } else {
       statusId.value = 4;
-      print("false");
     }
   }
 
