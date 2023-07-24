@@ -500,9 +500,9 @@ class MainScreen extends StatelessWidget {
                                             color: const Color(0xff008d36)
                                                 .withOpacity(0.9),
                                             buttonText:
-                                                controller.bookingId.value == 1
-                                                    ? "استكمال المسار"
-                                                    : "حجز المسار",
+                                                controller.bookingId.value == 0
+                                                    ? "حجز المسار"
+                                                    : "استكمال المسار",
                                             onPressed: () {
                                               controller.bookingId.value == 0
                                                   ? {
@@ -625,9 +625,8 @@ class MainScreen extends StatelessWidget {
                                             width: Dimensions.width * 0.3,
                                             height: Dimensions.height * 0.05,
                                           )),
-                                    Obx(() => controller.bookingId.value == 1
-                                        ? const SizedBox()
-                                        : SizedBox(
+                                    Obx(() => controller.bookingId.value == 0
+                                        ? SizedBox(
                                             width: 120,
                                             child: TextButton(
                                               onPressed: () {
@@ -649,7 +648,8 @@ class MainScreen extends StatelessWidget {
                                                           color: Colors.white)),
                                                 ],
                                               ),
-                                            ))),
+                                            ))
+                                        : const SizedBox()),
                                   ],
                                 )
                               ],
@@ -685,6 +685,8 @@ class MainScreen extends StatelessWidget {
                             child: GoogleMap(
                                 zoomControlsEnabled: true,
                                 markers: {...controller.markersContinue},
+                                polylines:
+                                Set<Polyline>.of(controller.polyline),
                                 gestureRecognizers: {}
                                   ..add(Factory<PanGestureRecognizer>(
                                       () => PanGestureRecognizer()))
