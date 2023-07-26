@@ -27,6 +27,7 @@ class AppConstants {
   static const String theme = 'theme';
   static const String expireOn = 'expireOn';
   static const String trackVehicleNumber = 'trackVehicleNumber';
+  static const String cityName = 'cityName';
   static const String trackVehicleDevice = 'trackVehicleDevice';
   static const String role = 'role';
   static const String length = 'length';

@@ -32,6 +32,7 @@ class Data {
 
   Data.fromJson(dynamic json) {
     token = json['token'];
+    cityName = json['cityName'];
     trackVehicleNumber = json['trackVehicleNumber'];
     trackVehicleDevice = json['trackVehicleDevice'];
     expiresOn = json['expiresOn'];
@@ -47,6 +48,7 @@ class Data {
   String? trackVehicleDevice;
   String? trackVehicleNumber;
   String? name;
+  String? cityName;
   int? cityId;
   int? projectId;
 

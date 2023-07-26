@@ -68,16 +68,20 @@ class MainScreen extends StatelessWidget {
                                           style: robotoRegular.copyWith(
                                               color: Colors.white,
                                               fontSize: 14)),
-                                      Text(
-                                          "رقم السياره : ${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
-                                          style: robotoRegular.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 14)),
-                                      Text(
-                                          "نوعها : ${CacheHelper.getData(key: AppConstants.trackVehicleDevice)}",
-                                          style: robotoRegular.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 14)),
+                                      Row(
+                                        children: [
+                                          Text(
+                                              "رقم السياره : ${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
+                                              style: robotoRegular.copyWith(
+                                                  color: Colors.white,
+                                                  fontSize: 14)),
+                                          Text(
+                                              "${CacheHelper.getData(key: AppConstants.trackVehicleDevice)}",
+                                              style: robotoRegular.copyWith(
+                                                  color: Colors.white,
+                                                  fontSize: 14)),
+                                        ],
+                                      ),
                                       Row(
                                         children: [
                                           const Icon(Icons.access_time,
@@ -89,21 +93,26 @@ class MainScreen extends StatelessWidget {
                                             controller.time.value,
                                             style: const TextStyle(
                                                 color: Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.date_range,
-                                              color: Colors.white),
-                                          const SizedBox(
-                                            width: 5,
                                           ),
-                                          Text(formattedDate,
-                                              style: const TextStyle(
-                                                  color: Colors.white))
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.date_range,
+                                                  color: Colors.white),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(formattedDate,
+                                                  style: const TextStyle(
+                                                      color: Colors.white))
+                                            ],
+                                          ),
                                         ],
                                       ),
+                                      Text(
+                                          "البلديه : ${CacheHelper.getData(key: AppConstants.cityName)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 16)),
                                     ],
                                   ),
                                   Column(
@@ -158,7 +167,7 @@ class MainScreen extends StatelessWidget {
                                                       "GpsEnabled",
                                                       style: TextStyle(
                                                           color: Colors.white),
-                                                    )
+                                                    ),
                                                   ],
                                                 )
                                               : Row(
@@ -173,7 +182,12 @@ class MainScreen extends StatelessWidget {
                                                           color: Colors.white),
                                                     )
                                                   ],
-                                                ))
+                                                )),
+                                      Text(
+                                        "v2",
+                                        style: TextStyle(color: Colors.white),
+                                      )
+
                                     ],
                                   )
                                 ],
@@ -228,16 +242,20 @@ class MainScreen extends StatelessWidget {
                                           style: robotoRegular.copyWith(
                                               color: Colors.white,
                                               fontSize: 14)),
-                                      Text(
-                                          "رقم السياره : ${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
-                                          style: robotoRegular.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 14)),
-                                      Text(
-                                          "نوعها : ${CacheHelper.getData(key: AppConstants.trackVehicleDevice)}",
-                                          style: robotoRegular.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 14)),
+                                      Row(
+                                        children: [
+                                          Text(
+                                              "رقم السياره : ${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
+                                              style: robotoRegular.copyWith(
+                                                  color: Colors.white,
+                                                  fontSize: 14)),
+                                          Text(
+                                              "${CacheHelper.getData(key: AppConstants.trackVehicleDevice)}",
+                                              style: robotoRegular.copyWith(
+                                                  color: Colors.white,
+                                                  fontSize: 14)),
+                                        ],
+                                      ),
                                       Row(
                                         children: [
                                           const Icon(Icons.access_time,
@@ -249,21 +267,26 @@ class MainScreen extends StatelessWidget {
                                             controller.time.value,
                                             style: const TextStyle(
                                                 color: Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.date_range,
-                                              color: Colors.white),
-                                          const SizedBox(
-                                            width: 5,
                                           ),
-                                          Text(formattedDate,
-                                              style: const TextStyle(
-                                                  color: Colors.white))
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.date_range,
+                                                  color: Colors.white),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(formattedDate,
+                                                  style: const TextStyle(
+                                                      color: Colors.white))
+                                            ],
+                                          ),
                                         ],
                                       ),
+                                      Text(
+                                          "البلديه : ${CacheHelper.getData(key: AppConstants.cityName)}",
+                                          style: robotoRegular.copyWith(
+                                              color: Colors.white,
+                                              fontSize: 16)),
                                     ],
                                   ),
                                   Column(
@@ -333,7 +356,11 @@ class MainScreen extends StatelessWidget {
                                                           color: Colors.white),
                                                     )
                                                   ],
-                                                ))
+                                                )),
+                                      const Text(
+                                        "v2",
+                                        style: TextStyle(color: Colors.white),
+                                      )
                                     ],
                                   )
                                 ],
@@ -686,7 +713,7 @@ class MainScreen extends StatelessWidget {
                                 zoomControlsEnabled: true,
                                 markers: {...controller.markersContinue},
                                 polylines:
-                                Set<Polyline>.of(controller.polyline),
+                                    Set<Polyline>.of(controller.polyline),
                                 gestureRecognizers: {}
                                   ..add(Factory<PanGestureRecognizer>(
                                       () => PanGestureRecognizer()))
