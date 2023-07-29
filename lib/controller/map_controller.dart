@@ -743,7 +743,7 @@ class MapController extends BaseController {
       case 1:
         CacheHelper.saveData(key: AppConstants.tapped, value: true);
         positionStream?.cancel();
-        services.startMission();
+        services.startMission(lat: "${directionsModel!.districtLocations!.first.lat}",long:"${directionsModel!.districtLocations!.first.long}" );
         startMission();
         break;
       case 2:
