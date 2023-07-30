@@ -82,7 +82,8 @@ class MapController extends BaseController {
       await distanceBetweenLocations();
       await drawPolyLineMission();
       await getObjectZero();
-      CacheHelper.saveData(key: AppConstants.bookingId, value:directionsModel?.status);
+      CacheHelper.saveData(
+          key: AppConstants.bookingId, value: directionsModel?.status);
       if (directionsModel?.status == 3) {
         CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
       } else {
@@ -262,6 +263,9 @@ class MapController extends BaseController {
   }
 
   drawPolyLineMission() async {
+    markers.clear();
+    pathPoint.clear();
+    polyline.clear();
     directionsModel?.districtLocations?.forEach((element) {
       if (element.objectId == 0) {
       } else {
@@ -829,6 +833,7 @@ class MapController extends BaseController {
   }
 
   createPolyline() async {
+    polylineCoordinates.clear();
     polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       AppConstants.apiKey,
