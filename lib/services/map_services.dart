@@ -46,9 +46,9 @@ class MapServices {
     } catch (e) {}
   }
 
-  startMission() async {
+  startMission({String? lat,long}) async {
     try {
-      final response = await dio!.put(AppConstants.startMission);
+      final response = await dio!.put(AppConstants.startMission,queryParameters: {"lng":long,"lat":lat});
       print(response.statusCode);
       if (response.statusCode == 200) {}
     } catch (e) {}
