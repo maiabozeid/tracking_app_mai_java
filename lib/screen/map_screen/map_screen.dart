@@ -93,7 +93,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                                         false == false
                                     ? {
                                   MapController.to.positionStream?.cancel(),
-                                        Get.to(() => const HomeScreen()),
+                                        Get.offAll(() => const HomeScreen()),
                                       }
                                     : {
                                         controller.timeSubscription?.cancel(),
@@ -108,7 +108,7 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                                             value: 3),
                                         controller.latitude.value = 0.0,
                                         controller.longitude.value = 0.0,
-                                        Get.to(() => const HomeScreen()),
+                                        Get.offAll(() => const HomeScreen()),
                                       };
                               },
                               style: TextButton.styleFrom(

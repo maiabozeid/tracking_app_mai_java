@@ -64,6 +64,10 @@ class MapController extends BaseController {
     // TODO: implement onInit
     super.onInit();
     setState(ViewState.busy);
+    markers.clear();
+    pathPoint.clear();
+    polyline.clear();
+    polylineCoordinates.clear();
     await determinePosition();
     await getPaths();
     _timeStream = Stream<DateTime>.periodic(
@@ -263,9 +267,7 @@ class MapController extends BaseController {
   }
 
   drawPolyLineMission() async {
-    markers.clear();
-    pathPoint.clear();
-    polyline.clear();
+
     directionsModel?.districtLocations?.forEach((element) {
       if (element.objectId == 0) {
       } else {
@@ -405,6 +407,7 @@ class MapController extends BaseController {
         }
       }
     } else {
+
       statusId.value = 4;
     }
   }
@@ -833,7 +836,7 @@ class MapController extends BaseController {
   }
 
   createPolyline() async {
-    polylineCoordinates.clear();
+    //
     polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       AppConstants.apiKey,

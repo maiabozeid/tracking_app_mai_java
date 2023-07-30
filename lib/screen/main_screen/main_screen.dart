@@ -71,7 +71,7 @@ class MainScreen extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                              "رقم السياره : ${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
+                                              "${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
                                               style: robotoRegular.copyWith(
                                                   color: Colors.white,
                                                   fontSize: 14)),
@@ -184,7 +184,7 @@ class MainScreen extends StatelessWidget {
                                                   ],
                                                 )),
                                       const Text(
-                                        "v2",
+                                        "v2.1",
                                         style: TextStyle(color: Colors.white),
                                       )
 
@@ -245,7 +245,7 @@ class MainScreen extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                              "رقم السياره : ${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
+                                              "${CacheHelper.getData(key: AppConstants.trackVehicleNumber)}",
                                               style: robotoRegular.copyWith(
                                                   color: Colors.white,
                                                   fontSize: 14)),
@@ -358,7 +358,7 @@ class MainScreen extends StatelessWidget {
                                                   ],
                                                 )),
                                       const Text(
-                                        "v2",
+                                        "v2.1",
                                         style: TextStyle(color: Colors.white),
                                       )
                                     ],
