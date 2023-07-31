@@ -183,8 +183,8 @@ class MainScreen extends StatelessWidget {
                                                     )
                                                   ],
                                                 )),
-                                      const Text(
-                                        "v2.1",
+                                       const Text(
+                                        AppConstants.appVersion,
                                         style: TextStyle(color: Colors.white),
                                       )
 
@@ -358,7 +358,7 @@ class MainScreen extends StatelessWidget {
                                                   ],
                                                 )),
                                       const Text(
-                                        "v2.1",
+                                        AppConstants.appVersion,
                                         style: TextStyle(color: Colors.white),
                                       )
                                     ],

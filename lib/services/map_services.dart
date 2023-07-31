@@ -30,25 +30,30 @@ class MapServices {
     } catch (e) {}
   }
 
-  bookPath({int? routeNumber, int? districtId}) async {
+  bookPath({int? routeNumber, int? districtId, double? lat, long}) async {
     try {
-      final response = await dio!.post(AppConstants.bookPath,
-          data: {"routeNumber": routeNumber, "districtId": districtId});
+      final response = await dio!.post(AppConstants.bookPath, data: {
+        "routeNumber": routeNumber,
+        "districtId": districtId,
+        "lat": lat,
+        "long": long
+      });
       if (response.statusCode == 200) {
         print(response.statusCode);
 
         Utility.displaySuccessAlert("تم حجز المسار بنجاح", Get.context!);
-      } else  if(response.statusCode ==400){
+      } else if (response.statusCode == 400) {
         showCustomSnackBar(isError: true, message: "هذا المسار محجوز من قبل");
-      }else{
+      } else {
         showCustomSnackBar(isError: true, message: "توجد مشكله فى السيرفر");
       }
     } catch (e) {}
   }
 
-  startMission({String? lat,long}) async {
+  startMission({String? lat, long}) async {
     try {
-      final response = await dio!.put(AppConstants.startMission,queryParameters: {"lng":long,"lat":lat});
+      final response = await dio!.put(AppConstants.startMission,
+          queryParameters: {"lng": long, "lat": lat});
       print(response.statusCode);
       if (response.statusCode == 200) {}
     } catch (e) {}

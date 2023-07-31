@@ -81,6 +81,7 @@ class MapController extends BaseController {
   getPaths() async {
     //directionsModel = await testData();
     directionsModel = await services.getPaths(position: position);
+    print(directionsModel?.districtLocations?.length);
     if (directionsModel?.districtLocations != null) {
       await createPolyline();
       await distanceBetweenLocations();
@@ -267,7 +268,6 @@ class MapController extends BaseController {
   }
 
   drawPolyLineMission() async {
-
     directionsModel?.districtLocations?.forEach((element) {
       if (element.objectId == 0) {
       } else {
@@ -407,7 +407,6 @@ class MapController extends BaseController {
         }
       }
     } else {
-
       statusId.value = 4;
     }
   }
@@ -696,7 +695,9 @@ class MapController extends BaseController {
       bookValue.value = true;
       await services.bookPath(
           routeNumber: directionsModel?.routeNumber,
-          districtId: directionsModel?.districtId);
+          districtId: directionsModel?.districtId,
+          lat: directionsModel?.districtLocations?.first.lat,
+          long: directionsModel?.districtLocations?.first.long);
       bookValue.value = false;
       CacheHelper.saveData(key: AppConstants.bookingId, value: 1);
       bookingId.value = CacheHelper.getData(key: AppConstants.bookingId);
@@ -750,7 +751,9 @@ class MapController extends BaseController {
       case 1:
         CacheHelper.saveData(key: AppConstants.tapped, value: true);
         positionStream?.cancel();
-        services.startMission(lat: "${directionsModel!.districtLocations!.first.lat}",long:"${directionsModel!.districtLocations!.first.long}" );
+        services.startMission(
+            lat: "${directionsModel!.districtLocations!.first.lat}",
+            long: "${directionsModel!.districtLocations!.first.long}");
         startMission();
         break;
       case 2:
