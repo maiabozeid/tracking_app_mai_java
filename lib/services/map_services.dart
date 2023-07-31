@@ -38,17 +38,20 @@ class MapServices {
         print(response.statusCode);
 
         Utility.displaySuccessAlert("تم حجز المسار بنجاح", Get.context!);
-      } else  if(response.statusCode ==400){
+      } else if (response.statusCode == 400) {
         showCustomSnackBar(isError: true, message: "هذا المسار محجوز من قبل");
-      }else{
+      } else {
         showCustomSnackBar(isError: true, message: "توجد مشكله فى السيرفر");
       }
     } catch (e) {}
   }
 
-  startMission({String? lat,long}) async {
+  startMission({String? lat, long}) async {
     try {
-      final response = await dio!.put(AppConstants.startMission,queryParameters: {"lng":long,"lat":lat});
+      final response = await dio!.put(
+        "${AppConstants.startMission}?lat=$lat&lng=$long",
+        // queryParameters: {"lng":long,"lat":lat}
+      );
       print(response.statusCode);
       if (response.statusCode == 200) {}
     } catch (e) {}
