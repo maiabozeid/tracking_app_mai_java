@@ -1,10 +1,8 @@
 class AppConstants {
   static const String appName = 'Paths App';
-  static const String appVersion = 'v2.3';
-
-   // static const String baseUrl = 'http://192.168.0.122:7049/api';
-
-   static const String baseUrl = 'https://apiapp.co4qu.com/api';
+  static const String appVersion = 'v2.4';
+  // static const String baseUrl = 'http://192.168.0.122:7049/api';
+  static const String baseUrl = 'https://apiapp.co4qu.com/api';
 
   static const String login = '/Account/Loginapp';
   static const String getPaths = '/DriverPaths/GetAvailablePaths2?';
@@ -31,37 +29,8 @@ class AppConstants {
   static const String length = 'length';
   static const String token = 'multivendor_token';
   static const String countryCode = 'country_code';
-  static const String superAdmin = 'SuperAdmin';
   static const String languageCode = 'language_code';
-  static const String counterFan = "Counter Fan";
-  static const String scheduleCounter = "View Schedule Counter";
-  static const String valveQut = "Valve Qut :";
-  static const String working = "Working";
-  static const String oN = "ON";
-  static const String off = "OFF";
-  static const String lastReadingDate = "Last Reading Date :";
-  static const String lastReadingTime = "Last Reading Time :";
-  static const String time = "00:00";
-  static const String co2 = "Co2 Cylinder : ";
-  static const String fixedPercent = "0.0%";
-  static const String scheduleFan = "View Schedule Fan";
-  static const String scheduleValQut = "View Schedule Val Qut";
-  static const String fixedDouble = "0.0";
-  static const String fixedDate = "0:0";
-  static const String trap = "Trap:";
-  static const String details = " Details";
-  static const String email = "Email";
-  static const String userName = "UserName";
-  static const String password = "Password";
-  static const String traps = "Traps";
   static const String name = "Name";
-  static const String noFoundUsers = "No Found Users";
-  static const String oldPassword = "Old Password";
-  static const String newPassword = "New Password";
-  static const String confirmPassword = "Confirm Password";
-  static const String noFoundNotifications = "No Found Notifications";
-  static const String counter = "counter";
-  static const String seen = "seen";
   static const String apiKey = "AIzaSyBGOAVKbeA0MiN6NfGm8Z0y5LtE7cgdCo4";
 
 // static List<LanguageModel> languages = [

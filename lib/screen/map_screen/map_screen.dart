@@ -37,14 +37,23 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
       // Call your function here
 
       _myFunction();
+    } else if (state == AppLifecycleState.detached) {
+      // Call your function here
+
+      _myFunction();
     }
   }
 
   Future<void> _myFunction() async {
-    CacheHelper.getData(key: AppConstants.tapped) ?? false == false
+    CacheHelper.getData(key: AppConstants.tapped) == false
         ? {
-      MapController.to.positionStream?.cancel(),
-    }
+            MapController.to.timeSubscription?.cancel(),
+            MapController.to.timer != null
+                ? MapController.to.timer?.cancel()
+                : {},
+            MapController.to.positionStream?.cancel(),
+            MapController.to.positionStreamSubscription?.cancel(),
+          }
         : {
             MapController.to.timeSubscription?.cancel(),
             MapController.to.timer != null
@@ -92,7 +101,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                                 CacheHelper.getData(key: AppConstants.tapped) ??
                                         false == false
                                     ? {
-                                  MapController.to.positionStream?.cancel(),
+                                        MapController.to.positionStream
+                                            ?.cancel(),
                                         Get.offAll(() => const HomeScreen()),
                                       }
                                     : {

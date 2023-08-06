@@ -70,11 +70,11 @@ class _SplashScreenState extends State<SplashScreen>
             (value3) => _lottieAnimation.forward().then((value4) {
               if (CacheHelper.getData(key: AppConstants.token) == null) {
                 // Get.offAll(const MapScreen());
-                Get.offAll(const SignInScreen());
+                Get.offAll(()=>const SignInScreen());
               } else if (differenceBetweenExpireNow() < 1) {
-                Get.offAll(const SignInScreen());
+                Get.offAll(()=>const SignInScreen());
               } else {
-                Get.offAll(const HomeScreen());
+                Get.offAll(()=>const HomeScreen());
               }
             }),
           ),

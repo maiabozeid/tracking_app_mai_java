@@ -874,3 +874,18 @@ class MapController extends BaseController {
     }
   }
 }
+
+// Future<List<DirectionsResponse>> getDirections(List<LatLng> points) async {
+//   List<DirectionsResponse> responses = [];
+//
+//   for (int i = 0; i < points.length - 1; i++) {
+//     final response = await _places.directionsWithLocation(
+//       Location(points[i].latitude, points[i].longitude),
+//       Location(points[i + 1].latitude, points[i + 1].longitude),
+//       travelMode: TravelMode.driving,
+//     );
+//     responses.add(response);
+//   }
+//
+//   return responses;
+// }
