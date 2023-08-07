@@ -446,10 +446,10 @@ class MapController extends BaseController {
 
   getIndexPoint(LatLng latLng) async {
     LatLng? closestPoint = await util.getClosestPoint(latLng, pathPoint);
-    print('Closest point: $closestPoint');
+    // print('Closest point: $closestPoint');
     if (closestPoint != null) {
       int? index = pathPoint.indexWhere((element) => element == closestPoint);
-      print('Index: $index');
+      // print('Index: $index');
       await services.sendPoints(
           districtId: directionsModel?.districtId,
           routeNumber: directionsModel?.routeNumber,
@@ -750,6 +750,9 @@ class MapController extends BaseController {
     switch (missionValue.value) {
       case 1:
         CacheHelper.saveData(key: AppConstants.tapped, value: true);
+        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
+        missionValue.value =
+            CacheHelper.getData(key: AppConstants.missionVaValue);
         positionStream?.cancel();
         services.startMission(
             lat: "${directionsModel!.districtLocations!.first.lat}",
@@ -773,6 +776,8 @@ class MapController extends BaseController {
                     await stopMission();
                     CacheHelper.saveData(
                         key: AppConstants.missionVaValue, value: 3);
+                    missionValue.value =
+                        CacheHelper.getData(key: AppConstants.missionVaValue);
                     soundHelper.player.dispose();
                     completer = Completer();
                     latitude.value = 0.0;
@@ -788,6 +793,9 @@ class MapController extends BaseController {
             ));
         break;
       case 3:
+        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
+        missionValue.value =
+            CacheHelper.getData(key: AppConstants.missionVaValue);
         pauseMission();
         startMission();
         positionStream?.cancel();
