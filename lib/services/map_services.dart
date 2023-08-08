@@ -118,6 +118,7 @@ class MapServices {
     try {
       final response =
           await dio!.post(AppConstants.addVehicleInfos, data: data);
+      // print(response.data);
       if (response.statusCode == 200) {
         print(response.statusCode);
       }

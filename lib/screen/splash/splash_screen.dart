@@ -77,6 +77,7 @@ class _SplashScreenState extends State<SplashScreen>
                 CacheHelper.clearData();
                 Get.offAll(() => const SignInScreen());
               } else {
+                print(CacheHelper.getData(key: AppConstants.token));
                 Get.offAll(() => const HomeScreen());
               }
             }),

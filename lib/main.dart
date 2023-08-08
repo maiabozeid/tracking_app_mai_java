@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tracking_app/helper/cache_helper.dart';
 import 'package:tracking_app/screen/splash/splash_screen.dart';
+import 'package:tracking_app/util/app_constants.dart';
 import 'helper/get_di.dart' as di;
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -22,6 +24,7 @@ Future<void> main() async {
   Map<String, Map<String, String>> languages = await di.init();
 
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {

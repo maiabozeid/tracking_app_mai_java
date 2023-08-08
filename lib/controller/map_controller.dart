@@ -89,7 +89,7 @@ class MapController extends BaseController {
       await getObjectZero();
       CacheHelper.saveData(
           key: AppConstants.bookingId, value: directionsModel?.status);
-      if (directionsModel?.status == 3) {
+      if (directionsModel?.status == 3 || directionsModel?.status == 4) {
         CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
       } else {
         CacheHelper.saveData(key: AppConstants.missionVaValue, value: 0);
