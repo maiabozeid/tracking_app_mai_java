@@ -797,7 +797,6 @@ class MapController extends BaseController {
         missionValue.value =
             CacheHelper.getData(key: AppConstants.missionVaValue);
         pauseMission();
-        startMission();
         positionStream?.cancel();
         break;
       case 4:

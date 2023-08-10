@@ -22,15 +22,18 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 Future<void> main() async {
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    HttpOverrides.global = MyHttpOverrides();
-    runApp(const MyApp());
-  }, (error, stackTrace) {
-    // Custom function to be called on app crash
-    // handleAppCrash();
-    MapController.to.myFunction();
-  });
+  WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
+  runApp(const MyApp());
+  // runZonedGuarded<Future<void>>(() async {
+  //   WidgetsFlutterBinding.ensureInitialized();
+  //   HttpOverrides.global = MyHttpOverrides();
+  //   runApp(const MyApp());
+  // }, (error, stackTrace) {
+  //   // Custom function to be called on app crash
+  //   // handleAppCrash();
+  //   // MapController.to.myFunction();
+  // });
   Map<String, Map<String, String>> languages = await di.init();
 }
 
