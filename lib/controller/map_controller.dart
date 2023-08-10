@@ -881,8 +881,32 @@ class MapController extends BaseController {
       );
     }
   }
-}
 
+  Future<void> myFunction() async {
+    CacheHelper.getData(key: AppConstants.tapped) == false
+        ? {
+            timeSubscription?.cancel(),
+            timer != null ? timer?.cancel() : {},
+            positionStream?.cancel(),
+            positionStreamSubscription?.cancel(),
+            latitude.value = 0.0,
+            longitude.value = 0.0,
+          }
+        : {
+            timeSubscription?.cancel(),
+            timer != null ? timer?.cancel() : {},
+            positionStream?.cancel(),
+            positionStreamSubscription?.cancel(),
+            await stopMission(),
+            CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
+            soundHelper.player.dispose(),
+            completer = Completer(),
+            latitude.value = 0.0,
+            longitude.value = 0.0,
+            // Do something here
+          };
+  }
+}
 // Future<List<DirectionsResponse>> getDirections(List<LatLng> points) async {
 //   List<DirectionsResponse> responses = [];
 //

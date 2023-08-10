@@ -35,43 +35,44 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
       // Call your function here
-
-      _myFunction();
-    } else if (state == AppLifecycleState.detached) {
-      // Call your function here
-
-      _myFunction();
+      MapController.to.myFunction();
+      // _myFunction();
     }
+    // else if (state == AppLifecycleState.detached) {
+    //   // Call your function here
+    //
+    //   _myFunction();
+    // }
   }
 
-  Future<void> _myFunction() async {
-    CacheHelper.getData(key: AppConstants.tapped) == false
-        ? {
-            MapController.to.timeSubscription?.cancel(),
-            MapController.to.timer != null
-                ? MapController.to.timer?.cancel()
-                : {},
-            MapController.to.positionStream?.cancel(),
-            MapController.to.positionStreamSubscription?.cancel(),
-            MapController.to.latitude.value = 0.0,
-            MapController.to.longitude.value = 0.0,
-          }
-        : {
-            MapController.to.timeSubscription?.cancel(),
-            MapController.to.timer != null
-                ? MapController.to.timer?.cancel()
-                : {},
-            MapController.to.positionStream?.cancel(),
-            MapController.to.positionStreamSubscription?.cancel(),
-            await MapController.to.stopMission(),
-            CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
-            MapController.to.soundHelper.player.dispose(),
-            MapController.to.completer = Completer(),
-            MapController.to.latitude.value = 0.0,
-            MapController.to.longitude.value = 0.0,
-            // Do something here
-          };
-  }
+  // Future<void> _myFunction() async {
+  //   CacheHelper.getData(key: AppConstants.tapped) == false
+  //       ? {
+  //           MapController.to.timeSubscription?.cancel(),
+  //           MapController.to.timer != null
+  //               ? MapController.to.timer?.cancel()
+  //               : {},
+  //           MapController.to.positionStream?.cancel(),
+  //           MapController.to.positionStreamSubscription?.cancel(),
+  //           MapController.to.latitude.value = 0.0,
+  //           MapController.to.longitude.value = 0.0,
+  //         }
+  //       : {
+  //           MapController.to.timeSubscription?.cancel(),
+  //           MapController.to.timer != null
+  //               ? MapController.to.timer?.cancel()
+  //               : {},
+  //           MapController.to.positionStream?.cancel(),
+  //           MapController.to.positionStreamSubscription?.cancel(),
+  //           await MapController.to.stopMission(),
+  //           CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
+  //           MapController.to.soundHelper.player.dispose(),
+  //           MapController.to.completer = Completer(),
+  //           MapController.to.latitude.value = 0.0,
+  //           MapController.to.longitude.value = 0.0,
+  //           // Do something here
+  //         };
+  // }
 
   @override
   Widget build(BuildContext context) {
