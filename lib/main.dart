@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tracking_app/controller/map_controller.dart';
-import 'package:tracking_app/helper/cache_helper.dart';
 import 'package:tracking_app/screen/splash/splash_screen.dart';
-import 'package:tracking_app/util/app_constants.dart';
+import 'firebase_options.dart';
 import 'helper/get_di.dart' as di;
 
 class MyHttpOverrides extends HttpOverrides {
@@ -21,8 +22,24 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Pass all uncaught "fatal" errors from the framework to Crashlytics
+  bool weWantFatalErrorRecording = true;
+  FlutterError.onError = (errorDetails) async {
+    await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
   // runZonedGuarded<Future<void>>(() async {

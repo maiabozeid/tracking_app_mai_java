@@ -1,8 +1,8 @@
 class AppConstants {
   static const String appName = 'Paths App';
   static const String appVersion = 'v2.5';
-   static const String baseUrl = 'http://192.168.0.122:5000/api';
-  //static const String baseUrl = 'https://apiapp.co4qu.com/api';
+   // static const String baseUrl = 'http://192.168.0.122:5000/api';
+  static const String baseUrl = 'https://apiapp.co4qu.com/api';
 
   static const String login = '/Account/Loginapp';
   static const String getPaths = '/DriverPaths/GetAvailablePaths2?';
