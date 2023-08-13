@@ -183,11 +183,10 @@ class MainScreen extends StatelessWidget {
                                                     )
                                                   ],
                                                 )),
-                                       const Text(
+                                      const Text(
                                         AppConstants.appVersion,
                                         style: TextStyle(color: Colors.white),
                                       )
-
                                     ],
                                   )
                                 ],
@@ -408,8 +407,7 @@ class MainScreen extends StatelessWidget {
                                             color: Colors.white, fontSize: 16),
                                       )),
                                 ));
-                          } else if (controller.longitudeContinue.value !=
-                                  0.0 &&
+                          } else if (controller.latitudeContinue.value != 0.0 &&
                               controller.longitudeContinue.value != 0.0 &&
                               controller.distanceContinue.value > 70) {
                             Get.defaultDialog(
@@ -439,7 +437,8 @@ class MainScreen extends StatelessWidget {
                                             color: Colors.white, fontSize: 16),
                                       )),
                                 ));
-                          } else if (controller.userDistance.value > 500) {
+                          } else if (controller.userDistance.value > 500 &&
+                              controller.distanceContinue.value == 0.0) {
                             Get.defaultDialog(
                                 radius: 6,
                                 title:
@@ -561,7 +560,7 @@ class MainScreen extends StatelessWidget {
                                                   : {
                                                       if (controller.longitudeContinue.value != 0.0 &&
                                                           controller
-                                                                  .longitudeContinue
+                                                                  .latitudeContinue
                                                                   .value !=
                                                               0.0 &&
                                                           controller
@@ -604,9 +603,13 @@ class MainScreen extends StatelessWidget {
                                                               )),
                                                         }
                                                       else if (controller
-                                                              .userDistance
-                                                              .value >
-                                                          500)
+                                                                  .userDistance
+                                                                  .value >
+                                                              500 &&
+                                                          controller
+                                                                  .distanceContinue
+                                                                  .value ==
+                                                              0.0)
                                                         {
                                                           Get.defaultDialog(
                                                               radius: 6,

@@ -198,11 +198,13 @@ class MapController extends BaseController {
   }
 
   checkUserInLocation() {
-    if (userDistance.value > 70) {
+    if (userDistance.value > 70 || distanceContinue.value > 70) {
       Get.defaultDialog(
           barrierDismissible: false,
           radius: 6,
-          title: "اذهب الى بدايه المسار",
+          title: distanceContinue.value > 70
+              ? "اذهب الى نقطه الاستكمال"
+              : "اذهب الى بدايه المسار",
           content: SizedBox(
             width: 120,
             child: TextButton(
@@ -420,12 +422,13 @@ class MapController extends BaseController {
         // print(element.long);
         // print(element.objectId);
         // print(element.description);
-        distanceContinue.value = Geolocator.distanceBetween(
-            position.latitude,
-            position.longitude,
-            latitudeContinue.value,
-            longitudeContinue.value);
-        // print(distanceContinue.value);
+        distanceContinue.value = util.distanceBetweenPoints(
+                position.latitude,
+                position.longitude,
+                latitudeContinue.value,
+                longitudeContinue.value) *
+            1000;
+        print("distance:${distanceContinue.value} ");
         markersContinue.add(Marker(
             markerId: MarkerId(
               "${element.objectId}",
@@ -797,6 +800,7 @@ class MapController extends BaseController {
         missionValue.value =
             CacheHelper.getData(key: AppConstants.missionVaValue);
         pauseMission();
+        startMission();
         positionStream?.cancel();
         break;
       case 4:
