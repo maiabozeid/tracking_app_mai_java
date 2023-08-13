@@ -34,10 +34,12 @@ class _SplashScreenState extends State<SplashScreen>
   getConnectivity() =>
       subscription = Connectivity().onConnectivityChanged.listen(
         (ConnectivityResult result) async {
+          if (mounted) {
           isDeviceConnected = await InternetConnectionChecker().hasConnection;
           if (!isDeviceConnected && isAlertSet == false) {
-            showDialogBox();
-            setState(() => isAlertSet = true);
+              showDialogBox();
+              setState(() => isAlertSet = true);
+            }
           }
         },
       );
@@ -78,6 +80,7 @@ class _SplashScreenState extends State<SplashScreen>
                 Get.offAll(() => const SignInScreen());
               } else {
                 print(CacheHelper.getData(key: AppConstants.token));
+
                 Get.offAll(() => const HomeScreen());
               }
             }),
@@ -88,6 +91,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void dispose() {
     subscription.cancel();
+    _lottieAnimation.dispose();
+    print("fffffffff");
     super.dispose();
   }
 

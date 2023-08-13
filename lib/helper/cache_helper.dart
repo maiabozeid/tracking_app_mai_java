@@ -8,21 +8,21 @@ class CacheHelper{
     preferences=await SharedPreferences.getInstance();
   }
   static dynamic getData({required String key}){
-    return preferences!.get(key);
+    return preferences?.get(key);
   }
-  static Future<bool>saveData({
+  static Future<bool?>saveData({
     required String key,
     required dynamic value
   })async {
-    if(value is String )return await preferences!.setString(key, value);
-    if(value is int )return await preferences!.setInt(key, value);
-    if(value is bool )return await preferences!.setBool(key, value);
+    if(value is String )return await preferences?.setString(key, value);
+    if(value is int )return await preferences?.setInt(key, value);
+    if(value is bool )return await preferences?.setBool(key, value);
     return await preferences!.setDouble(key, value);
   }
 
-  static Future<bool>clearData(){return preferences!.clear();}
-  static Future<bool>removeData({required key}){
-    return preferences!.remove(key);
+  static Future<bool>?clearData(){return preferences?.clear();}
+  static Future<bool>?removeData({required key}){
+    return preferences?.remove(key);
   }
 
 }

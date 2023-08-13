@@ -22,7 +22,6 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -33,11 +32,11 @@ Future<void> main() async {
   bool weWantFatalErrorRecording = true;
   FlutterError.onError = (errorDetails) async {
     await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
-
   };
   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
   PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    FirebaseCrashlytics.instance
+        .recordError(error, stack, fatal: true, reason: true);
     return true;
   };
   HttpOverrides.global = MyHttpOverrides();

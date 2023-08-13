@@ -567,7 +567,7 @@ class MainScreen extends StatelessWidget {
                                                           controller
                                                                   .distanceContinue
                                                                   .value >
-                                                              70)
+                                                              150)
                                                         {
                                                           Get.defaultDialog(
                                                               radius: 6,
@@ -668,10 +668,10 @@ class MainScreen extends StatelessWidget {
                                                     const Color(0xff008d36)
                                                         .withOpacity(0.9),
                                               ),
-                                              child: Row(
+                                              child: const Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                children: const [
+                                                children: [
                                                   Icon(Icons.refresh,
                                                       color: Colors.white),
                                                   Text("تحديث",
@@ -740,20 +740,7 @@ class MainScreen extends StatelessWidget {
                           )),
                   ],
                 )),
-      // bottomNavigationBar: TextButton(
-      //   onPressed: _throwTestException,
-      //   child: Text('Throw Test Exception'),
-      // ),
+
     ));
   }
-
-  // void _throwTestException() {
-  // FirebaseCrashlytics.instance.recordError(
-  // Exception('This is a test exception.'),
-  // null,
-  // reason: 'Test Exception',
-  // fatal: true,
-  // );
-  // throw Exception('This is a test exception.');
-  // }
 }

@@ -198,11 +198,11 @@ class MapController extends BaseController {
   }
 
   checkUserInLocation() {
-    if (userDistance.value > 70 || distanceContinue.value > 70) {
+    if (userDistance.value > 150 || distanceContinue.value > 150) {
       Get.defaultDialog(
           barrierDismissible: false,
           radius: 6,
-          title: distanceContinue.value > 70
+          title: distanceContinue.value > 150
               ? "اذهب الى نقطه الاستكمال"
               : "اذهب الى بدايه المسار",
           content: SizedBox(
@@ -223,7 +223,7 @@ class MapController extends BaseController {
                                         ?.districtLocations?.first.long ??
                                     0.0) *
                             1000 >=
-                        70) {
+                        150) {
                       CacheHelper.saveData(
                           key: AppConstants.missionVaValue, value: 0);
                       missionValue.value =
@@ -396,7 +396,7 @@ class MapController extends BaseController {
     bool isNearPolyline = util.isLocationOnPath(
       latLng,
       pathPoint,
-      tolerance: 70,
+      tolerance: 150,
     );
     if (isNearPolyline) {
       CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
@@ -668,7 +668,7 @@ class MapController extends BaseController {
       case "e":
         if (Geolocator.distanceBetween(
                 event.latitude, event.longitude, lat, long) <=
-            20) {
+            70) {
           print(Geolocator.distanceBetween(
               event.latitude, event.longitude, lat, long));
           soundHelper.playerAudioFinish();
