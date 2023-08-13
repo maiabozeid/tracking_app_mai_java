@@ -177,22 +177,13 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                                             ? Colors.red
                                             : controller.missionValue.value == 3
                                                 ? Colors.amber
-                                                : controller.missionValue
-                                                            .value ==
-                                                        4
+                                                : controller.missionValue.value == 4
                                                     ? Colors.red
                                                     : Colors.transparent,
-                                    buttonText: controller.missionValue.value ==
-                                            1
-                                        ? "ابداء المهمه"
-                                        : controller.missionValue.value == 2
-                                            ? "ايقاف مؤقت"
-                                            : controller.missionValue.value == 3
-                                                ? "استكمال المسار"
-                                                : controller.missionValue
-                                                            .value ==
-                                                        4
-                                                    ? "انهاء المهمه"
+                                    buttonText: controller.missionValue.value == 1 ? "ابداء المهمه"
+                                        : controller.missionValue.value == 2 ? "ايقاف مؤقت"
+                                            : controller.missionValue.value == 3 ? "استكمال المسار"
+                                                : controller.missionValue.value == 4 ? "انهاء المهمه"
                                                     : "",
                                     onPressed: () {
                                       controller.functionButton();

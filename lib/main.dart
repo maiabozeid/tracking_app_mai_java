@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -39,6 +40,16 @@ Future<void> main() async {
         .recordError(error, stack, fatal: true, reason: true);
     return true;
   };
+
+  Isolate.current.addErrorListener(RawReceivePort((pair) async {
+    final List<dynamic> errorAndStacktrace = pair;
+    await FirebaseCrashlytics.instance.recordError(
+      errorAndStacktrace.first,
+      errorAndStacktrace.last,
+      fatal: true,
+    );
+  }).sendPort);
+
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
   // runZonedGuarded<Future<void>>(() async {

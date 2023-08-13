@@ -65,16 +65,35 @@ class HomeScreen extends StatelessWidget {
                                   Text(formattedDate,style: const TextStyle(color:Colors.white))
                                 ],
                               ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.note,color: Colors.white),
+                                  const SizedBox(width: 5,),
+                                  Text( AppConstants.appVersion,
+                                      style: const TextStyle(color:Colors.white))
+                                ],
+                              ),
+                              SizedBox( height: Dimensions.height * 0.02,),
+
+
                             ],
                           ),
-                          IconButton(
-                              onPressed: () {
-                                CacheHelper.clearData();
-                                Get.offAll(() => const SignInScreen());
-                              },
-                              icon: Image.asset(Images.logIcon))
+                          Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    CacheHelper.clearData();
+                                    Get.offAll(() => const SignInScreen());
+                                  },
+                                  icon: Image.asset(Images.logIcon)),
+
+
+                            ],
+                          ),
+
                         ],
                       ),
+
                     ),
                   ),
                   Positioned(

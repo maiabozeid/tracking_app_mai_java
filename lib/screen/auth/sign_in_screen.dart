@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tracking_app/component/custom_button.dart';
 import 'package:tracking_app/component/fixed_text_field.dart';
 import 'package:tracking_app/screen/auth/controller/signin_controller.dart';
+import 'package:tracking_app/util/app_constants.dart';
 import 'package:tracking_app/util/dimensions.dart';
 import 'package:tracking_app/util/images.dart';
 
@@ -87,18 +88,54 @@ class SignInScreen extends StatelessWidget {
                         ),
                       )
                     : CustomButton(
-                        color: const Color(0xff008d36).withOpacity(0.9),
+                        color: const Color(0xff008d36).withOpacity(0.99),
                         onPressed: () {
                           controller.signIn();
                         },
                         width: Dimensions.width * 0.8,
                         radius: Dimensions.RADIUS_DEFAULT,
                         buttonText: "تسجيل الدخول".tr,
-                      ))
+                      ),
+                ),
+                 SizedBox(
+                   height: Dimensions.height * 0.04,
+                 ),
+
+
+                 Padding(
+                   padding: const EdgeInsets.symmetric(
+                     horizontal: 10,),
+                   child: Container(
+
+                     width: Dimensions.width * 0.4,
+                     height: Dimensions.height * 0.04,
+                     decoration: BoxDecoration(
+                         color: Color(0xff008d36),
+                       borderRadius: BorderRadius.circular(10)),
+
+                     child: Row(
+
+                       mainAxisAlignment: MainAxisAlignment.center,
+                       children: [
+                         const Text(
+                          AppConstants.appVersion,
+                          style: TextStyle( color:Colors.white,
+                         backgroundColor: Color(0xff008d36),
+                         fontSize: 20,
+                         fontFamily: 'Montserrat',
+                         fontWeight: FontWeight.bold,
+
+                ),),
+                         SizedBox(width: 10,)
+                       ],
+                     ),
+                   ),
+                 )
               ],
             ),
           ),
         ),
+
       ),
     );
   }
