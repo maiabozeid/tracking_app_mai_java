@@ -9,10 +9,7 @@ import 'package:tracking_app/util/app_constants.dart';
 class AuthServices {
   final dio = DioUtilNew.dio;
 
-  signIn({
-    String? email,
-    String? password,
-  }) async {
+  signIn({String? email, String? password,}) async {
     try {
       final response = await dio!.post(AppConstants.login, data: {
         "Email": email,

@@ -375,10 +375,10 @@ class MapController extends BaseController {
     positionStreamSubscription = Geolocator.getPositionStream(
             locationSettings: const LocationSettings(
                 accuracy: LocationAccuracy.high,
+
                 distanceFilter: 1
             ))
         // .timeout(Duration(seconds: 10),
-
         .listen((position) {
       latitude.value = position.latitude;
       longitude.value = position.longitude;
@@ -388,15 +388,23 @@ class MapController extends BaseController {
           bearing: position.heading);
       drawPolyLine(points: streamPoint);
       checkLocation(LatLng(position.latitude, position.longitude));
-    });
+    },);
     LocationAccuracy.high;
-  }
+    if(missionValue.value==1 || missionValue.value==3 ) {
+      LocationAccuracy desiredAccuracy = LocationAccuracy.high;
+      await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high
+      );
+
+      LatLng latLng = LatLng(latitude.value, longitude.value);
+      streamPoint.add(latLng);
+    }
+    }
+
 
   checkLocation(LatLng latLng) {
     bool isNearPolyline = util.isLocationOnPath(
-      latLng,
-      pathPoint,
-      tolerance: 150,
+      latLng, pathPoint, tolerance: 150,
     );
     if (isNearPolyline) {
       CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
@@ -411,6 +419,7 @@ class MapController extends BaseController {
               latLng,
               directionsModel!.districtLocations![i].lat ?? 0.0,
               directionsModel!.districtLocations![i].long ?? 0.0);
+
         }
       }
     } else {

@@ -15,8 +15,7 @@ class MapServices {
       final response = await dio!.get(
           "${AppConstants.getPaths}ULat=${position?.latitude}&ULong=${position?.longitude}");
       if (response.statusCode == 200) {
-        DirectionsModel directionsModel =
-            DirectionsModel.fromJson(response.data);
+        DirectionsModel directionsModel = DirectionsModel.fromJson(response.data);
         print(directionsModel);
         print(response.data);
         return directionsModel;
@@ -32,11 +31,8 @@ class MapServices {
 
   bookPath({int? routeNumber, int? districtId, double? lat, long}) async {
     try {
-      final response = await dio!.post(AppConstants.bookPath, data: {
-        "routeNumber": routeNumber,
-        "districtId": districtId,
-        "lat": lat,
-        "long": long
+      final response = await dio!.post(AppConstants.bookPath, data: {"routeNumber": routeNumber,
+        "districtId": districtId, "lat": lat, "long": long
       });
       if (response.statusCode == 200) {
         print(response.statusCode);

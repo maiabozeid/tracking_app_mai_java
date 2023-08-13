@@ -186,7 +186,7 @@ class MainScreen extends StatelessWidget {
                                                 )),
                                       const Text(
                                         AppConstants.appVersion,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.red),
                                       )
                                     ],
                                   )
@@ -357,9 +357,15 @@ class MainScreen extends StatelessWidget {
                                                     )
                                                   ],
                                                 )),
-                                      const Text(
-                                        AppConstants.appVersion,
-                                        style: TextStyle(color: Colors.white),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.note,color: Colors.white),
+                                          const SizedBox(width: 9,),
+                                          const Text(
+                                            AppConstants.appVersion,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ],
                                       )
                                     ],
                                   )
