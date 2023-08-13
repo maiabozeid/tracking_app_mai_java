@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -739,6 +740,20 @@ class MainScreen extends StatelessWidget {
                           )),
                   ],
                 )),
+      // bottomNavigationBar: TextButton(
+      //   onPressed: _throwTestException,
+      //   child: Text('Throw Test Exception'),
+      // ),
     ));
   }
+
+  // void _throwTestException() {
+  // FirebaseCrashlytics.instance.recordError(
+  // Exception('This is a test exception.'),
+  // null,
+  // reason: 'Test Exception',
+  // fatal: true,
+  // );
+  // throw Exception('This is a test exception.');
+  // }
 }

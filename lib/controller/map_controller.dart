@@ -212,6 +212,7 @@ class MapController extends BaseController {
                   positionStream = Geolocator.getPositionStream(
                           locationSettings: const LocationSettings(
                               accuracy: LocationAccuracy.high))
+                  // timeout(Duration(seconds: 10))
                       .listen((event) {
                     if (util.distanceBetweenPoints(
                                 event.latitude,
@@ -373,8 +374,11 @@ class MapController extends BaseController {
   Future<void> startLocationTracking() async {
     positionStreamSubscription = Geolocator.getPositionStream(
             locationSettings: const LocationSettings(
-                accuracy: LocationAccuracy.bestForNavigation,
-                distanceFilter: 1))
+                accuracy: LocationAccuracy.high,
+                distanceFilter: 1
+            ))
+        // .timeout(Duration(seconds: 10),
+
         .listen((position) {
       latitude.value = position.latitude;
       longitude.value = position.longitude;
@@ -385,6 +389,7 @@ class MapController extends BaseController {
       drawPolyLine(points: streamPoint);
       checkLocation(LatLng(position.latitude, position.longitude));
     });
+    LocationAccuracy.high;
   }
 
   checkLocation(LatLng latLng) {
