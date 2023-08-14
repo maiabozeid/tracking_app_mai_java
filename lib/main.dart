@@ -28,7 +28,7 @@ class MyHttpOverrides extends HttpOverrides {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Map<String, Map<String, String>> languages = await di.init();
+
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -59,7 +59,7 @@ Future<void> main() async {
   // FirebaseCrashlytics.instance.setUserIdentifier(CacheHelper.getData(key: AppConstants.token),
   // );
   // print(AppConstants.token);
-
+  Map<String, Map<String, String>> languages = await di.init();
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
   // runZonedGuarded<Future<void>>(() async {

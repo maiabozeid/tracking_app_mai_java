@@ -186,7 +186,7 @@ class MainScreen extends StatelessWidget {
                                                 )),
                                       const Text(
                                         AppConstants.appVersion,
-                                        style: TextStyle(color: Colors.red),
+                                        style: TextStyle(color: Colors.white),
                                       )
                                     ],
                                   )
