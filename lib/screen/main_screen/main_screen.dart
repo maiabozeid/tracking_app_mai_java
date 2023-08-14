@@ -713,6 +713,7 @@ class MainScreen extends StatelessWidget {
                                   ..add(Factory<VerticalDragGestureRecognizer>(
                                       () => VerticalDragGestureRecognizer())),
                                 myLocationEnabled: true,
+
                                 initialCameraPosition: CameraPosition(
                                     target: LatLng(controller.position.latitude,
                                         controller.position.longitude),
@@ -738,13 +739,19 @@ class MainScreen extends StatelessWidget {
                                   map.showMarkerInfoWindow(controller
                                       .markersContinue.first.markerId);
                                 },
+
                                 initialCameraPosition: CameraPosition(
                                     target: LatLng(
                                         controller.latitudeContinue.value,
                                         controller.longitudeContinue.value),
                                     zoom: 18)),
                           )),
-                  ],
+                    // TextButton(
+                    //   onPressed: () => throw Exception(),
+                    //   child: const Text("Throw Test Exception"),
+                    // ),
+                  ]
+
                 )),
 
     ));
