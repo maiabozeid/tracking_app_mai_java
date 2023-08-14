@@ -58,7 +58,8 @@ class MapController extends BaseController {
   StreamSubscription<DateTime>? timeSubscription;
   final time = "".obs;
   final serversEnabledBool = false.obs;
-
+// Define your threshold distance (in meters)
+  double thresholdDistance = 50;
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
@@ -389,16 +390,16 @@ class MapController extends BaseController {
       drawPolyLine(points: streamPoint);
       checkLocation(LatLng(position.latitude, position.longitude));
     },);
-    LocationAccuracy.high;
-    if(missionValue.value==1 || missionValue.value==3 ) {
-      LocationAccuracy desiredAccuracy = LocationAccuracy.high;
-      await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high
-      );
-
-      LatLng latLng = LatLng(latitude.value, longitude.value);
-      streamPoint.add(latLng);
-    }
+    // LocationAccuracy.high;
+    // if(missionValue.value==1 || missionValue.value==3 ) {
+    //   LocationAccuracy desiredAccuracy = LocationAccuracy.high;
+    //   await Geolocator.getCurrentPosition(
+    //       desiredAccuracy: LocationAccuracy.high
+    //   );
+    //
+    //   LatLng latLng = LatLng(latitude.value, longitude.value);
+    //   streamPoint.add(latLng);
+    // }
     }
 
 
@@ -412,6 +413,7 @@ class MapController extends BaseController {
           CacheHelper.getData(key: AppConstants.missionVaValue);
       // print("object");
       statusId.value = 1;
+      if (directionsModel!.districtLocations != null) {
       for (int i = 0; i < directionsModel!.districtLocations!.length; i++) {
         if (directionsModel!.districtLocations![i].description != null) {
           playSound(
@@ -419,8 +421,8 @@ class MapController extends BaseController {
               latLng,
               directionsModel!.districtLocations![i].lat ?? 0.0,
               directionsModel!.districtLocations![i].long ?? 0.0);
-
         }
+      }
       }
     } else {
       statusId.value = 4;
@@ -725,9 +727,10 @@ class MapController extends BaseController {
 
   Future<void> animateTo(double latitude, double longitude,
       {double? bearing}) async {
+
     final googleMapController = await completer.future;
-    googleMapController
-        .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+    Future.delayed(Duration(seconds: 2), () {
+    googleMapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
             target: LatLng(
               latitude,
               longitude,
@@ -736,7 +739,7 @@ class MapController extends BaseController {
             zoom: 18,
             tilt: 30)));
   }
-
+    );}
   drawPolyLine({List<LatLng>? points}) {
     polyline.add(Polyline(
         polylineId: const PolylineId("1"),
@@ -755,6 +758,7 @@ class MapController extends BaseController {
       flat: true,
       anchor: const Offset(0.5, 0.5),
       position: LatLng(event.latitude, event.longitude),
+
       infoWindow: const InfoWindow(
         title: "موقعك الحالى",
         snippet: "موقعك الحالى",
@@ -863,7 +867,7 @@ class MapController extends BaseController {
     }
   }
 
-  createPolyline() async {
+  Future<void> createPolyline() async {
     //
     polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(

@@ -30,18 +30,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  geolocator:
+  geolocator: ^9.0.2
   dio: ^5.1.2
   get:
   shared_preferences:
   rflutter_alert:
   lottie:
   just_audio:
-  google_directions_api:
+  google_directions_api: ^0.9.1
   intl:
   internet_connection_checker:
   connectivity:
-  google_maps_flutter:
+  google_maps_flutter: ^2.4.0
   show_up_animation:
   flutter_spinkit: ^5.2.0
   flutter_polyline_points:
@@ -54,7 +54,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_crashlytics: ^3.3.4
   firebase_core: ^2.15.0
-  firebase_analytics: ^10.4.4
   firebase_database: ^10.2.4
 
 dev_dependencies:

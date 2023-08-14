@@ -6,7 +6,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tracking_app/helper/cache_helper.dart';
 import 'package:tracking_app/screen/splash/splash_screen.dart';
+import 'package:tracking_app/util/app_constants.dart';
 import 'firebase_options.dart';
 import 'helper/get_di.dart' as di;
 
@@ -25,6 +28,8 @@ class MyHttpOverrides extends HttpOverrides {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Map<String, Map<String, String>> languages = await di.init();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -42,6 +47,8 @@ Future<void> main() async {
   };
 
   Isolate.current.addErrorListener(RawReceivePort((pair) async {
+    Map<String, Map<String, String>> languages = await di.init();
+
     final List<dynamic> errorAndStacktrace = pair;
     await FirebaseCrashlytics.instance.recordError(
       errorAndStacktrace.first,
@@ -49,6 +56,9 @@ Future<void> main() async {
       fatal: true,
     );
   }).sendPort);
+  // FirebaseCrashlytics.instance.setUserIdentifier(CacheHelper.getData(key: AppConstants.token),
+  // );
+  // print(AppConstants.token);
 
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
@@ -61,7 +71,6 @@ Future<void> main() async {
   //   // handleAppCrash();
   //   // MapController.to.myFunction();
   // });
-  Map<String, Map<String, String>> languages = await di.init();
 }
 
 class MyApp extends StatelessWidget {

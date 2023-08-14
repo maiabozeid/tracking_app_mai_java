@@ -23,26 +23,26 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
-  late StreamSubscription subscription;
-  bool isDeviceConnected = false;
-  bool isAlertSet = false;
+  // late StreamSubscription subscription;
+  // bool isDeviceConnected = false;
+  // bool isAlertSet = false;
   late AnimationController _lottieAnimation;
   var expanded = false;
   final double _bigFontSize = kIsWeb ? 234 : 30;
   final transitionDuration = const Duration(seconds: 1);
 
-  getConnectivity() =>
-      subscription = Connectivity().onConnectivityChanged.listen(
-        (ConnectivityResult result) async {
-          if (mounted) {
-          isDeviceConnected = await InternetConnectionChecker().hasConnection;
-          if (!isDeviceConnected && isAlertSet == false) {
-              showDialogBox();
-              setState(() => isAlertSet = true);
-            }
-          }
-        },
-      );
+  // getConnectivity() =>
+  //     subscription = Connectivity().onConnectivityChanged.listen(
+  //       (ConnectivityResult result) async {
+  //         if (mounted) {
+  //         isDeviceConnected = await InternetConnectionChecker().hasConnection;
+  //         if (!isDeviceConnected && isAlertSet == false) {
+  //             showDialogBox();
+  //             setState(() => isAlertSet = true);
+  //           }
+  //         }
+  //       },
+  //     );
 
   int differenceBetweenExpireNow() {
     if (CacheHelper.getData(key: AppConstants.expireOn) != null) {
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    getConnectivity();
+    // getConnectivity();
     _lottieAnimation = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
@@ -90,9 +90,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
-    subscription.cancel();
+    // subscription.cancel();
     _lottieAnimation.dispose();
-    print("fffffffff");
     super.dispose();
   }
 
@@ -177,26 +176,26 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  showDialogBox() => showCupertinoDialog<String>(
-        context: context,
-        builder: (BuildContext context) => CupertinoAlertDialog(
-          title: const Text('No Connection'),
-          content: const Text('Please check your internet connectivity'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context, 'Cancel');
-                setState(() => isAlertSet = false);
-                isDeviceConnected =
-                    await InternetConnectionChecker().hasConnection;
-                if (!isDeviceConnected && isAlertSet == false) {
-                  showDialogBox();
-                  setState(() => isAlertSet = true);
-                }
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
+  // showDialogBox() => showCupertinoDialog<String>(
+  //       context: context,
+  //       builder: (BuildContext context) => CupertinoAlertDialog(
+  //         title: const Text('No Connection'),
+  //         content: const Text('Please check your internet connectivity'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             onPressed: () async {
+  //               Navigator.pop(context, 'Cancel');
+  //               setState(() => isAlertSet = false);
+  //               isDeviceConnected =
+  //                   await InternetConnectionChecker().hasConnection;
+  //               if (!isDeviceConnected && isAlertSet == false) {
+  //                 showDialogBox();
+  //                 setState(() => isAlertSet = true);
+  //               }
+  //             },
+  //             child: const Text('OK'),
+  //           ),
+  //         ],
+  //       ),
+  //     );
 }
