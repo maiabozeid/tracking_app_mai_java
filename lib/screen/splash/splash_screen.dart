@@ -107,11 +107,11 @@ class _SplashScreenState extends State<SplashScreen>
       // For example, you could use a default user identifier or log a message
     }
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xff005133),
         key: _globalKey,
         body: Container(
           width: double.infinity,
-          color: Colors.white,
+          color: Color(0xff005133),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -134,7 +134,7 @@ class _SplashScreenState extends State<SplashScreen>
                 duration: transitionDuration,
                 curve: Curves.fastOutSlowIn,
                 style: TextStyle(
-                  color: const Color(0xff005133),
+                  color: Colors.white,
                   fontSize: expanded ? _bigFontSize : 45,
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w600,
@@ -167,7 +167,7 @@ class _SplashScreenState extends State<SplashScreen>
           " وزارة الشؤون البلدية والقروية",
           style: TextStyle(
 
-            color:  const Color(0xff005133),
+            color:  Colors.white,
             fontSize: 25,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w600,
@@ -177,7 +177,7 @@ class _SplashScreenState extends State<SplashScreen>
           "أمانة منطقة الرياض ",
           style: TextStyle(
 
-            color: const Color(0xff005133),
+            color: Colors.white,
             fontSize: 25,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w600,

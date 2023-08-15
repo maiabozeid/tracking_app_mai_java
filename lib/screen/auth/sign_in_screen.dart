@@ -143,9 +143,9 @@ class SignInScreen extends StatelessWidget {
                           AppConstants.appVersion,
                           style: TextStyle( color:Colors.white,
                          backgroundColor: Color(0xff008d36),
-                         fontSize: 20,
+                         fontSize: 17,
                          fontFamily: 'Montserrat',
-                         fontWeight: FontWeight.bold,
+                         fontWeight: FontWeight.w500,
 
                 ),),
                          SizedBox(width: 10,)
