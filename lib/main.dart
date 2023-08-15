@@ -56,9 +56,15 @@ Future<void> main() async {
       fatal: true,
     );
   }).sendPort);
-  // FirebaseCrashlytics.instance.setUserIdentifier(CacheHelper.getData(key: AppConstants.token),
-  // );
-  // print(AppConstants.token);
+  String? userIdentifier ;
+  // = CacheHelper.getData(key: AppConstants.token);
+  if (userIdentifier != null) {
+    FirebaseCrashlytics.instance.setUserIdentifier("1234");
+  } else {
+    // Handle the case when userIdentifier is null
+    // For example, you could use a default user identifier or log a message
+  };
+  print(AppConstants.token);
   Map<String, Map<String, String>> languages = await di.init();
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());

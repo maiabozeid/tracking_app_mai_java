@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -83,6 +84,18 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+
+    FirebaseCrashlytics.instance.log("Higgs-Boson detected! Bailing out");
+
+    // Get the user identifier from CacheHelper
+    String? userIdentifier = CacheHelper.getData(key: AppConstants.trackVehicleNumber);
+    if (userIdentifier != null) {
+      // Set the user identifier for Crashlytics
+      FirebaseCrashlytics.instance.setUserIdentifier(userIdentifier);
+    } else {
+      // Handle the case when userIdentifier is null
+      // For example, you could use a default user identifier or log a message
+    }
     // return FutureBuilder<void>(
     //     future: _initializeMap(),
     //     builder: (context, snapshot) {
@@ -225,7 +238,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
                           ],
                         ),
                       ),
-                    )),
+                    ),
+                ),
               );
             });
           }

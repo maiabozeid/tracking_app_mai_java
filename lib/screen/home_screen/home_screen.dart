@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,18 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.log("Higgs-Boson detected! Bailing out");
+
+    // Get the user identifier from CacheHelper
+    String? userIdentifier = CacheHelper.getData(key: AppConstants.
+    trackVehicleNumber);
+    if (userIdentifier != null) {
+      // Set the user identifier for Crashlytics
+      FirebaseCrashlytics.instance.setUserIdentifier(userIdentifier);
+    } else {
+      // Handle the case when userIdentifier is null
+      // For example, you could use a default user identifier or log a message
+    }
     var now = DateTime.now();
     var formatter = DateFormat('dd-MM-yyyy');
     String formattedTime = DateFormat.jm().format(
@@ -75,7 +88,6 @@ class HomeScreen extends StatelessWidget {
                               ),
                               SizedBox( height: Dimensions.height * 0.02,),
 
-
                             ],
                           ),
                           Column(
@@ -102,7 +114,7 @@ class HomeScreen extends StatelessWidget {
                     left: 0,
                     child: Image.asset(
                       Images.logo,
-                      height: 100,
+                      height: Dimensions.height * 0.13,
                     ),
                   )
                 ],

@@ -1,7 +1,9 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tracking_app/component/custom_button.dart';
 import 'package:tracking_app/component/fixed_text_field.dart';
+import 'package:tracking_app/helper/cache_helper.dart';
 import 'package:tracking_app/screen/auth/controller/signin_controller.dart';
 import 'package:tracking_app/util/app_constants.dart';
 import 'package:tracking_app/util/dimensions.dart';
@@ -12,6 +14,17 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.log("Higgs-Boson detected! Bailing out");
+
+    // Get the user identifier from CacheHelper
+    String? userIdentifier = CacheHelper.getData(key: AppConstants.trackVehicleNumber);
+    if (userIdentifier != null) {
+      // Set the user identifier for Crashlytics
+      FirebaseCrashlytics.instance.setUserIdentifier(userIdentifier);
+    } else {
+      // Handle the case when userIdentifier is null
+      // For example, you could use a default user identifier or log a message
+    }
     final controller = Get.put(SignInController());
     return SafeArea(
       child: Scaffold(
@@ -91,11 +104,20 @@ class SignInScreen extends StatelessWidget {
                         color: const Color(0xff008d36).withOpacity(0.99),
                         onPressed: () {
                           controller.signIn();
+                          // FirebaseCrashlytics.instance.log("Higgs-Boson detected! Bailing out");
+                          // String? userIdentifier = CacheHelper.getData(key: AppConstants.token);
+                          // if (userIdentifier != null) {
+                          //   FirebaseCrashlytics.instance.setUserIdentifier(userIdentifier);
+                          // } else {
+                          //   // Handle the case when userIdentifier is null
+                          //   // For example, you could use a default user identifier or log a message
+                          // }
                         },
                         width: Dimensions.width * 0.8,
                         radius: Dimensions.RADIUS_DEFAULT,
                         buttonText: "تسجيل الدخول".tr,
                       ),
+
                 ),
                  SizedBox(
                    height: Dimensions.height * 0.04,
@@ -130,7 +152,8 @@ class SignInScreen extends StatelessWidget {
                        ],
                      ),
                    ),
-                 )
+                 ),
+
               ],
             ),
           ),
