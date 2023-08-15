@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -97,12 +98,20 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    String? userIdentifier = CacheHelper.getData(key: AppConstants.trackVehicleNumber);
+    if (userIdentifier != null) {
+      // Set the user identifier for Crashlytics
+      FirebaseCrashlytics.instance.setUserIdentifier(userIdentifier);
+    } else {
+      // Handle the case when userIdentifier is null
+      // For example, you could use a default user identifier or log a message
+    }
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.white,
         key: _globalKey,
         body: Container(
           width: double.infinity,
-          color: const Color(0xff005133),
+          color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -125,7 +134,7 @@ class _SplashScreenState extends State<SplashScreen>
                 duration: transitionDuration,
                 curve: Curves.fastOutSlowIn,
                 style: TextStyle(
-                  color: const Color(0xFFffffff),
+                  color: const Color(0xff005133),
                   fontSize: expanded ? _bigFontSize : 45,
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w600,
@@ -157,7 +166,8 @@ class _SplashScreenState extends State<SplashScreen>
         Text(
           " وزارة الشؤون البلدية والقروية",
           style: TextStyle(
-            color: Color(0xFFffffff),
+
+            color:  const Color(0xff005133),
             fontSize: 25,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w600,
@@ -166,7 +176,8 @@ class _SplashScreenState extends State<SplashScreen>
         Text(
           "أمانة منطقة الرياض ",
           style: TextStyle(
-            color: Color(0xFFffffff),
+
+            color: const Color(0xff005133),
             fontSize: 25,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w600,

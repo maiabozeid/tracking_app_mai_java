@@ -24,6 +24,17 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.log("Higgs-Boson detected! Bailing out");
+
+    // Get the user identifier from CacheHelper
+    String? userIdentifier = CacheHelper.getData(key: AppConstants.trackVehicleNumber);
+    if (userIdentifier != null) {
+      // Set the user identifier for Crashlytics
+      FirebaseCrashlytics.instance.setUserIdentifier(userIdentifier);
+    } else {
+      // Handle the case when userIdentifier is null
+      // For example, you could use a default user identifier or log a message
+    }
     var now = DateTime.now();
     var formatter = DateFormat('dd-MM-yyyy');
     String formattedDate = formatter.format(now);
@@ -125,9 +136,7 @@ class MainScreen extends StatelessWidget {
                                                 () => const SignInScreen());
                                           },
                                           icon: Image.asset(Images.logIcon)),
-                                      Obx(() => ConnectivityController
-                                                  .to.connectionStatus.value !=
-                                              0
+                                      Obx(() => ConnectivityController.to.connectionStatus.value != 0
                                           ? Row(
                                               children: [
                                                 Image.asset(
@@ -200,7 +209,7 @@ class MainScreen extends StatelessWidget {
                             left: 0,
                             child: Image.asset(
                               Images.logo,
-                              height: 100,
+                              height:  Dimensions.height * 0.13,
                             ),
                           )
                         ],
@@ -379,7 +388,7 @@ class MainScreen extends StatelessWidget {
                             left: 0,
                             child: Image.asset(
                               Images.logo,
-                              height: 100,
+                              height:  Dimensions.height * 0.13,
                             ),
                           )
                         ],
