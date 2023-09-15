@@ -60,6 +60,8 @@ class MapController extends BaseController {
   final serversEnabledBool = false.obs;
 // Define your threshold distance (in meters)
   double thresholdDistance = 50;
+
+
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
