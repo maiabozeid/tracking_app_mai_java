@@ -149,3 +149,26 @@ class DistrictLocations {
     return map;
   }
 }
+class DirectionModelItems{
+  String? message;
+  List<DirectionsModel>? directionsModels;
+  bool? isSucsseded;
+  int? status;
+
+  DirectionModelItems(
+      this.message, this.directionsModels, this.isSucsseded, this.status);
+
+
+  DirectionModelItems.fromJson(dynamic json) {
+    message = json['message'];
+    isSucsseded = json['isSucsseded'];
+    status = json['status'];
+    if (json['directionsModels'] != null) {
+      directionsModels = [];
+      json['directionsModels'].forEach((v) {
+        directionsModels?.add(DirectionsModel.fromJson(v));
+      });
+    }
+    }
+  }
+

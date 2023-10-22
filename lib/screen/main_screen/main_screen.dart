@@ -518,18 +518,77 @@ class MainScreen extends StatelessWidget {
                                         style: robotoRegular.copyWith(
                                             color: const Color(0xff008d36),
                                             fontSize: 16)),
-                                    Text(
-                                        "رقم المسار : ${controller.directionsModel?.routeNumber}",
-                                        style: robotoRegular.copyWith(
-                                            color: const Color(0xff008d36),
-                                            fontSize: 16)),
+
                                     Text(
                                         "المسافه :  ${controller.userDistance.value.toStringAsFixed(3)}",
                                         style: robotoRegular.copyWith(
                                             color: const Color(0xff008d36),
-                                            fontSize: 16))
-                                  ],
-                                ),
+                                            fontSize: 16)),
+
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+
+                                    Container(
+                                      width: 100,
+                                      height: 100,
+                                      child: ListView.builder(
+                                        itemCount: controller.directionModelItems?.directionsModels?.length ?? 0,
+                                       shrinkWrap: true,
+                                       physics:
+                                       const BouncingScrollPhysics(),
+                                       itemBuilder:
+                                                  (_, x) {
+                                                 controller.selectedOption.value =
+    List.filled(controller.directionModelItems?.directionsModels?.length??0 , false);
+                                                 print(controller
+                                                     .directionModelItems?.directionsModels?.length);
+    return Card(
+    color: Colors.white,
+    child:
+    Container(
+    decoration: BoxDecoration(
+    border: Border.all(
+    color: Theme
+        .of(context)
+        .primaryColor,
+    ),
+    // Set the desired frame color
+    borderRadius:
+    BorderRadius.circular(
+    8.0),
+    ),
+    child: Row(
+    children: [
+    Obx(() =>
+    Checkbox(
+    value: controller
+        .selectedOption[x],
+    onChanged: (value) {
+    controller
+        .selectedOption[x] =
+    value!;
+    // CacheHelper.saveData(key: AppConstants.multiOptionAnswers, value: value);
+    })),
+      Text(
+
+          "المسارات : ${controller.directionModelItems?.directionsModels?[x].routeNumber??""}",
+
+          style: robotoRegular.copyWith(
+              color: const Color(0xff008d36),
+              fontSize: 16)),
+
+    ],
+    ),
+
+    ),
+
+    );
+
+    })
+                                    ),
+
+                                ]),
                                 Column(
                                   children: [
                                     Obx(() => controller.bookValue.value

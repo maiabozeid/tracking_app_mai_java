@@ -60,6 +60,15 @@ class MapController extends BaseController {
   final serversEnabledBool = false.obs;
 // Define your threshold distance (in meters)
   double thresholdDistance = 50;
+  final selectedOption = <bool>[].obs;
+
+
+  DirectionModelItems? directionModelItems;
+  final directionModelItemsData = <DirectionsModel>[].obs;
+  final directionModelItemsDataSelected = DirectionsModel().obs;
+  final selectedItems = <bool>[].obs;
+  RxBool isSelected = RxBool(false);
+
 
 
   @override
@@ -71,7 +80,12 @@ class MapController extends BaseController {
     pathPoint.clear();
     polyline.clear();
     polylineCoordinates.clear();
+
     await determinePosition();
+
+    directionModelItemsData.assignAll(directionModelItems?.directionsModels?? []);
+    selectedItems.value = List.filled(directionModelItemsData.length, false);
+
     await getPaths();
     _timeStream = Stream<DateTime>.periodic(
         const Duration(seconds: 1), (i) => DateTime.now());
@@ -82,6 +96,8 @@ class MapController extends BaseController {
   }
 
   getPaths() async {
+
+
     //directionsModel = await testData();
     directionsModel = await services.getPaths(position: position);
     print(directionsModel?.districtLocations?.length);

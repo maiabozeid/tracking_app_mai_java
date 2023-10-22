@@ -17,6 +17,8 @@ class MapServices {
       if (response.statusCode == 200) {
         DirectionsModel directionsModel = DirectionsModel.fromJson(response.data);
         print(directionsModel);
+        print("routeNumberto: $response.data");
+
         print(response.data);
         return directionsModel;
       } else if (response.statusCode == 400) {
