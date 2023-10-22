@@ -67,7 +67,7 @@ class MainScreenBooking extends StatelessWidget {
 
     return Column(
     children: [
-    Text("Route Number: ${directionsModel?.routeNumber?.toString()}"),
+    // Text("Route Number: ${directionsModel?.routeNumber?.toString()}"),
     for (var location in districtLocations!)
     ListTile(
     title: Text("District ID: ${location.districtId?.toString()}"),
