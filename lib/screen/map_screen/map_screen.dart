@@ -8,6 +8,7 @@ import 'package:tracking_app/component/custom_button.dart';
 import 'package:tracking_app/controller/map_controller.dart';
 import 'package:tracking_app/enum/view_state.dart';
 import 'package:tracking_app/helper/cache_helper.dart';
+import 'package:tracking_app/model/path_model.dart';
 import 'package:tracking_app/screen/home_screen/home_screen.dart';
 import 'package:tracking_app/util/app_constants.dart';
 import 'package:tracking_app/util/styles.dart';
@@ -20,6 +21,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
+
   // Future<void> _initializeMap() async {
     // Perform your asynchronous map initialization here.
     // Example: Call controller.checkUserInLocation() and other setup tasks.
@@ -243,6 +245,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
               );
             });
           }
+
+
 
   }
 

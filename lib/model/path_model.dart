@@ -161,14 +161,30 @@ class DirectionModelItems{
 
   DirectionModelItems.fromJson(dynamic json) {
     message = json['message'];
-    isSucsseded = json['isSucsseded'];
-    status = json['status'];
     if (json['directionsModels'] != null) {
       directionsModels = [];
       json['directionsModels'].forEach((v) {
         directionsModels?.add(DirectionsModel.fromJson(v));
       });
+    isSucsseded = json['isSucsseded'];
+    status = json['status'];
+
     }
     }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['message'] = message;
+    if (directionsModels != null) {
+      map['districtLocations'] =
+          directionsModels?.map((v) => v.toJson()).toList();
+    }
+    map['isSucsseded'] = isSucsseded;
+    map['status'] = status;
+
+    return map;
   }
+}
+
+
 

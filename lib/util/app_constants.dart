@@ -1,9 +1,10 @@
 class AppConstants {
   static const String appName = 'Paths App';
   static const String appVersion = 'v2.8';
-   // static const String baseUrl = 'http://192.168.0.122:5000/api';
+   static const String baseUrl = 'http://192.168.0.143:5020/api';
+   // static const String baseUrl = 'http://eslamdeshesha-001-site1.atempurl.com/api';
 
-   static const String baseUrl = 'https://apiapp.co4qu.com/api';
+   // static const String baseUrl = 'https://apiapp.co4qu.com/api';
 
   static const String login = '/Account/Loginapp';
   static const String getPaths = '/DriverPaths/GetAvailablePaths2?';
@@ -47,3 +48,37 @@ class AppConstants {
 //       languageCode: 'ar'),
 // ];
 }
+// test() {
+//   directionsModelItems = DirectionModelItems(
+//     'hello',
+//     [
+//       DirectionsModel(
+//         status: 3,
+//         routeNumber: 1,
+//         districtId: 1,
+//         districtName: "birket",
+//         districtLocations: [
+//           DistrictLocations(
+//             districtId: 1,
+//             routeNumber: 1,
+//             description: "s",
+//             objectId: 1,
+//             lat: 30.629651,
+//             long: 31.079462,
+//           ),
+//           DistrictLocations(
+//             districtId: 1,
+//             routeNumber: 1,
+//             description: "c",
+//             objectId: 1,
+//             lat: 30.629709,
+//             long: 31.079129,
+//           ),
+//           // Add more DistrictLocations here
+//         ],
+//       ),
+//       // Add more DirectionsModel instances here
+//     ],
+//     true, 200,
+//   );
+// }

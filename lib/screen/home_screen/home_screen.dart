@@ -10,6 +10,8 @@ import 'package:tracking_app/util/dimensions.dart';
 import 'package:tracking_app/util/images.dart';
 import 'package:tracking_app/util/styles.dart';
 
+import '../main_screen_booking.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -127,7 +129,7 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => const MainScreen());
+                  Get.to(() => const MainScreenBooking());
                 },
                 child: Card(
                   shadowColor: Colors.grey,

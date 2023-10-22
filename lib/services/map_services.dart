@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:tracking_app/component/custom_snackbar.dart';
@@ -14,21 +16,33 @@ class MapServices {
     try {
       final response = await dio!.get(
           "${AppConstants.getPaths}ULat=${position?.latitude}&ULong=${position?.longitude}");
-      if (response.statusCode == 200) {
-        DirectionsModel directionsModel = DirectionsModel.fromJson(response.data);
-        print(directionsModel);
-        print("routeNumberto: $response.data");
 
-        print(response.data);
-        return directionsModel;
-      } else if (response.statusCode == 400) {
-        print(response.data);
-        showCustomSnackBar(
-            isError: true, message: "لاتوجد سياره لهذا المستخدم");
-      } else if (response.statusCode! >= 500) {
-        showCustomSnackBar(isError: true, message: "توجد مشاكل فى السيرفر");
+      if (response != null && response.statusCode == 200) {
+        // print("DirectionModelItems: $response");
+        // print("DirectionModelItems: $response.statusCode");
+        // Handle a successful response
+        final data = response.data;
+        if (data is List) {
+          // Parse the data if it's a list of directions
+          final directionsList = List<DirectionsModel>.from(
+            data.map((x) => DirectionsModel.fromJson(x)),
+          );
+          print("API Response: ${response.toString()}");
+          print("API Response: ${response.statusCode}");
+
+          // Process the directions list as needed
+          // print("DirectionModelItems: $directionsList");
+          return directionsList;
+        }
+        // ... other code ...
+      } else {
+        // Handle the case when the response is null or when the status code is not 200
+        print("Error: The response is null or has a status code other than 200");
       }
-    } catch (e) {}
+    } catch (e) {
+      // Handle exceptions here (e.g., network errors, timeouts)
+      print("Error: $e");
+    }
   }
 
   bookPath({int? routeNumber, int? districtId, double? lat, long}) async {

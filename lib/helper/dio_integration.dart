@@ -35,7 +35,6 @@ class DioUtilNew {
       'Authorization': "Bearer ${CacheHelper.getData(key: AppConstants.token)}"
     };
     options.queryParameters = {};
-
     return options;
   }
 }

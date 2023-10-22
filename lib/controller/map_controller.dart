@@ -39,8 +39,12 @@ class MapController extends BaseController {
   final pathPoint = <LatLng>[].obs;
   final polylineCoordinates = <LatLng>[].obs;
   Completer<GoogleMapController> completer = Completer();
-  DirectionsModel? directionsModel;
+
+  // DirectionsModel? directionsModel;
   final statusId = 0.obs;
+
+  // var directionsModel = <DirectionsModel>[].obs;
+
   final missionValue = 0.obs;
   final bookingId = 0.obs;
   final userDistance = 0.0.obs;
@@ -58,17 +62,15 @@ class MapController extends BaseController {
   StreamSubscription<DateTime>? timeSubscription;
   final time = "".obs;
   final serversEnabledBool = false.obs;
+  RxList<DirectionsModel> directionsModel = RxList<DirectionsModel>();
+
 // Define your threshold distance (in meters)
   double thresholdDistance = 50;
   final selectedOption = <bool>[].obs;
 
 
-  DirectionModelItems? directionModelItems;
-  final directionModelItemsData = <DirectionsModel>[].obs;
-  final directionModelItemsDataSelected = DirectionsModel().obs;
   final selectedItems = <bool>[].obs;
   RxBool isSelected = RxBool(false);
-
 
 
   @override
@@ -80,12 +82,7 @@ class MapController extends BaseController {
     pathPoint.clear();
     polyline.clear();
     polylineCoordinates.clear();
-
     await determinePosition();
-
-    directionModelItemsData.assignAll(directionModelItems?.directionsModels?? []);
-    selectedItems.value = List.filled(directionModelItemsData.length, false);
-
     await getPaths();
     _timeStream = Stream<DateTime>.periodic(
         const Duration(seconds: 1), (i) => DateTime.now());
@@ -95,125 +92,146 @@ class MapController extends BaseController {
     setState(ViewState.idle);
   }
 
+
   getPaths() async {
-
-
     //directionsModel = await testData();
-    directionsModel = await services.getPaths(position: position);
-    print(directionsModel?.districtLocations?.length);
-    if (directionsModel?.districtLocations != null) {
-      await createPolyline();
-      await distanceBetweenLocations();
-      await drawPolyLineMission();
-      await getObjectZero();
-      CacheHelper.saveData(
-          key: AppConstants.bookingId, value: directionsModel?.status);
-      if (directionsModel?.status == 3 || directionsModel?.status == 4) {
-        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
-      } else {
-        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 0);
+    final directionsData = await services.getPaths(position: position);
+    if (directionsData != null) {
+      // Only assign the data if it's not null
+      directionsModel.assignAll(directionsData);
+
+      if (directionsModel.isNotEmpty) {
+        print("Number of districtLocations: ${directionsModel.length}");
+
+        // Process each DirectionModel in the list
+        for (var model in directionsModel) {
+          if (model.districtLocations != null &&
+              model.districtLocations!.isNotEmpty) {
+            await createPolyline();
+            await distanceBetweenLocations();
+            await drawPolyLineMission();
+            await getObjectZero();
+
+            // Cache data based on each model
+            CacheHelper.saveData(
+                key: AppConstants.bookingId, value: model.status);
+            if (model.status == 3 || model.status == 4) {
+              CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3);
+            } else {
+              CacheHelper.saveData(key: AppConstants.missionVaValue, value: 0);
+            }
+          }
+        }
       }
+
+      missionValue.value =
+          CacheHelper.getData(key: AppConstants.missionVaValue) ?? 0;
+      bookingId.value = CacheHelper.getData(key: AppConstants.bookingId) ?? 0;
+
+      print(missionValue.value);
     }
-    missionValue.value =
-        CacheHelper.getData(key: AppConstants.missionVaValue) ?? 0;
-
-    bookingId.value = CacheHelper.getData(key: AppConstants.bookingId) ?? 0;
-
-    print(missionValue.value);
   }
 
-  testData() {
-    directionsModel = DirectionsModel(
-        status: 3,
-        routeNumber: 1,
-        districtId: 1,
-        districtName: "birket",
-        districtLocations: [
-          DistrictLocations(
-            districtId: 1,
-            routeNumber: 1,
-            description: "s",
-            objectId: 1,
-            lat: 30.629651,
-            long: 31.079462,
-          ),
-          DistrictLocations(
-            districtId: 1,
-            routeNumber: 1,
-            description: "c",
-            objectId: 1,
-            lat: 30.629709,
-            long: 31.079129,
-          ),
-          DistrictLocations(
-            districtId: 1,
-            routeNumber: 1,
-            description: "l",
-            objectId: 1,
-            lat: 30.629787,
-            long: 31.078822,
-          ),
-          DistrictLocations(
-            districtId: 1,
-            routeNumber: 1,
-            description: "c",
-            objectId: 1,
-            lat: 30.629967,
-            long: 31.078968,
-          ),
-          DistrictLocations(
-            districtId: 1,
-            routeNumber: 1,
-            description: "l",
-            objectId: 1,
-            lat: 30.630093,
-            long: 31.079094,
-          ),
-          // DistrictLocations(
-          //   districtId: 1,
-          //   routeNumber: 1,
-          //   description: "l",
-          //   objectId: 0,
-          //   lat: 30.630093,
-          //   long: 31.079094,
-          // ),
-          DistrictLocations(
-            districtId: 1,
-            routeNumber: 1,
-            description: "c",
-            objectId: 1,
-            lat: 30.630061,
-            long: 31.079404,
-          ),
-          DistrictLocations(
-            districtId: 1,
-            routeNumber: 1,
-            description: "l",
-            objectId: 1,
-            lat: 30.630029,
-            long: 31.079700,
-          ),
-          DistrictLocations(
-            districtId: 1,
-            routeNumber: 1,
-            description: "e",
-            objectId: 1,
-            lat: 30.629874,
-            long: 31.079663,
-          ),
-        ]);
-    return directionsModel;
-  }
+  // testData() {
+  //   directionsModel = DirectionsModel(
+  //       status: 3,
+  //       routeNumber: 1,
+  //       districtId: 1,
+  //       districtName: "birket",
+  //       districtLocations: [
+  //         DistrictLocations(
+  //           districtId: 1,
+  //           routeNumber: 1,
+  //           description: "s",
+  //           objectId: 1,
+  //           lat: 30.629651,
+  //           long: 31.079462,
+  //         ),
+  //         DistrictLocations(
+  //           districtId: 1,
+  //           routeNumber: 1,
+  //           description: "c",
+  //           objectId: 1,
+  //           lat: 30.629709,
+  //           long: 31.079129,
+  //         ),
+  //         DistrictLocations(
+  //           districtId: 1,
+  //           routeNumber: 1,
+  //           description: "l",
+  //           objectId: 1,
+  //           lat: 30.629787,
+  //           long: 31.078822,
+  //         ),
+  //         DistrictLocations(
+  //           districtId: 1,
+  //           routeNumber: 1,
+  //           description: "c",
+  //           objectId: 1,
+  //           lat: 30.629967,
+  //           long: 31.078968,
+  //         ),
+  //         DistrictLocations(
+  //           districtId: 1,
+  //           routeNumber: 1,
+  //           description: "l",
+  //           objectId: 1,
+  //           lat: 30.630093,
+  //           long: 31.079094,
+  //         ),
+  //         // DistrictLocations(
+  //         //   districtId: 1,
+  //         //   routeNumber: 1,
+  //         //   description: "l",
+  //         //   objectId: 0,
+  //         //   lat: 30.630093,
+  //         //   long: 31.079094,
+  //         // ),
+  //         DistrictLocations(
+  //           districtId: 1,
+  //           routeNumber: 1,
+  //           description: "c",
+  //           objectId: 1,
+  //           lat: 30.630061,
+  //           long: 31.079404,
+  //         ),
+  //         DistrictLocations(
+  //           districtId: 1,
+  //           routeNumber: 1,
+  //           description: "l",
+  //           objectId: 1,
+  //           lat: 30.630029,
+  //           long: 31.079700,
+  //         ),
+  //         DistrictLocations(
+  //           districtId: 1,
+  //           routeNumber: 1,
+  //           description: "e",
+  //           objectId: 1,
+  //           lat: 30.629874,
+  //           long: 31.079663,
+  //         ),
+  //       ]);
+  //   return directionsModel;
+  // }
 
   distanceBetweenLocations() {
-    userDistance.value = util.distanceBetweenPoints(
-          position.latitude,
-          position.longitude,
-          directionsModel?.districtLocations?.first.lat ?? 0.0,
-          directionsModel?.districtLocations?.first.long ?? 0.0,
-        ) *
-        1000;
-    print("userDistance${userDistance.value}");
+    if (directionsModel != null && directionsModel!.isNotEmpty) {
+      for (var model in directionsModel!) {
+        if (model.districtLocations != null &&
+            model.districtLocations!.isNotEmpty) {
+          double distance = util.distanceBetweenPoints(
+            position.latitude,
+            position.longitude,
+            model.districtLocations?[0].lat ?? 0.0,
+            model.districtLocations?[0].long ?? 0.0,
+          ) *
+              1000;
+          print("Distance for directionModel ${model
+              .routeNumber}: $distance meters");
+        }
+      }
+    }
   }
 
   checkUserInLocation() {
@@ -229,19 +247,16 @@ class MapController extends BaseController {
             child: TextButton(
                 onPressed: () {
                   positionStream = Geolocator.getPositionStream(
-                          locationSettings: const LocationSettings(
-                              accuracy: LocationAccuracy.high))
+                      locationSettings: const LocationSettings(
+                          accuracy: LocationAccuracy.high))
                   // timeout(Duration(seconds: 10))
                       .listen((event) {
                     if (util.distanceBetweenPoints(
-                                event.latitude,
-                                event.longitude,
-                                directionsModel?.districtLocations?.first.lat ??
-                                    0.0,
-                                directionsModel
-                                        ?.districtLocations?.first.long ??
-                                    0.0) *
-                            1000 >=
+                        event.latitude,
+                        event.longitude,
+                        directionsModel![0].districtLocations?[0].lat ?? 0.0,
+                        directionsModel![0].districtLocations?[0].long ?? 0.0,)*
+                        1000 >=
                         150) {
                       CacheHelper.saveData(
                           key: AppConstants.missionVaValue, value: 0);
@@ -250,17 +265,17 @@ class MapController extends BaseController {
                     } else {
                       CacheHelper.getData(key: AppConstants.missionVaValue) == 3
                           ? {
-                              CacheHelper.saveData(
-                                  key: AppConstants.missionVaValue, value: 3),
-                              missionValue.value = CacheHelper.getData(
-                                  key: AppConstants.missionVaValue)
-                            }
+                        CacheHelper.saveData(
+                            key: AppConstants.missionVaValue, value: 3),
+                        missionValue.value = CacheHelper.getData(
+                            key: AppConstants.missionVaValue)
+                      }
                           : {
-                              CacheHelper.saveData(
-                                  key: AppConstants.missionVaValue, value: 1),
-                              missionValue.value = CacheHelper.getData(
-                                  key: AppConstants.missionVaValue)
-                            };
+                        CacheHelper.saveData(
+                            key: AppConstants.missionVaValue, value: 1),
+                        missionValue.value = CacheHelper.getData(
+                            key: AppConstants.missionVaValue)
+                      };
                     }
                     animateTo(event.latitude, event.longitude,
                         bearing: event.heading);
@@ -277,46 +292,38 @@ class MapController extends BaseController {
     } else {
       CacheHelper.getData(key: AppConstants.missionVaValue) == 3
           ? {
-              CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
-              missionValue.value =
-                  CacheHelper.getData(key: AppConstants.missionVaValue)
-            }
+        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
+        missionValue.value =
+            CacheHelper.getData(key: AppConstants.missionVaValue)
+      }
           : {
-              CacheHelper.saveData(key: AppConstants.missionVaValue, value: 1),
-              missionValue.value =
-                  CacheHelper.getData(key: AppConstants.missionVaValue)
-            };
+        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 1),
+        missionValue.value =
+            CacheHelper.getData(key: AppConstants.missionVaValue)
+      };
     }
   }
 
+
   drawPolyLineMission() async {
-    directionsModel?.districtLocations?.forEach((element) {
-      if (element.objectId == 0) {
-      } else {
-        pathPoint.add(LatLng(element.lat ?? 0.0, element.long ?? 0.0));
-        polyline.add(Polyline(
-            polylineId: const PolylineId("2"),
-            color: Colors.red,
-            width: 6,
-            points: pathPoint));
+    if (directionsModel != null) {
+      for (var model in directionsModel!) {
+        model.districtLocations?.forEach((element) {
+          if (element.objectId == 0) {
+            // Handle the case when objectId is 0
+          } else {
+            pathPoint.add(LatLng(element.lat ?? 0.0, element.long ?? 0.0));
+            polyline.add(Polyline(
+              polylineId: PolylineId(model.routeNumber.toString()),
+              // Use a unique ID for each polyline
+              color: Colors.red,
+              width: 6,
+              points: pathPoint,
+            ));
+          }
+        });
       }
-    });
-    final Uint8List markerStartEnd =
-        await util.getBytesFromAsset(Images.startIcon, 80);
-    BitmapDescriptor start = BitmapDescriptor.fromBytes(markerStartEnd);
-    final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.endIcon, 80);
-    BitmapDescriptor end = BitmapDescriptor.fromBytes(markerIconEnd);
-    markers.add(Marker(
-        markerId: const MarkerId("1"),
-        icon: start,
-        position: LatLng(directionsModel?.districtLocations?.first.lat ?? 0.0,
-            directionsModel?.districtLocations?.first.long ?? 0)));
-    markers.add(Marker(
-        markerId: const MarkerId("1"),
-        icon: end,
-        position: LatLng(directionsModel?.districtLocations?.last.lat ?? 0.0,
-            directionsModel?.districtLocations?.last.long ?? 0)));
+    }
   }
 
   Future<Position?> determinePosition() async {
@@ -366,16 +373,15 @@ class MapController extends BaseController {
     locationMarker.value = false;
     await startLocationTracking().then((value) {
       timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-        if (latitude.value == 0.0 && longitude.value == 0.0) {
-        } else {
+        if (latitude.value == 0.0 && longitude.value == 0.0) {} else {
           getIndexPoint(LatLng(latitude.value, longitude.value));
           infoList.add(InfoModel(
               time: DateTime.now().toString(),
-              districtId: directionsModel?.districtId,
-              status: statusId.value,
-              routeNumber: directionsModel?.routeNumber,
-              latitude: latitude.value,
-              longitude: longitude.value));
+        districtId: directionsModel![0].districtId, // Access districtId for the first element
+        status: statusId.value,
+        routeNumber: directionsModel![0].routeNumber, // Access routeNumber for the first element
+        latitude: latitude.value,
+        longitude: longitude.value));
         }
       });
       timer = Timer.periodic(const Duration(seconds: 30), (timer) async {
@@ -392,12 +398,12 @@ class MapController extends BaseController {
 
   Future<void> startLocationTracking() async {
     positionStreamSubscription = Geolocator.getPositionStream(
-            locationSettings: const LocationSettings(
-                accuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.high,
 
-                distanceFilter: 1
-            ))
-        // .timeout(Duration(seconds: 10),
+            distanceFilter: 1
+        ))
+    // .timeout(Duration(seconds: 10),
         .listen((position) {
       latitude.value = position.latitude;
       longitude.value = position.longitude;
@@ -418,79 +424,96 @@ class MapController extends BaseController {
     //   LatLng latLng = LatLng(latitude.value, longitude.value);
     //   streamPoint.add(latLng);
     // }
-    }
+  }
 
 
   checkLocation(LatLng latLng) {
     bool isNearPolyline = util.isLocationOnPath(
       latLng, pathPoint, tolerance: 150,
     );
-    if (isNearPolyline) {
+    if (isNearPolyline && directionsModel!.isNotEmpty) {
       CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
-      missionValue.value =
-          CacheHelper.getData(key: AppConstants.missionVaValue);
+      missionValue.value = CacheHelper.getData(key: AppConstants.missionVaValue);
       // print("object");
       statusId.value = 1;
-      if (directionsModel!.districtLocations != null) {
-      for (int i = 0; i < directionsModel!.districtLocations!.length; i++) {
-        if (directionsModel!.districtLocations![i].description != null) {
-          playSound(
-              directionsModel!.districtLocations![i].description!,
+
+      if (directionsModel![0].districtLocations != null) {
+        for (int i = 0; i < directionsModel![0].districtLocations!.length; i++) {
+          if (directionsModel![0].districtLocations![i].description != null) {
+            playSound(
+              directionsModel![0].districtLocations![i].description!,
               latLng,
-              directionsModel!.districtLocations![i].lat ?? 0.0,
-              directionsModel!.districtLocations![i].long ?? 0.0);
+              directionsModel![0].districtLocations![i].lat ?? 0.0,
+              directionsModel![0].districtLocations![i].long ?? 0.0,
+            );
+          }
         }
       }
-      }
+
     } else {
       statusId.value = 4;
     }
   }
 
   getObjectZero() {
-    directionsModel?.districtLocations?.forEach((element) {
-      if (element.objectId == 0) {
-        latitudeContinue.value = element.lat!;
-        longitudeContinue.value = element.long!;
-        // print(element.lat);
-        // print(element.long);
-        // print(element.objectId);
-        // print(element.description);
-        distanceContinue.value = util.distanceBetweenPoints(
+    if (directionsModel != null) {
+      for (var model in directionsModel!) {
+        model.districtLocations?.forEach((element) {
+          if (element.objectId == 0) {
+            latitudeContinue.value = element.lat!;
+            longitudeContinue.value = element.long!;
+            // print(element.lat);
+            // print(element.long);
+            // print(element.objectId);
+            // print(element.description);
+            distanceContinue.value = util.distanceBetweenPoints(
                 position.latitude,
                 position.longitude,
                 latitudeContinue.value,
                 longitudeContinue.value) *
-            1000;
-        print("distance:${distanceContinue.value} ");
-        markersContinue.add(Marker(
-            markerId: MarkerId(
-              "${element.objectId}",
-            ),
-            onTap: () async {
-              await openMap(
-                  latLng:
+                1000;
+            print("distance:${distanceContinue.value} ");
+            markersContinue.add(Marker(
+                markerId: MarkerId(
+                  "${element.objectId}",
+                ),
+                onTap: () async {
+                  await openMap(
+                      latLng:
                       LatLng(latitudeContinue.value, longitudeContinue.value));
-            },
-            infoWindow: const InfoWindow(
-              title: ' نقطه الاستكمال',
-            ),
-            position: LatLng(latitudeContinue.value, longitudeContinue.value)));
-        // print("true");
+                },
+                infoWindow: const InfoWindow(
+                  title: ' نقطه الاستكمال',
+                ),
+                position: LatLng(
+                    latitudeContinue.value, longitudeContinue.value)));
+            // print("true");
+          }
+        });
       }
-    });
+    }
   }
 
   getIndexPoint(LatLng latLng) async {
-    LatLng? closestPoint = await util.getClosestPoint(latLng, pathPoint);
-    // print('Closest point: $closestPoint');
-    if (closestPoint != null) {
-      int? index = pathPoint.indexWhere((element) => element == closestPoint);
-      // print('Index: $index');
-      await services.sendPoints(
-          districtId: directionsModel?.districtId,
-          routeNumber: directionsModel?.routeNumber,
-          objectId: directionsModel?.districtLocations![index].objectId);
+    if (directionsModel != null) {
+      LatLng? closestPoint = await util.getClosestPoint(latLng, pathPoint);
+      // print('Closest point: $closestPoint');
+      if (closestPoint != null) {
+        for (var model in directionsModel!) {
+          int index = model.districtLocations!.indexWhere(
+                  (element) =>
+              element.lat == closestPoint.latitude &&
+                  element.long == closestPoint.longitude);
+          if (index != -1) {
+            await services.sendPoints(
+              districtId: model.districtId,
+              routeNumber: model.routeNumber,
+              objectId: model.districtLocations![index].objectId,
+            );
+            break; // Exit the loop once a match is found
+          }
+        }
+      }
     }
   }
 
@@ -498,7 +521,7 @@ class MapController extends BaseController {
     switch (char) {
       case "s":
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           soundHelper.playerAudioStart();
           break;
@@ -506,10 +529,10 @@ class MapController extends BaseController {
         break;
       case "r":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.turnRight, 80);
+        await util.getBytesFromAsset(Images.turnRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -525,10 +548,10 @@ class MapController extends BaseController {
         break;
       case "l":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.left, 80);
+        await util.getBytesFromAsset(Images.left, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -544,10 +567,10 @@ class MapController extends BaseController {
         break;
       case "u":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.returnImage, 80);
+        await util.getBytesFromAsset(Images.returnImage, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -563,10 +586,10 @@ class MapController extends BaseController {
         break;
       case "ub":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.turnBack, 80);
+        await util.getBytesFromAsset(Images.turnBack, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -582,10 +605,10 @@ class MapController extends BaseController {
         break;
       case "c":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.goStraight, 80);
+        await util.getBytesFromAsset(Images.goStraight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -600,11 +623,11 @@ class MapController extends BaseController {
         }
         break;
       case "ss":
-        // final Uint8List markerIconEnd =
-        //     await util.getBytesFromAsset(Images.goStraight, 80);
-        // BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
+      // final Uint8List markerIconEnd =
+      //     await util.getBytesFromAsset(Images.goStraight, 80);
+      // BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           // markers.add(
           //   Marker(
@@ -620,10 +643,10 @@ class MapController extends BaseController {
         break;
       case "rr":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.turnRight, 80);
+        await util.getBytesFromAsset(Images.turnRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -639,10 +662,10 @@ class MapController extends BaseController {
         break;
       case "ll":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.left, 80);
+        await util.getBytesFromAsset(Images.left, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -658,10 +681,10 @@ class MapController extends BaseController {
         break;
       case "rl":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.leftAndRight, 80);
+        await util.getBytesFromAsset(Images.leftAndRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -677,10 +700,10 @@ class MapController extends BaseController {
         break;
       case "lr":
         final Uint8List markerIconEnd =
-            await util.getBytesFromAsset(Images.leftAndRight, 80);
+        await util.getBytesFromAsset(Images.leftAndRight, 80);
         BitmapDescriptor navigate = BitmapDescriptor.fromBytes(markerIconEnd);
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             20) {
           markers.add(
             Marker(
@@ -696,7 +719,7 @@ class MapController extends BaseController {
         break;
       case "e":
         if (Geolocator.distanceBetween(
-                event.latitude, event.longitude, lat, long) <=
+            event.latitude, event.longitude, lat, long) <=
             70) {
           print(Geolocator.distanceBetween(
               event.latitude, event.longitude, lat, long));
@@ -730,11 +753,15 @@ class MapController extends BaseController {
   bookMission() async {
     try {
       bookValue.value = true;
-      await services.bookPath(
-          routeNumber: directionsModel?.routeNumber,
-          districtId: directionsModel?.districtId,
-          lat: directionsModel?.districtLocations?.first.lat,
-          long: directionsModel?.districtLocations?.first.long);
+      if (directionsModel != null && directionsModel!.isNotEmpty) {
+        final firstDirection = directionsModel?.first;
+        await services.bookPath(
+          routeNumber: firstDirection?.routeNumber,
+          districtId: firstDirection?.districtId,
+          lat: firstDirection?.districtLocations?.first.lat,
+          long: firstDirection?.districtLocations?.first.long,
+        );
+      }
       bookValue.value = false;
       CacheHelper.saveData(key: AppConstants.bookingId, value: 1);
       bookingId.value = CacheHelper.getData(key: AppConstants.bookingId);
@@ -745,19 +772,21 @@ class MapController extends BaseController {
 
   Future<void> animateTo(double latitude, double longitude,
       {double? bearing}) async {
-
     final googleMapController = await completer.future;
     Future.delayed(Duration(seconds: 2), () {
-    googleMapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: LatLng(
-              latitude,
-              longitude,
-            ),
-            bearing: bearing ?? 90,
-            zoom: 18,
-            tilt: 30)));
+      googleMapController.animateCamera(
+          CameraUpdate.newCameraPosition(CameraPosition(
+              target: LatLng(
+                latitude,
+                longitude,
+              ),
+              bearing: bearing ?? 90,
+              zoom: 18,
+              tilt: 30)));
+    }
+    );
   }
-    );}
+
   drawPolyLine({List<LatLng>? points}) {
     polyline.add(Polyline(
         polylineId: const PolylineId("1"),
@@ -768,7 +797,7 @@ class MapController extends BaseController {
 
   myMarker(Position event, double rotate) async {
     final Uint8List markerIconEnd =
-        await util.getBytesFromAsset(Images.track, 50);
+    await util.getBytesFromAsset(Images.track, 50);
     BitmapDescriptor end = BitmapDescriptor.fromBytes(markerIconEnd);
     currentLocationMarker.value = Marker(
       markerId: MarkerId("$event"),
@@ -786,166 +815,184 @@ class MapController extends BaseController {
   }
 
   functionButton() async {
-    switch (missionValue.value) {
-      case 1:
-        CacheHelper.saveData(key: AppConstants.tapped, value: true);
-        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
-        missionValue.value =
-            CacheHelper.getData(key: AppConstants.missionVaValue);
-        positionStream?.cancel();
-        services.startMission(
-            lat: "${directionsModel!.districtLocations!.first.lat}",
-            long: "${directionsModel!.districtLocations!.first.long}");
-        startMission();
-        break;
-      case 2:
-        Get.defaultDialog(
-            radius: 6,
-            title: "ايقاف مؤقت",
-            titleStyle: const TextStyle(color: Colors.red, fontSize: 18),
-            content: const Text(""),
-            confirm: SizedBox(
-              width: 120,
-              child: TextButton(
-                  onPressed: () async {
-                    timeSubscription?.cancel();
-                    timer?.cancel();
-                    positionStream?.cancel();
-                    positionStreamSubscription?.cancel();
-                    await stopMission();
-                    CacheHelper.saveData(
-                        key: AppConstants.missionVaValue, value: 3);
-                    missionValue.value =
-                        CacheHelper.getData(key: AppConstants.missionVaValue);
-                    soundHelper.player.dispose();
-                    completer = Completer();
-                    latitude.value = 0.0;
-                    longitude.value = 0.0;
-                    Get.offAll(() => const HomeScreen());
-                  },
-                  style: TextButton.styleFrom(
-                      backgroundColor: const Color(0xff008d36)),
-                  child: const Text(
-                    "تأكيد",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  )),
-            ));
-        break;
-      case 3:
-        CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
-        missionValue.value =
-            CacheHelper.getData(key: AppConstants.missionVaValue);
-        pauseMission();
-        startMission();
-        positionStream?.cancel();
-        break;
-      case 4:
-        // positionStream?.cancel();
-        // positionStreamSubscription?.cancel();
-        // timer?.cancel();
-        // completer = Completer();
-        // soundHelper.player.dispose();
-        // CacheHelper.saveData(key: AppConstants.bookingId, value: 0);
-        // bookingId.value = CacheHelper.getData(key: AppConstants.bookingId);
-        Get.defaultDialog(
-            radius: 6,
-            title: 'انهاء المهمه'.tr,
-            titleStyle: const TextStyle(color: Colors.red, fontSize: 18),
-            content: const Text(""),
-            confirm: SizedBox(
-              width: 120,
-              child: TextButton(
-                  onPressed: () async {
-                    timeSubscription?.cancel();
-                    CacheHelper.saveData(
-                        key: AppConstants.tapped, value: false);
-                    soundHelper.player.dispose();
-                    completer = Completer();
-                    timer?.cancel();
-                    positionStream?.cancel();
-                    positionStreamSubscription?.cancel();
-                    endMission();
-                    CacheHelper.saveData(
-                        key: AppConstants.missionVaValue, value: 0);
-                    CacheHelper.saveData(key: AppConstants.bookingId, value: 0);
-                    await services.completeTask(
-                        districtId: directionsModel!.districtId!,
-                        routeId: directionsModel!.routeNumber!);
-                    latitude.value = 0.0;
-                    longitude.value = 0.0;
-                    Get.offAll(() => const HomeScreen());
-                  },
-                  style: TextButton.styleFrom(
-                      backgroundColor: const Color(0xff008d36)),
-                  child: const Text(
-                    "انهاء",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  )),
-            ));
+    if (directionsModel!.isNotEmpty) {
+      for (DirectionsModel model in directionsModel!) {
+        if (model.districtLocations != null &&
+            model.districtLocations!.isNotEmpty) {
+          switch (missionValue.value) {
+            case 1:
+              CacheHelper.saveData(key: AppConstants.tapped, value: true);
+              CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
+              missionValue.value =
+                  CacheHelper.getData(key: AppConstants.missionVaValue);
+              positionStream?.cancel();
+              services.startMission(
+                lat: "${model.districtLocations?.first.lat}",
+                long: "${model.districtLocations?.first.long}",
+              );
+              startMission();
+              break;
+          // Add more cases as needed
+
+
+
+    case 2:
+    Get.defaultDialog(
+    radius: 6,
+    title: "ايقاف مؤقت",
+    titleStyle: const TextStyle(color: Colors.red, fontSize: 18),
+    content: const Text(""),
+    confirm: SizedBox(
+    width: 120,
+    child: TextButton(
+    onPressed: () async {
+    timeSubscription?.cancel();
+    timer?.cancel();
+    positionStream?.cancel();
+    positionStreamSubscription?.cancel();
+    await stopMission();
+    CacheHelper.saveData(
+    key: AppConstants.missionVaValue, value: 3);
+    missionValue.value =
+    CacheHelper.getData(key: AppConstants.missionVaValue);
+    soundHelper.player.dispose();
+    completer = Completer();
+    latitude.value = 0.0;
+    longitude.value = 0.0;
+    Get.offAll(() => const HomeScreen());
+    },
+    style: TextButton.styleFrom(
+    backgroundColor: const Color(0xff008d36)),
+    child: const Text(
+    "تأكيد",
+    style: TextStyle(color: Colors.white, fontSize: 16),
+    )),
+    ));
+    break;
+    case 3:
+    CacheHelper.saveData(key: AppConstants.missionVaValue, value: 2);
+    missionValue.value =
+    CacheHelper.getData(key: AppConstants.missionVaValue);
+    pauseMission();
+    startMission();
+    positionStream?.cancel();
+    break;
+    case 4:
+    // positionStream?.cancel();
+    // positionStreamSubscription?.cancel();
+    // timer?.cancel();
+    // completer = Completer();
+    // soundHelper.player.dispose();
+    // CacheHelper.saveData(key: AppConstants.bookingId, value: 0);
+    // bookingId.value = CacheHelper.getData(key: AppConstants.bookingId);
+    Get.defaultDialog(
+    radius: 6,
+    title: 'انهاء المهمه'.tr,
+    titleStyle: const TextStyle(color: Colors.red, fontSize: 18),
+    content: const Text(""),
+    confirm: SizedBox(
+    width: 120,
+    child: TextButton(
+    onPressed: () async {
+    timeSubscription?.cancel();
+    CacheHelper.saveData(
+    key: AppConstants.tapped, value: false);
+    soundHelper.player.dispose();
+    completer = Completer();
+    timer?.cancel();
+    positionStream?.cancel();
+    positionStreamSubscription?.cancel();
+    endMission();
+    CacheHelper.saveData(
+    key: AppConstants.missionVaValue, value: 0);
+    CacheHelper.saveData(key: AppConstants.bookingId, value: 0);
+    await services.completeTask(
+        districtId: directionsModel!.isNotEmpty ? directionsModel ![0].districtId : null,
+        routeId: directionsModel!.isNotEmpty ? directionsModel![0].routeNumber : null);
+    latitude.value = 0.0;
+    longitude.value = 0.0;
+    Get.offAll(() => const HomeScreen());
+    },
+    style: TextButton.styleFrom(
+    backgroundColor: const Color(0xff008d36)),
+    child: const Text(
+    "انهاء",
+    style: TextStyle(color: Colors.white, fontSize: 16),
+    )),
+    ));
+    }
+    }
+    }
     }
   }
 
   Future<void> createPolyline() async {
     //
     polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      AppConstants.apiKey,
-      PointLatLng(position.latitude, position.longitude),
-      PointLatLng(directionsModel!.districtLocations!.first.lat!,
-          directionsModel!.districtLocations!.first.long!),
-      travelMode: TravelMode.driving,
-    );
+    for (var model in directionsModel!) {
+      if (model.districtLocations != null &&
+          model.districtLocations!.isNotEmpty) {
+        final firstLocation = model.districtLocations?.first;
+        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+          AppConstants.apiKey,
+          PointLatLng(position.latitude, position.longitude),
+          PointLatLng(firstLocation!.lat!, firstLocation!.long!),
+          travelMode: TravelMode.driving,
+        );
 
-    if (result.points.isNotEmpty) {
-      for (var point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        if (result.points.isNotEmpty) {
+          for (var point in result.points) {
+            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+          }
+        }
+        polyline.add(Polyline(
+          polylineId: const PolylineId('2'),
+          color: Colors.amber,
+          points: polylineCoordinates,
+          width: 4,
+        ));
       }
     }
-    polyline.add(Polyline(
-      polylineId: const PolylineId('2'),
-      color: Colors.amber,
-      points: polylineCoordinates,
-      width: 4,
-    ));
   }
 
-  openMap({LatLng? latLng}) async {
-    final availableMaps = await MapLauncher.installedMaps;
-    for (var map in availableMaps) {
-      map.showDirections(
-        origin: Coords(position.latitude, position.longitude),
-        directionsMode: DirectionsMode.driving,
-        destination: Coords(latLng?.latitude ?? 0.0, latLng?.longitude ?? 0.0),
-        // waypoints: waypoints
-      );
+      openMap({LatLng? latLng}) async {
+        final availableMaps = await MapLauncher.installedMaps;
+        for (var map in availableMaps) {
+          map.showDirections(
+            origin: Coords(position.latitude, position.longitude),
+            directionsMode: DirectionsMode.driving,
+            destination: Coords(
+                latLng?.latitude ?? 0.0, latLng?.longitude ?? 0.0),
+            // waypoints: waypoints
+          );
+        }
+      }
+
+      Future<void> myFunction() async {
+        CacheHelper.getData(key: AppConstants.tapped) == false
+            ? {
+          timeSubscription?.cancel(),
+          timer != null ? timer?.cancel() : {},
+          positionStream?.cancel(),
+          positionStreamSubscription?.cancel(),
+          latitude.value = 0.0,
+          longitude.value = 0.0,
+        }
+            : {
+          timeSubscription?.cancel(),
+          timer != null ? timer?.cancel() : {},
+          positionStream?.cancel(),
+          positionStreamSubscription?.cancel(),
+          await stopMission(),
+          CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
+          soundHelper.player.dispose(),
+          completer = Completer(),
+          latitude.value = 0.0,
+          longitude.value = 0.0,
+          // Do something here
+        };
+      }
     }
-  }
-
-  Future<void> myFunction() async {
-    CacheHelper.getData(key: AppConstants.tapped) == false
-        ? {
-            timeSubscription?.cancel(),
-            timer != null ? timer?.cancel() : {},
-            positionStream?.cancel(),
-            positionStreamSubscription?.cancel(),
-            latitude.value = 0.0,
-            longitude.value = 0.0,
-          }
-        : {
-            timeSubscription?.cancel(),
-            timer != null ? timer?.cancel() : {},
-            positionStream?.cancel(),
-            positionStreamSubscription?.cancel(),
-            await stopMission(),
-            CacheHelper.saveData(key: AppConstants.missionVaValue, value: 3),
-            soundHelper.player.dispose(),
-            completer = Completer(),
-            latitude.value = 0.0,
-            longitude.value = 0.0,
-            // Do something here
-          };
-  }
-}
 // Future<List<DirectionsResponse>> getDirections(List<LatLng> points) async {
 //   List<DirectionsResponse> responses = [];
 //
